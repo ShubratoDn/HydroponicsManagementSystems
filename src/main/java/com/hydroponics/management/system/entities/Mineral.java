@@ -1,0 +1,27 @@
+package com.hydroponics.management.system.entities;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.ManyToOne;
+import lombok.Data;
+
+@Data
+@Entity
+public class Mineral {
+
+	@Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+	private Long id;
+	private String mineralName;
+	private String mineralUnit;
+	private Double mineralAmount;
+	
+	@ManyToOne
+	@JsonIgnore
+    private Environment environment;	
+	
+}

@@ -1,0 +1,131 @@
+		<!-- Side-Nav-->
+        <aside class="main-sidebar hidden-print ">
+            <section class="sidebar" id="sidebar-scroll">
+                <!-- Sidebar Menu-->
+                <ul class="sidebar-menu">
+                	<li class="nav-level">--- Navigation </li>
+                    <li class="treeview">
+                        <a class="waves-effect waves-dark" href="/">
+                            <i class="icon-home"></i><span>Home</span>
+                        </a>
+                    </li>
+                    <li class="nav-level">--- Manage User</li>
+                    <li class="treeview">
+                        <a class="waves-effect waves-dark" href="/add-user">
+                            <i class="icon-plus"></i><span> Add User</span>
+                        </a>
+                    </li>
+                    <li class="nav-level">--- Location Management</li>
+                    <li class="treeview">
+                        <a class="waves-effect waves-dark" href="/add-location">
+                            <i class="icon-map"></i><span>Add Location</span>
+                        </a>
+                    </li>
+                     <li class="nav-level">--- Environment</li>
+                    <li class="treeview">
+                        <a class="waves-effect waves-dark" href="/add-environment">
+                            <i class="icon-plus"></i><span>Add Environment</span>
+                        </a>
+                    </li>
+                    
+                    <li class="treeview">
+                        <a class="waves-effect waves-dark" href="/find-environments">
+                            <i class="icon-magnifier"></i><span>Find Environments</span>
+                        </a>
+                    </li>
+                    
+                     <li class="nav-level">--- Generate Fake Data</li>
+                    <li class="treeview">
+                        <a class="waves-effect waves-dark" href="/generate-data/">
+                            <i class="icon-people"></i><span>Fake data Form</span>
+                        </a>
+                    </li>
+                    
+                                       
+                    <li class="nav-level">--- Menu Level</li>
+
+                    <li class="treeview"><a class="waves-effect waves-dark" href="#!"><i
+                                class="icofont icofont-company"></i><span>Menu Level 1</span><i
+                                class="icon-arrow-down"></i></a>
+                        <ul class="treeview-menu">
+                            <li>
+                                <a class="waves-effect waves-dark" href="#!">
+                                    <i class="icon-arrow-right"></i>
+                                    Level Two
+                                </a>
+                            </li>
+                            <li class="treeview">
+                                <a class="waves-effect waves-dark" href="#!">
+                                    <i class="icon-arrow-right"></i>
+                                    <span>Level Two</span>
+                                    <i class="icon-arrow-down"></i>
+                                </a>
+                                <ul class="treeview-menu">
+                                    <li>
+                                        <a class="waves-effect waves-dark" href="#!">
+                                            <i class="icon-arrow-right"></i>
+                                            Level Three
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a class="waves-effect waves-dark" href="#!">
+                                            <i class="icon-arrow-right"></i>
+                                            <span>Level Three</span>
+                                            <i class="icon-arrow-down"></i>
+                                        </a>
+                                        <ul class="treeview-menu">
+                                            <li>
+                                                <a class="waves-effect waves-dark" href="#!">
+                                                    <i class="icon-arrow-right"></i>
+                                                    Level Four
+                                                </a>
+                                            </li>
+                                            <li>
+                                                <a class="waves-effect waves-dark" href="#!">
+                                                    <i class="icon-arrow-right"></i>
+                                                    Level Four
+                                                </a>
+                                            </li>
+                                        </ul>
+                                    </li>
+                                </ul>
+                            </li>
+                        </ul>
+                    </li>
+                </ul>
+            </section>
+        </aside>
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        <!-- Include jQuery library -->
+<script src="${pageContext.request.contextPath}/assets//js/jquery.min.js"></script>
+
+<script>
+$(document).ready(function() {
+    // Get the current URL path
+    var path = window.location.pathname;
+
+    // Find the <a> element with matching href and add the 'active' class to its parent <li>
+    $('.treeview a').each(function() {
+        var href = $(this).attr('href');
+        
+        if(path === "/home"  && href ==="/"){
+        	$(this).closest('li').addClass('active');
+        }else if(path === "/generate-data"  && href ==="/generate-data/"){
+        	$(this).closest('li').addClass('active');
+        }else if (path === href) {
+            $(this).closest('li').addClass('active');
+        }
+    });
+})
+</script>

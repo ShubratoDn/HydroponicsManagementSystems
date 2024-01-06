@@ -1,0 +1,31 @@
+{
+	"id": 5,
+	"environment": null,
+	"mineralDataList": [
+		{
+			"id": 6,
+			"mineral": {
+				"id": 8,
+				"mineralName": "Nitrogen",
+				"mineralUnit": "gram",
+				"mineralAmount": 12.0
+			},
+			"mineralValue": 11.602164038800556
+		},
+		{
+			"id": 7,
+			"mineral": {
+				"id": 9,
+				"mineralName": "Oxygen",
+				"mineralUnit": "gram",
+				"mineralAmount": 14.0
+			},
+			"mineralValue": 13.499448992294305
+		}
+	],
+	"lightDuration": null,
+	"waterPH": 5.655248552518426,
+	"temperatureC": 24.48666938048139,
+	"humidity": 11.776649978442467,
+	"timestamp": "2024-01-06T11:43:09.552+00:00"
+}

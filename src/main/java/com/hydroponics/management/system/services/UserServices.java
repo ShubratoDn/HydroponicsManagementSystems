@@ -1,0 +1,21 @@
+package com.hydroponics.management.system.services;
+
+
+import java.util.List;
+
+import com.hydroponics.management.system.DTO.UserDTO;
+
+public interface UserServices {
+
+	public UserDTO addUser(UserDTO userDto);
+	public UserDTO getUserById(Integer id);
+	public UserDTO getUserByEmail(String email);
+	public UserDTO getUserByPhone(String phone);
+	public UserDTO getUserByPhoneOrEmail(String username);
+	public List<UserDTO> getAllUser();
+	
+	public String hashPassword(String password);
+	public boolean verifyPassword(String inputPassword, String hashedPassword);
+	
+	public UserDTO getLoggedInUser();
+}
