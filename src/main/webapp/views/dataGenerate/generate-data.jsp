@@ -113,10 +113,7 @@
 	                    %>
 				    	<form class="form-horizontal" method="post" action="/generate-data/">
 				        <table class="table table-striped bordered">
-				            <tr>
-				                <th>Parameter name</th>
-				                <th>Parameter Value</th>
-				            </tr>
+				            
 				            <tbody>
 				            	<tr>
 				                    <th>Select Environment</th>
@@ -136,26 +133,21 @@
 									        %>
 										</select>
 				                    </td>
-				                </tr>
-				                <tr>
-				                    <th>Light Duration</th>
-				                    <td><input type="number" required="required"  class="form-control" name="lightDuration" placeholder="Light Duration"></td>
-				                </tr>
-				                <tr>
-				                    <th>Water pH</th>
-				                    <td><input type="number" required="required"  step="0.1" class="form-control" name="waterPH" placeholder="Water pH"></td>
-				                </tr>
-				                <tr>
-				                    <th>Temperature (°C)</th>
-				                    <td><input type="number" required="required"  step="0.1" class="form-control" name="temperatureC" placeholder="Temperature (°C)"></td>
-				                </tr>
-				                <tr>
-				                    <th>Humidity</th>
-				                    <td><input type="number" required="required"  step="0.1" class="form-control" name="humidity" placeholder="Humidity"></td>
-				                </tr>			                
+				                </tr>					             			                
 				            </tbody>
 				        </table>
 				        
+				        <h1>Set Environment value</h1>
+				        <table class="table table-striped bordered">
+				            <tr>
+				                <th>Mineral name</th>
+				                <th>Base value</th>
+				                <th>Your value	</th>
+				            </tr>
+				            <tbody id="environmentElementBody">				            
+				                		                
+				            </tbody>
+				        </table>	
 				        
 				        
 				        <h1>Set minerals value</h1>
@@ -232,13 +224,39 @@
                 // Perform AJAX request to fetch data for the selected environment
                 $.ajax({
                     type: "GET",
-                    url: "/environment/get-minerals/" + selectedEnvironmentId,
-                    success: function (minerals) {
-                        // Handle the success response
-                        console.log("Minerals data:", minerals);
-
+                    //url: "/environment/get-minerals/" + selectedEnvironmentId,
+                    url: "/environment/fake-data/" + selectedEnvironmentId,
+                    success: function (env) {
+                        console.log(env);
+                        var minerals = env.minerals;
                         // Clear previous mineral rows
                         $("#mineralTableBody").empty();
+                        $("#environmentElementBody").empty();
+                        
+                        var row1 = `
+                        <tr>
+		                    <th>Light Duration</th>
+		                    <td><b>`+env.lightDuration+` Hours</b></td>
+		                    <td><input type="number" required="required"  class="form-control" name="lightDuration" placeholder="Light Duration"></td>
+		                </tr>
+		                <tr>
+		                    <th>Water pH</th>
+		                    <td><b>`+env.waterPH+`</b></td>
+		                    <td><input type="number" required="required"  step="0.1" class="form-control" name="waterPH" placeholder="Water pH"></td>
+		                </tr>
+		                <tr>
+		                    <th>Temperature (°C)</th>
+		                    <td><b>`+env.temperatureC+`°C </b></td>
+		                    <td><input type="number" required="required"  step="0.1" class="form-control" name="temperatureC" placeholder="Temperature (°C)"></td>
+		                </tr>
+		                <tr>
+		                    <th>Humidity</th>
+		                    <td><b>`+env.humidity+`</b></td>
+		                    <td><input type="number" required="required"  step="0.1" class="form-control" name="humidity" placeholder="Humidity"></td>
+		                </tr>
+                        `;                             
+
+                        $("#environmentElementBody").append(row1);
 					
                         // Dynamically create input fields for each mineral
                         for (var i = 0; i < minerals.length; i++) {
@@ -248,7 +266,7 @@
                                 "<th>" + mineral.mineralAmount + " / "+mineral.mineralUnit+"</th>" +
                                 "<td><input type='number' required='required' step='0.1' class='form-control' name='minerals[" + i + "].mineralAmount' placeholder='" + mineral.mineralName + " Amount'>"+"<input type='number' hidden  name='minerals[" + i + "].mineralId' value='" + mineral.id + "'> "+"</td>" +                                
                                 "</tr>";
-                            $("#mineralTableBody").append(row);
+                           $("#mineralTableBody").append(row);
                         }
                     },
                     error: function (error) {

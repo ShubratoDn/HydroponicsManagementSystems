@@ -140,6 +140,14 @@ public class EnvironmentController {
 		return ResponseEntity.ok(environmentById);
 	}
 	
+	@GetMapping("/environment/fake-data/{id}")
+	public ResponseEntity<?> getEnvironmentForFakeData(@PathVariable Long id){
+		Environment environmentById = environmentServices.getEnvironmentById(id);
+		environmentById.setOwnedBy(null);
+		environmentById.setAddedEnvironmentBy(null);		
+		return ResponseEntity.ok(environmentById);
+	}
+	
 	
 	@GetMapping("/environment/get-minerals/{id}")
 	public ResponseEntity<?> getMineralsOfEnvironment(@PathVariable Long id){

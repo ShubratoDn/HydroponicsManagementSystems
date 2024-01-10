@@ -1,0 +1,12 @@
+package com.hydroponics.management.system.entities.enums;
+
+public enum NotificationType {
+
+	EXPIRATION_DATE_ERROR,
+	INVALID_TEMPERATURE_ERROR,
+	INVALID_WATER_pH_ERROR,
+	INVALID_HUMIDITY_ERROR,
+	INVALID_LIGHT_DURATION_ERROR,
+	INVALID_MINERAL_ERROR
+	
+}

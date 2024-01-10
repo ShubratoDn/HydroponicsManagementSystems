@@ -56,11 +56,14 @@ public class EnvironmentServiceImple implements EnvironmentServices {
 
 	@Override
 	public Environment getEnvironmentById(Long id) {
-		Environment environment = environmentRepo.findById(id).get();
-		if(environment != null) {
+		Environment environment = null;
+		try {			
+			environment = environmentRepo.findById(id).get();
 			return environment;
+		}catch (Exception e) {
+			return null;
 		}
-		return null;
+		
 	}
 
 	@Override

@@ -1,31 +1,111 @@
-{
-	"id": 5,
-	"environment": null,
-	"mineralDataList": [
-		{
-			"id": 6,
-			"mineral": {
-				"id": 8,
-				"mineralName": "Nitrogen",
-				"mineralUnit": "gram",
-				"mineralAmount": 12.0
+[
+	{
+		"id": 23,
+		"environment": {
+			"id": 3,
+			"plantName": "Paddy",
+			"ownedBy": {
+				"id": 4,
+				"firstName": "Akash",
+				"lastName": "Debnath",
+				"phone": "01303544534",
+				"email": "akash@gmail.com",
+				"image": "14c2da08ef49c793a931b895af27c6e5b55b9640_.jpg",
+				"password": "$2a$10$rqczeQ7OfgDbG8Glqa90eO80GbnylTVpM3EWfPTSTbFwjVqcdragO",
+				"remark": null,
+				"role": "User",
+				"addedBy": {
+					"id": 1,
+					"firstName": "Admin",
+					"lastName": "Admin",
+					"phone": null,
+					"email": "admin@gmail.com",
+					"image": "AdminImage.jpg",
+					"password": "$2a$10$KhhFWSgHW2Y/q1NiEteeIefz2U5ct3Y5qvVAZBFjIjXWumnBRYqCm",
+					"remark": null,
+					"role": "Admin",
+					"addedBy": null
+				}
 			},
-			"mineralValue": 11.602164038800556
+			"location": {
+				"id": 1,
+				"locationName": "Location A",
+				"fullAddress": "Sirajganj, enayetpur, kyau, building - 312",
+				"length": 10.0,
+				"width": 10.0,
+				"note": "Beside the door\r\n",
+				"available": false
+			},
+			"plantDate": "2023-12-28T18:00:00.000+00:00",
+			"maturityDate": "2023-12-29T18:00:00.000+00:00",
+			"lightDuration": 7,
+			"waterPH": 9.0,
+			"temperatureC": 60.0,
+			"humidity": 9.0,
+			"minerals": [
+				{
+					"id": 4,
+					"mineralName": "Nitrogen",
+					"mineralUnit": "gram",
+					"mineralAmount": 1.0
+				},
+				{
+					"id": 5,
+					"mineralName": "Oxygen",
+					"mineralUnit": "gram",
+					"mineralAmount": 5.0
+				}
+			],
+			"addedEnvironmentBy": {
+				"id": 5,
+				"firstName": "Shubrato",
+				"lastName": "Debnath",
+				"phone": "01759458961",
+				"email": "shubratodn44985@gmail.com",
+				"image": "c6fdd02406cb30ded449c8fa08230511875c4607_.png",
+				"password": "$2a$10$AI92.o.RFcfJqt5ISvlOQurYPUpy8yzhRuWG4bR2pEesKukdZZ.RW",
+				"remark": null,
+				"role": "Admin",
+				"addedBy": {
+					"id": 1,
+					"firstName": "Admin",
+					"lastName": "Admin",
+					"phone": null,
+					"email": "admin@gmail.com",
+					"image": "AdminImage.jpg",
+					"password": "$2a$10$KhhFWSgHW2Y/q1NiEteeIefz2U5ct3Y5qvVAZBFjIjXWumnBRYqCm",
+					"remark": null,
+					"role": "Admin",
+					"addedBy": null
+				}
+			}
 		},
-		{
-			"id": 7,
-			"mineral": {
-				"id": 9,
-				"mineralName": "Oxygen",
-				"mineralUnit": "gram",
-				"mineralAmount": 14.0
+		"mineralDataList": [
+			{
+				"id": 49,
+				"mineral": {
+					"id": 4,
+					"mineralName": "Nitrogen",
+					"mineralUnit": "gram",
+					"mineralAmount": 1.0
+				},
+				"mineralValue": 1.006899011550549
 			},
-			"mineralValue": 13.499448992294305
-		}
-	],
-	"lightDuration": null,
-	"waterPH": 5.655248552518426,
-	"temperatureC": 24.48666938048139,
-	"humidity": 11.776649978442467,
-	"timestamp": "2024-01-06T11:43:09.552+00:00"
-}
+			{
+				"id": 50,
+				"mineral": {
+					"id": 5,
+					"mineralName": "Oxygen",
+					"mineralUnit": "gram",
+					"mineralAmount": 5.0
+				},
+				"mineralValue": 4.780555171855494
+			}
+		],
+		"lightDuration": 7,
+		"waterPH": 8.24958532253077,
+		"temperatureC": 55.16047701768712,
+		"humidity": 8.392922941916169,
+		"timestamp": "2024-01-08T15:45:51.000+00:00"
+	}
+]

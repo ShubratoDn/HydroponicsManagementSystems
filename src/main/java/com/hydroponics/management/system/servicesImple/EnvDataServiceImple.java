@@ -1,11 +1,13 @@
 package com.hydroponics.management.system.servicesImple;
 
+import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.hydroponics.management.system.entities.Environment;
 import com.hydroponics.management.system.entities.FieldData;
 import com.hydroponics.management.system.entities.MineralData;
 import com.hydroponics.management.system.reopository.FieldDataRepository;
@@ -56,4 +58,23 @@ public class EnvDataServiceImple implements EnvDataServices {
 		return null;
 	}
 
+
+	@Override
+	public List<FieldData> getFieldDataByEnvironment(Environment environment) {
+		List<FieldData> findByEnvironment = fielDataRepository.findByEnvironment(environment);
+		return findByEnvironment;
+	}
+
+	
+	@Override
+	public List<FieldData> getFieldDataByEnvironmentAfterGivenHour(Environment environment, double hour) {		
+		Timestamp now = new Timestamp(System.currentTimeMillis());
+		Timestamp twentyFourHoursAgo = new Timestamp(now.getTime() - ((long) hour * 60 * 60 * 1000));
+
+		List<FieldData> recentFieldData = fielDataRepository.findByEnvironmentAndTimestampAfter(environment, twentyFourHoursAgo);
+
+		return recentFieldData;
+	}
+
+	
 }
