@@ -1,10 +1,15 @@
 package com.hydroponics.management.system.services;
 
-import com.hydroponics.management.system.entities.Environment;
 import com.hydroponics.management.system.entities.Notification;
+import com.hydroponics.management.system.entities.User;
+import com.hydroponics.management.system.payloads.PageableResponse;
 
 public interface NotificationServices {
 	Notification sendNotification(Notification notification);
 	
 	Notification sendNotificationAfterVerify(Notification notification, double hour);
+
+	PageableResponse getMyNotifications(User user, int pageNumber, int pageSize, String sortBy, String sortDirection);
+	
+	
 }

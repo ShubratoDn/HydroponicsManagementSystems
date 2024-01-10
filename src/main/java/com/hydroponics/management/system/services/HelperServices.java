@@ -2,10 +2,22 @@ package com.hydroponics.management.system.services;
 
 import java.util.Random;
 
+import org.modelmapper.ModelMapper;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.context.request.RequestContextHolder;
+import org.springframework.web.context.request.ServletRequestAttributes;
+
+import com.hydroponics.management.system.DTO.UserDTO;
+import com.hydroponics.management.system.entities.User;
+
+import jakarta.servlet.http.HttpSession;
 
 @Service
 public class HelperServices {
+	
+	@Autowired
+	private ModelMapper modelMapper;
 
 	//generated random value
     public double generateRandomValue(double actualValue, int decreasePercent, int increasePercent) {
@@ -56,6 +68,25 @@ public class HelperServices {
     		return false;
     	}
     	
+    }
+    
+    
+    
+    
+    public User getLoggedUser() {
+        ServletRequestAttributes attr = (ServletRequestAttributes) RequestContextHolder.currentRequestAttributes();
+        HttpSession session = attr.getRequest().getSession(false);
+
+        if (session != null) {
+        	User user = modelMapper.map((UserDTO) session.getAttribute("loggedUser"), User.class);
+        	if(user  != null) {
+        		return user;
+        	}else {
+        		return null;
+        	}
+        }
+
+        return null;
     }
 	
 }

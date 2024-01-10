@@ -3,15 +3,22 @@ package com.hydroponics.management.system.controllers;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.scheduling.annotation.Scheduled;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
+import com.hydroponics.management.system.annotation.LoginRequired;
 import com.hydroponics.management.system.configs.Constants;
 import com.hydroponics.management.system.entities.Environment;
 import com.hydroponics.management.system.entities.FieldData;
 import com.hydroponics.management.system.entities.MineralData;
 import com.hydroponics.management.system.entities.Notification;
+import com.hydroponics.management.system.entities.User;
 import com.hydroponics.management.system.entities.enums.NotificationStatus;
 import com.hydroponics.management.system.entities.enums.NotificationType;
+import com.hydroponics.management.system.payloads.PageableResponse;
 import com.hydroponics.management.system.services.EnvDataServices;
 import com.hydroponics.management.system.services.EnvironmentServices;
 import com.hydroponics.management.system.services.HelperServices;
@@ -20,6 +27,7 @@ import com.hydroponics.management.system.services.NotificationServices;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
+@Controller
 public class NotificationController {
 	
 
@@ -34,6 +42,34 @@ public class NotificationController {
 
 	@Autowired
 	private NotificationServices notificationServices;
+	
+	
+	
+	
+	//get my notification
+	@LoginRequired
+	@GetMapping("/api/my-notifications/")
+	public ResponseEntity<?> getMyNotifications(
+			@RequestParam(value = "page", defaultValue = "0", required = false) int page,
+			@RequestParam(value = "size", defaultValue = "10", required = false) int size,
+			@RequestParam(value = "sortBy", defaultValue = "productId", required = false) String sortBy,
+			@RequestParam(value = "sortDirection", defaultValue = "desc", required = false) String sortDirection
+			){
+
+		User loggedUser = helperServices.getLoggedUser();
+		if(loggedUser == null) {
+			return ResponseEntity.badRequest().body("YOU ARE NOT LOGGED IN");	
+		}		
+		
+		PageableResponse myNotifications = notificationServices.getMyNotifications(loggedUser, page, size, sortBy, sortDirection);
+
+		return ResponseEntity.ok(myNotifications);
+	}
+	
+	
+	
+	
+	
 	
 	
 	private void checkAndNotifyError(double actualValue, double expectedValue, String fieldName,
@@ -61,6 +97,7 @@ public class NotificationController {
         }
     }
 	
+	//automatically notification upload to the database
 	@Scheduled(fixedRate = 1000 * 60 * Constants.NOTIFICATION_SCHEDULE_INTERVAL_MIN)
 	public void notificationProgress() {		
 		List<Environment> allEnvironments = environmentServices.getAllEnvironments();

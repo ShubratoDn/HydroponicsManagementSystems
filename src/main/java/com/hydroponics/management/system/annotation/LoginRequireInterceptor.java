@@ -24,6 +24,7 @@ public class LoginRequireInterceptor implements HandlerInterceptor {
         if (method.isAnnotationPresent(LoginRequired.class)) {
             HttpSession session = request.getSession(false);
             if (session == null || session.getAttribute("loggedUser") == null) {
+            	
                 response.sendRedirect("/login"); // Redirect to login if not logged in
                 return false;
             }

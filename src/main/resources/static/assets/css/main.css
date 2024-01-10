@@ -8701,3 +8701,10 @@ svg#sun {
 .tab-pane{
 	padding-top: 15px;
 }
+
+
+
+.nav-notification-container{
+	height: 40vh;
+	overflow-y: scroll;	
+}

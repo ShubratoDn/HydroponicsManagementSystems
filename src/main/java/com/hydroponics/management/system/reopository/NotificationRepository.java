@@ -3,6 +3,8 @@ package com.hydroponics.management.system.reopository;
 import java.sql.Timestamp;
 import java.util.List;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import com.hydroponics.management.system.entities.Environment;
@@ -14,4 +16,6 @@ public interface NotificationRepository extends JpaRepository<Notification, Long
 
 	List<Notification> findByReceiverAndNotificationTypeAndEnvironmentAndTimestampAfter(User receiver, NotificationType notificationType, Environment environment, Timestamp timestamp);
 
+	Page<Notification> findByReceiver(User user, Pageable page);
+	
 }
