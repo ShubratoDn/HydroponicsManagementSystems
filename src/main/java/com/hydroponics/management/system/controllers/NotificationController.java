@@ -7,6 +7,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import com.hydroponics.management.system.annotation.LoginRequired;
@@ -52,7 +54,7 @@ public class NotificationController {
 	public ResponseEntity<?> getMyNotifications(
 			@RequestParam(value = "page", defaultValue = "0", required = false) int page,
 			@RequestParam(value = "size", defaultValue = "10", required = false) int size,
-			@RequestParam(value = "sortBy", defaultValue = "productId", required = false) String sortBy,
+			@RequestParam(value = "sortBy", defaultValue = "id", required = false) String sortBy,
 			@RequestParam(value = "sortDirection", defaultValue = "desc", required = false) String sortDirection
 			){
 
@@ -65,10 +67,14 @@ public class NotificationController {
 
 		return ResponseEntity.ok(myNotifications);
 	}
+			
 	
 	
-	
-	
+	@PutMapping("/api/notification/{id}/unread")
+	public ResponseEntity<?> unreadMessage(@PathVariable Long id){	
+		notificationServices.unreadNotification(id);
+		return ResponseEntity.ok(null);
+	}
 	
 	
 	

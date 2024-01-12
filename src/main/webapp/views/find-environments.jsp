@@ -397,7 +397,11 @@
 	<script type="text/javascript" src="assets/pages/dashboard.js"></script>
 	<script type="text/javascript" src="assets/pages/elements.js"></script>
 	<script src="assets/js/menu.min.js"></script>
-
+	<script type="text/javascript">
+        // Include the base context path in a JavaScript variable
+        var contextPath = '<%= request.getContextPath() %>';
+    </script>
+	<script type="text/javascript" src="${pageContext.request.contextPath}/assets/js/notification.js"></script>
 
 
 

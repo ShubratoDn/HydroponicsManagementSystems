@@ -8704,7 +8704,20 @@ svg#sun {
 
 
 
-.nav-notification-container{
-	height: 40vh;
+#nav-notification-container{
+	max-height: 40vh;
 	overflow-y: scroll;	
+}
+
+
+.notification-unread {
+    background-color: #95f5fa34;
+}
+
+.badge-top {
+    position: absolute;
+    top: 2px;
+    left: 25px;
+    padding: 4px 6px;
+    font-size: 11px;
 }

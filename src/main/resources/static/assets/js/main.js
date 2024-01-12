@@ -314,4 +314,3 @@ $(document).ready(function() {
         $(this).toggleClass("open");
     });
 });
-// End [ Menu ]

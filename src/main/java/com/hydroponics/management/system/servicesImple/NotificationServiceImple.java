@@ -3,7 +3,6 @@ package com.hydroponics.management.system.servicesImple;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -12,9 +11,9 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
-import com.hydroponics.management.system.entities.Environment;
 import com.hydroponics.management.system.entities.Notification;
 import com.hydroponics.management.system.entities.User;
+import com.hydroponics.management.system.entities.enums.NotificationStatus;
 import com.hydroponics.management.system.payloads.PageableResponse;
 import com.hydroponics.management.system.reopository.NotificationRepository;
 import com.hydroponics.management.system.services.NotificationServices;
@@ -96,6 +95,30 @@ public class NotificationServiceImple implements NotificationServices  {
 		
 		
 		return pageData;
+	}
+
+	@Override
+	public Notification unreadNotification(Long id) {
+		Notification notificationById = this.getNotificationById(id);
+		if(notificationById == null) {
+			return null;
+		}
+		notificationById.setStatus(NotificationStatus.READ);
+		Notification save = notificationRepository.save(notificationById);
+		return save;
+	}
+	
+
+	@Override
+	public Notification getNotificationById(Long id) {
+		Notification notification = null;		
+		try {
+			notification = notificationRepository.findById(id).get();
+		}catch (Exception e) {
+			notification = null;
+		}
+		
+		return notification;
 	}
 
 }
