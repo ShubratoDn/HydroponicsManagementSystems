@@ -1,7 +1,9 @@
 package com.hydroponics.management.system.services;
 
+import com.hydroponics.management.system.entities.Environment;
 import com.hydroponics.management.system.entities.Notification;
 import com.hydroponics.management.system.entities.User;
+import com.hydroponics.management.system.entities.enums.NotificationType;
 import com.hydroponics.management.system.payloads.PageableResponse;
 
 public interface NotificationServices {
@@ -14,5 +16,7 @@ public interface NotificationServices {
 	PageableResponse getMyNotifications(User user, int pageNumber, int pageSize, String sortBy, String sortDirection);
 	
 	Notification unreadNotification(Long id);
+	
+	void checkAndNotifyError(double actualValue, double expectedValue, String fieldName,NotificationType notificationType, Environment environment);
 	
 }

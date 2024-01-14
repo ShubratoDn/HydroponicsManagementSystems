@@ -80,6 +80,7 @@ public class DataGeneratorController {
 		fieldData.setMineralDataList(mineralDatas);
 
 		FieldData saveData = envDataServices.saveData(fieldData);
+		
 		if (saveData != null) {
 			attributes.addFlashAttribute("serverMessage", new ServerMessage(
 					"Added data for environment ENV_" + saveData.getEnvironment().getId(), "success", "alert-success"));
@@ -87,14 +88,20 @@ public class DataGeneratorController {
 			attributes.addFlashAttribute("serverMessage",
 					new ServerMessage("Error! Demo data added failed.", "error", "alert-danger"));
 		}
-
+		
+		
+		//validating and notifying if there is any error in field data
+		envDataServices.validateLastFieldDataAndNotify(saveData);
+				
 		return "redirect:/generate-data"; // Adjust success page as per your project
 	}
+	
+	
 
 	// generating Random fake data
-	@GetMapping("/generate-data/environment/{envId}")
+	@GetMapping("/generate-data/random/environment/{envId}")
 	public ResponseEntity<?> generateEnvironmentFakedata(@PathVariable Long envId) {
-		int percent = 10;
+		int percent = Constants.RANDOM_GENERATE_DIFFERENCE_PERCENT;
 		Environment environment = environmentServices.getEnvironmentById(envId);
 		if (environment == null) {
 			return new ResponseEntity<>("Environment Not FOUND", HttpStatus.OK);
@@ -113,15 +120,17 @@ public class DataGeneratorController {
 			MineralData mineralData = new MineralData();
 			mineralData.setFieldData(fieldData);
 			mineralData.setMineral(mineral);
-			mineralData
-					.setMineralValue(helperServices.generateRandomValue(mineral.getMineralAmount(), percent, percent));
+			mineralData.setMineralValue(helperServices.generateRandomValue(mineral.getMineralAmount(), percent, percent));
 			mineralDataList.add(mineralData);
 		}
 
 		fieldData.setMineralDataList(mineralDataList);
 
 		FieldData saveData = envDataServices.saveData(fieldData);
-
+		
+		//validating and notifying if there is any error in field data
+		envDataServices.validateLastFieldDataAndNotify(saveData);
+		
 		return ResponseEntity.ok(saveData);
 	}
 
@@ -132,6 +141,7 @@ public class DataGeneratorController {
 		return ResponseEntity.ok(allFieldsData);
 	}
 
+	//MAYBE USE HOCCHENA ETA
 	// get all fields data for a Specific Environment
 	@GetMapping("/data/getFieldsData/env/{envId}")
 	public ResponseEntity<?> getFieldsDataByEnvironment(@PathVariable Long envId) {
@@ -209,12 +219,13 @@ public class DataGeneratorController {
 		return ResponseEntity.ok(fieldDataList);
 	}
 
+	//MAYBE USE HOCCHENA ETA
 	private void checkAndNotifyError(double actualValue, double expectedValue, String fieldName, NotificationType notificationType, Environment environment) {
   	    if (!helperServices.isValidFieldData(actualValue, expectedValue, 4)) {
   	        String msg = "Error in " + fieldName + ". Actual value is: " + actualValue +
   	                " The value should be within " + helperServices.givenPercentIncrease(actualValue, 4) +
   	                " and " + helperServices.givenPercentDecrease(actualValue, 4);
-  	        System.out.println(msg);
+//  	        System.out.println(msg);
 
   	        Notification notification = new Notification();
   	        notification.setNotificationType(notificationType);

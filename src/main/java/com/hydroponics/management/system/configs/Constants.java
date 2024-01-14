@@ -9,4 +9,8 @@ public class Constants {
 	public static final double NOTIFICATION_TIME_INTERVAL_HOUR = 10;
 	
 	public static final int NOTIFICATION_SCHEDULE_INTERVAL_MIN = 10;
+	
+	public static final double MINERAL_ALLOWENCE_PERCENT = 4;
+	
+	public static final int RANDOM_GENERATE_DIFFERENCE_PERCENT = 10;
 }

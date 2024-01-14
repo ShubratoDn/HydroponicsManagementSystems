@@ -41,7 +41,7 @@
                                 <span class="badge badge-danger badge-top unread-notification-count" id="unread-notification-count">--</span>
                             </a>
                             <ul class="dropdown-menu">
-                                <li class="not-head">You have <b class="text-primary unread-notification-count">--</b> new notifications.</li>
+                                <li class="not-head">You have <b class="text-primary unread-notification-count" id="unread-notification-count">--</b> new notifications.</li>
                                 
                                 <ul id="nav-notification-container">
 								  
@@ -79,9 +79,9 @@
                             <!-- USER INFORMATION -->
                             <a href="#!" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"
                                 class="dropdown-toggle drop icon-circle drop-image">
-                                <span><img class="img-circle"
+                                <span><img class="img-circle nav-user-image"
                                         src="${pageContext.request.contextPath}/assets//images/userimages/<%=loggedUser != null ? loggedUser.getImage() : "" %>"
-                                        style="width:40px; height: 40px; object-fit: cover;" alt="User Image"></span>
+                                         alt="User Image"></span>
                                 <span>
                                     <%=loggedUser !=null ? loggedUser.getFirstName() : "" %> <b class="text-muted">(
                                             <%=loggedUser !=null ? loggedUser.getRole() : "" %>)

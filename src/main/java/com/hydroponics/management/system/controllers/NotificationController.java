@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -45,8 +46,16 @@ public class NotificationController {
 	@Autowired
 	private NotificationServices notificationServices;
 	
+	@Autowired
+	private SimpMessagingTemplate simpMessagingTemplate;
 	
+	@LoginRequired
+	@GetMapping("/send-notification")
+	public String sendNotificationPage() {
+		return "notificationDirectory/send-notification";
+	}
 	
+		
 	
 	//get my notification
 	@LoginRequired
@@ -96,6 +105,7 @@ public class NotificationController {
 
             Notification sendNotification = notificationServices.sendNotificationAfterVerify(notification, Constants.NOTIFICATION_TIME_INTERVAL_HOUR);
             if (sendNotification != null) {
+            	simpMessagingTemplate.convertAndSend("/specific/notification/" + sendNotification.getReceiver().getId(), sendNotification);
                 log.info("Notification: {} saved in the database.", notificationType);
             } else {
                 log.error("Failed to save Notification: {} in the database.", notificationType);

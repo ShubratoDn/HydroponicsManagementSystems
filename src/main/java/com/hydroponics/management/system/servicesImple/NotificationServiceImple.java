@@ -9,20 +9,34 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
+import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Service;
 
+import com.hydroponics.management.system.configs.Constants;
+import com.hydroponics.management.system.entities.Environment;
 import com.hydroponics.management.system.entities.Notification;
 import com.hydroponics.management.system.entities.User;
 import com.hydroponics.management.system.entities.enums.NotificationStatus;
+import com.hydroponics.management.system.entities.enums.NotificationType;
 import com.hydroponics.management.system.payloads.PageableResponse;
 import com.hydroponics.management.system.reopository.NotificationRepository;
+import com.hydroponics.management.system.services.HelperServices;
 import com.hydroponics.management.system.services.NotificationServices;
 
+import lombok.extern.slf4j.Slf4j;
+
 @Service
+@Slf4j
 public class NotificationServiceImple implements NotificationServices  {
 	
 	@Autowired
 	private NotificationRepository notificationRepository;
+	
+	@Autowired 
+	private HelperServices helperServices;
+		
+	@Autowired
+	private SimpMessagingTemplate simpMessagingTemplate;
 	
 	@Override
 	public Notification sendNotification(Notification notification) {
@@ -120,6 +134,38 @@ public class NotificationServiceImple implements NotificationServices  {
 		
 		return notification;
 	}
+
+	
+	
+	@Override
+	public void checkAndNotifyError(double actualValue, double expectedValue, String fieldName,
+            NotificationType notificationType, Environment environment) {
+		
+        if (!helperServices.isValidFieldData(actualValue, expectedValue, Constants.MINERAL_ALLOWENCE_PERCENT)) {
+            String errorMsg = "Error in " + fieldName + ". Actual value is: " + actualValue +
+                    ". It should be within the range of " + helperServices.givenPercentDecrease(actualValue, Constants.MINERAL_ALLOWENCE_PERCENT) +
+                    " to " + helperServices.givenPercentIncrease(actualValue, Constants.MINERAL_ALLOWENCE_PERCENT) + ".";
+            log.error(errorMsg);
+
+            Notification notification = new Notification();
+            notification.setNotificationType(notificationType);
+            notification.setEnvironment(environment);
+            notification.setMessage(errorMsg);
+            notification.setReceiver(environment.getOwnedBy());
+            notification.setSender(null);
+            notification.setStatus(NotificationStatus.UNREAD);
+            
+            Notification sendNotification = this.sendNotificationAfterVerify(notification, Constants.NOTIFICATION_TIME_INTERVAL_HOUR);
+            
+            if (sendNotification != null) {
+                log.info("Notification: {} saved in the database.", notificationType);
+                simpMessagingTemplate.convertAndSend("/specific/notification/" + sendNotification.getReceiver().getId(), sendNotification);
+            } else {
+                log.warn("Already saved Notification: {} in the database.", notificationType);
+            }
+        }
+    }
+	
 
 }
 

@@ -41,6 +41,13 @@
                         </a>
                     </li>
                     
+					<li class="nav-level">--- Notification</li>
+                    <li class="treeview">
+                        <a class="waves-effect waves-dark" href="/send-notification">
+                            <i class="icon-bell"></i><span>Send notification</span>
+                        </a>
+                    </li>
+                    
                                        
                     <li class="nav-level">--- Menu Level</li>
 

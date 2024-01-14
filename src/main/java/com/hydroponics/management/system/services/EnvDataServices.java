@@ -16,4 +16,8 @@ public interface EnvDataServices {
 	public List<FieldData> getFieldDataByEnvironment(Environment environment);
 
 	List<FieldData> getFieldDataByEnvironmentAfterGivenHour(Environment environment, double hour);
+	
+	public void validateAndNotifyEnvironmentData(Environment environment);
+	
+	public void validateLastFieldDataAndNotify(FieldData fieldData);
 }
