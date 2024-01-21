@@ -28,5 +28,8 @@ public interface EnvironmentServices {
 	 
 	 List<Mineral> getMineralsOfEnvironment(Long id);
 	 List<Mineral> getMineralsOfEnvironment(Environment environment);
+	 
+	 void deleteEnvironment (Long id);
+	 
 }
 

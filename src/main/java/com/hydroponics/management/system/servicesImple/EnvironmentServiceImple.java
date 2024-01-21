@@ -112,5 +112,10 @@ public class EnvironmentServiceImple implements EnvironmentServices {
 		Environment env = this.getEnvironmentById(environment.getId());		
 		return env.getMinerals();
 	}
+
+	@Override
+	public void deleteEnvironment(Long id) {
+		environmentRepo.deleteById(id);		
+	}
 	
 }

@@ -7,6 +7,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -55,9 +56,22 @@ public class NotificationController {
 		return "notificationDirectory/send-notification";
 	}
 	
-		
 	
-	//get my notification
+	
+	@LoginRequired
+	@GetMapping("/my-notifications")
+	public String myNotifications(Model model) {
+		User loggedUser = helperServices.getLoggedUser();
+		
+		PageableResponse myNotifications = notificationServices.getMyNotifications(loggedUser, 0, 5, "id", "desc");
+		
+		model.addAttribute("pageableNotifications", myNotifications);
+		
+		return "notificationDirectory/notifications";
+	}
+	
+	
+	//get my notification in JSON format
 	@LoginRequired
 	@GetMapping("/api/my-notifications/")
 	public ResponseEntity<?> getMyNotifications(
@@ -78,7 +92,7 @@ public class NotificationController {
 	}
 			
 	
-	
+	//unread message
 	@PutMapping("/api/notification/{id}/unread")
 	public ResponseEntity<?> unreadMessage(@PathVariable Long id){	
 		notificationServices.unreadNotification(id);

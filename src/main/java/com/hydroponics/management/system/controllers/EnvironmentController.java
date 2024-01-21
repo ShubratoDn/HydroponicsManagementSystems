@@ -25,6 +25,7 @@ import com.hydroponics.management.system.entities.Mineral;
 import com.hydroponics.management.system.payloads.ServerMessage;
 import com.hydroponics.management.system.services.EnvironmentServices;
 import com.hydroponics.management.system.services.LocationService;
+import com.hydroponics.management.system.services.NotificationServices;
 import com.hydroponics.management.system.services.UserServices;
 
 import jakarta.validation.Valid;
@@ -40,6 +41,9 @@ public class EnvironmentController {
 	
 	@Autowired
 	private EnvironmentServices environmentServices;
+	
+	@Autowired
+	private NotificationServices notificationServices;
 	
 	
 	//get environment page
@@ -78,10 +82,11 @@ public class EnvironmentController {
 		Environment addEnvironment = environmentServices.addEnvironment(environment);
 		
 		if (addEnvironment == null) {
-	        redirectAttributes.addFlashAttribute("serverMessage", new ServerMessage("Failed to set new Environment!", "error", "alert-danger"));
+	        redirectAttributes.addFlashAttribute("serverMessage", new ServerMessage("Failed to set new Environment!", "error", "alert-danger"));	        
 	    } else {
 	        redirectAttributes.addFlashAttribute("serverMessage", new ServerMessage("Successfully added new Environment", "success", "alert-success"));
 	        redirectAttributes.addFlashAttribute("environmentDTO", null);
+	        notificationServices.sendEnvWelcomeNotification(addEnvironment);
 	    }
 		
 		return "redirect:/add-environment";
@@ -126,9 +131,6 @@ public class EnvironmentController {
 		redirectAttributes.addFlashAttribute("searchResult", searchResult);
 	    return "redirect:/find-environments";
     }
-
-	
-	
 	
 	
 	
@@ -153,6 +155,14 @@ public class EnvironmentController {
 	public ResponseEntity<?> getMineralsOfEnvironment(@PathVariable Long id){
 		List<Mineral> mineralsOfEnvironment = environmentServices.getMineralsOfEnvironment(id);
 		return ResponseEntity.ok(mineralsOfEnvironment);
+	}
+	
+	
+	@PreAuthorized(roles = {"admin", "owner"})
+	@GetMapping("/environment/delete/{id}")
+	public String deleteEnvironment(@PathVariable Long id){
+		environmentServices.deleteEnvironment(id);
+		return "redirect:/?delete=success";
 	}
 	
 }

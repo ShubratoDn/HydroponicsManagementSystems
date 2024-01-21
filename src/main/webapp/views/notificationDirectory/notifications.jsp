@@ -1,3 +1,6 @@
+<%@page import="java.util.ArrayList"%>
+<%@page import="com.hydroponics.management.system.entities.Notification"%>
+<%@page import="com.hydroponics.management.system.payloads.PageableResponse"%>
 <%@page import="com.hydroponics.management.system.payloads.ServerMessage"%>
 <%@page import="com.hydroponics.management.system.entities.Environment"%>
 <%@page import="java.util.List"%>
@@ -7,7 +10,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-<title>Send Notification</title>
+<title>My Notifications</title>
 <meta charset="utf-8">
 <meta name="viewport"
 	content="width=device-width, initial-scale=1, maximum-scale=1.0, user-scalable=no">
@@ -87,7 +90,7 @@
 			<div class="container-fluid">
 				<div class="row">
 					<div class="main-header">
-						<h4>Add Fake Data</h4>
+						<h4>My notifications</h4>
 					</div>
 				</div>
 
@@ -95,11 +98,82 @@
 
 				<section class="min-h-80vh">
 				    <div class="bg-white p-20 bordered">
-				    	 <form id="notificationForm" onsubmit="sendNotification(event)">
-	                        <input type="number" placeholder="user id" id="userId">
-	                        <input type="text" placeholder="message" id="message">
-	                        <input type="submit" value="Send Notification">
-	                    </form>
+				    
+				    <%
+				    	PageableResponse pageableResponse = (PageableResponse) request.getAttribute("pageableNotifications");
+						
+				    	List<Notification> notifications = new ArrayList<>();
+				    
+				    	if(pageableResponse != null){
+				    		notifications = (List<Notification>) pageableResponse.getContent();
+				    	}
+				    	
+				    	
+				    	if(notifications.size() < 1){
+				    		%>
+				    			<h1 class="text-danger text-center">Empty Notifications</h1>
+				    		<%
+				    	}else{
+				    		for(Notification notification: notifications){
+				    			
+				    			 // Determine the CSS class based on notification type
+				                String cssClass = "";
+				    			 if(notification.getNotificationType().name().startsWith("SUCCESS")){
+				    				 cssClass = "success";
+				    			 }else if(notification.getNotificationType().name().startsWith("ERROR") || notification.getNotificationType().name().startsWith("INVALID")){
+				    				 cssClass = "danger";
+				    			 }else if(notification.getNotificationType().name().startsWith("EXPIRATION") || notification.getNotificationType().name().startsWith("WARN")){
+				    				 cssClass = "warning";
+				    			 }
+				    			 
+				    			 
+				    			 String shortMessage = "";
+				    			 
+				    			 if(notification.getMessage().length() > 20){
+				    				 shortMessage = notification.getMessage().substring(0, 20);
+				    			 }
+				    		
+				    		%>
+					    	<div class="accordion-panel notification-accordion-panel <%=cssClass %>" id="notification_<%=notification.getId()%>">
+	                            <div class="accordion-heading" role="tab" id="headingOne">
+	                                <h3 class="card-title accordion-title">
+	                                    <a class="accordion-msg collapsed" data-toggle="collapse" data-parent="#accordion" href="#collapse_<%=notification.getId()%>"
+	                                        aria-expanded="true" aria-controls="collapse_<%=notification.getId()%>">
+	                                        <div class="d-flex">
+	                                            <img src="<%=request.getContextPath()+"/assets/images/avatar-1.png" %>" alt="image" class="notification-image">
+	                                            <div>
+	                                                <%=notification.getNotificationType().name() %>
+	                                                <span class="short-info">(<%=shortMessage %>...)</span>
+	                                                <span class="icon collapsed-icon icon-arrow-down"></span>
+	                                            </div>
+	                                        </div>
+	                                        <span class="icon non-collapsed-icon icon-arrow-up"></span>
+	                                    </a>
+	                                </h3>
+	                            </div>
+	                            
+	                            <div id="collapse_<%=notification.getId()%>" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingOne">
+	                                <div class="accordion-content accordion-desc p-t-10">
+	                                    <div class="notification-content-container-main">
+	                                        <div class="m-r-10">
+	                                            <img src="<%=notification.getSender() == null ? request.getContextPath()+"/assets/images/avatar-1.png" : request.getContextPath()+"/assets/images/userimages/"+notification.getSender().getImage()%>" alt="image" class="notification-sender-image">
+	                                        </div>
+	                                        <div class="content">
+	                                            <h6><%= notification.getSender() == null ? "Owner" : notification.getSender().getFirstName() + " " + notification.getSender().getLastName() %></h6>
+	                                            <div>
+	                                               <%=notification.getMessage()%>
+	                                            </div>
+	                                        </div>
+	                                    </div>
+	                                </div>
+	                            </div>
+	                        </div>
+				    		<%
+				    		}
+				    	}
+				    %>				    
+				    
+				    
 				    </div>
 				</section>
 			

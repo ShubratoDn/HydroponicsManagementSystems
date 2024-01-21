@@ -28,7 +28,7 @@ function updateNotificationMenu(data) {
 
         var notificationHtml = `
 		    <li class="bell-notification ${notificationClass}">
-		        <a href="javascript:;" class="media" onclick="markAsReadAndRedirect(${notification.id}, '/notifications')">
+		        <a href="javascript:;" class="media" onclick="markAsReadAndRedirect(${notification.id}, '/my-notifications#notification_${notification.id}')">
 		            <span class="media-left media-icon">
 		                <img class="img-circle" src="${contextPath}/assets/images/avatar-2.png" alt="${notification.notificationType}">
 		            </span>
@@ -176,7 +176,7 @@ function addNewNotification(result){
 
     var notificationHtml = `
 	    <li class="bell-notification ${notificationClass}">
-	        <a href="javascript:;" class="media" onclick="markAsReadAndRedirect(${notification.id}, '/notifications')">
+	        <a href="javascript:;" class="media" onclick="markAsReadAndRedirect(${notification.id}, '/my-notificaitons')">
 	            <span class="media-left media-icon">
 	                <img class="img-circle" src="${contextPath}/assets/images/avatar-2.png" alt="${notification.notificationType}">
 	            </span>

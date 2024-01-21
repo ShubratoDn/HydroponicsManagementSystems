@@ -43,6 +43,15 @@ public class NotificationServiceImple implements NotificationServices  {
 		Notification save = notificationRepository.save(notification);
 		return save;
 	}
+	
+
+	@Override
+	public Notification sendNotificationAndNotify(Notification notification) {
+		Notification save = notificationRepository.save(notification);
+		simpMessagingTemplate.convertAndSend("/specific/notification/" + save.getReceiver().getId(), save);
+		return save;
+	}
+
 
 	@Override
 	public Notification sendNotificationAfterVerify(Notification notification, double hour) {
@@ -165,6 +174,30 @@ public class NotificationServiceImple implements NotificationServices  {
             }
         }
     }
+
+
+	@Override
+	public Notification sendEnvWelcomeNotification(Environment addEnvironment) {
+        
+        Notification notification = new Notification();
+        notification.setEnvironment(addEnvironment);
+        notification.setReceiver(addEnvironment.getOwnedBy());
+        notification.setSender(addEnvironment.getAddedEnvironmentBy());
+        notification.setStatus(NotificationStatus.UNREAD);
+        notification.setNotificationType(NotificationType.SUCCESS_ENVIRONMENT_CREATION);
+        
+        String msg = "🌱 Welcome to the Green Family, "+addEnvironment.getOwnedBy().getFirstName()+"!\n\n"
+        	    + "We're excited to share the news of your brand-new hydroponics environment. Your oasis, located in "+addEnvironment.getLocation().getFullAddress()+", is now home to thriving "+addEnvironment.getPlantName()+". 🌿\n\n"
+        	    + "A big shoutout to "+addEnvironment.getAddedEnvironmentBy().getFirstName()+" for making it happen! 🌟 Get ready for a journey of growth, freshness, and green goodness.\n\n"
+        	    + "Stay tuned for updates on your flourishing plants!\n\n"
+        	    + "Happy Growing! 🌱🌷🌿";
+        
+        notification.setMessage(msg);
+        
+        Notification sendNotificationAndNotify = this.sendNotificationAndNotify(notification);
+        
+		return sendNotificationAndNotify;
+	}
 	
 
 }

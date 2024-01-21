@@ -14,32 +14,32 @@
 	<meta name="author" content="Shubrato Debnath">
 
 	<!-- Favicon icon -->
-	<link rel="shortcut icon" href="assets/images/favicon.png" type="image/x-icon">
-	<link rel="icon" href="assets/images/favicon.ico" type="image/x-icon">
+	<link rel="shortcut icon" href="${pageContext.request.contextPath}/assets/images/favicon.png" type="image/x-icon">
+	<link rel="icon" href="${pageContext.request.contextPath}/assets/images/favicon.ico" type="image/x-icon">
 
 	<!-- Google font-->
    <link href="https://fonts.googleapis.com/css?family=Ubuntu:400,500,700" rel="stylesheet">
 
 	<!-- Font Awesome -->
-	<link href="assets/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+	<link href="${pageContext.request.contextPath}/assets/css/font-awesome.min.css" rel="stylesheet" type="text/css">
 
 	<!--ico Fonts-->
-	<link rel="stylesheet" type="text/css" href="assets/icon/icofont/css/icofont.css">
+	<link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/assets/icon/icofont/css/icofont.css">
 
     <!-- Required Fremwork -->
-    <link rel="stylesheet" type="text/css" href="assets/plugins/bootstrap/css/bootstrap.min.css">
+    <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/assets/plugins/bootstrap/css/bootstrap.min.css">
 
 	<!-- waves css -->
-	<link rel="stylesheet" type="text/css" href="assets/plugins/Waves/waves.min.css">
+	<link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/assets/plugins/Waves/waves.min.css">
 
 	<!-- Style.css -->
-	<link rel="stylesheet" type="text/css" href="assets/css/main.css">
+	<link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/assets/css/main.css">
 
 	<!-- Responsive.css-->
-	<link rel="stylesheet" type="text/css" href="assets/css/responsive.css">
+	<link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/assets/css/responsive.css">
 
 	<!--color css-->
-	<link rel="stylesheet" type="text/css" href="assets/css/color/color-1.min.css" id="color"/>
+	<link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/assets/css/color/color-1.min.css" id="color"/>
 
 </head>
 <body>
@@ -53,7 +53,7 @@
 					<form class="md-float-material" method="post" action="/login">
 						<div class="text-center">
 							<a href="/">
-								<img class="full-logo-lg" src="assets/images/logo-black.png" alt="logo">
+								<img class="full-logo-lg" src="${pageContext.request.contextPath}/assets/images/logo-black.png" alt="logo">
 							</a>
 						</div>
 						<h3 class="text-center txt-primary">
@@ -127,17 +127,17 @@
 </section>
 
 <!-- Required Jqurey -->
-<script src="assets/plugins/jquery/dist/jquery.min.js"></script>
-<script src="assets/plugins/jquery-ui/jquery-ui.min.js"></script>
-<script src="assets/plugins/tether/dist/js/tether.min.js"></script>
+<script src="${pageContext.request.contextPath}/assets/plugins/jquery/dist/jquery.min.js"></script>
+<script src="${pageContext.request.contextPath}/assets/plugins/jquery-ui/jquery-ui.min.js"></script>
+<script src="${pageContext.request.contextPath}/assets/plugins/tether/dist/js/tether.min.js"></script>
 
 <!-- Required Fremwork -->
-<script src="assets/plugins/bootstrap/js/bootstrap.min.js"></script>
+<script src="${pageContext.request.contextPath}/assets/plugins/bootstrap/js/bootstrap.min.js"></script>
 
 <!-- waves effects.js -->
-<script src="assets/plugins/Waves/waves.min.js"></script>
+<script src="${pageContext.request.contextPath}/assets/plugins/Waves/waves.min.js"></script>
 <!-- Custom js -->
-<script type="text/javascript" src="assets/pages/elements.js"></script>
+<script type="text/javascript" src="${pageContext.request.contextPath}/assets/pages/elements.js"></script>
 
 
     <script>

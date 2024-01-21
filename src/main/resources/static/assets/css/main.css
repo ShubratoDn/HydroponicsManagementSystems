@@ -8729,3 +8729,98 @@ svg#sun {
     height: 40px;
     object-fit: cover;
 }
+
+
+
+
+
+
+
+
+/* collapse */
+.accordion-msg{
+    position: relative;
+}
+
+.accordion-msg .icon{
+    color: black;
+    font-weight: bold;
+    width: fit-content;
+    position: absolute;
+    right: 0;
+    top: 50%;
+    background-color: transparent;
+    transform: translate(-50%, -50%);
+}
+
+.accordion-msg span.non-collapsed-icon {
+    display: block;
+}
+.accordion-msg.collapsed span.non-collapsed-icon {
+    display: none;
+}
+
+.accordion-msg span.collapsed-icon {
+    display: none;
+}
+.accordion-msg.collapsed span.collapsed-icon {
+    display: block;
+}
+
+.notification-accordion-panel{
+    border-radius: 5px;
+    overflow: hidden;
+    margin: 20px 0;
+    border: 1px solid #00000029;
+}
+
+.notification-accordion-panel.success .accordion-heading{
+    background-color: #d8ffd882;
+}
+
+.notification-accordion-panel.success .accordion-content{
+    background-color: #bef5be1c;
+}
+
+
+.notification-accordion-panel.danger .accordion-heading{
+    background-color: #ffe0e0;
+}
+
+.notification-accordion-panel.danger .accordion-content{
+    background-color: #fff1f1;
+}
+
+.accordion-msg{
+    border: none;
+}
+
+.accordion-msg.collapsed .short-info{
+    color: #b4b4b4bd;
+    font-size: 12px;
+    font-weight: lighter;
+    display: block;
+}
+.accordion-msg .short-info {
+    display: none;
+}
+
+.accordion-msg .notification-image{
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    object-fit: cover;
+    margin-right: 10px;
+}
+
+.accordion-content .notification-sender-image{
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    object-fit: cover;
+}
+
+.notification-content-container-main{
+	display: flex;
+	align-items: flex-start;
+}
