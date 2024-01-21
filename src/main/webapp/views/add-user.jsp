@@ -376,12 +376,17 @@
     <script type="text/javascript" src="${pageContext.request.contextPath}/assets/pages/dashboard.js"></script>
     <script type="text/javascript" src="${pageContext.request.contextPath}/assets/pages/elements.js"></script>
     <script src="${pageContext.request.contextPath}/assets/js/menu.min.js"></script>
+ 	<!-- Web Socket -->    
+    <script src="assets/plugins/websocket/sockjs.min.js"></script>
+    <script src="assets/plugins/websocket/stomp.min.js"></script>    
+
     <script type="text/javascript">
         // Include the base context path in a JavaScript variable
         var contextPath = '<%= request.getContextPath() %>';
+        var userId = '<%=loggedUser != null ? loggedUser.getId() : null %>';
     </script>
 	<script type="text/javascript" src="${pageContext.request.contextPath}/assets/js/notification.js"></script>
-    
+	
     <script>
  // Select all input elements within .md-input-wrapper elements
     const inputs = document.querySelectorAll(".md-input-wrapper input");

@@ -1,96 +1,138 @@
 {
-	"content": [
-		{
-			"id": 64,
-			"receiver": {
-				"id": 4,
-				"firstName": "Akash",
-				"lastName": "Debnath",
-				"phone": "01303544534",
-				"email": "akash@gmail.com",
-				"image": "14c2da08ef49c793a931b895af27c6e5b55b9640_.jpg",
-				"password": null,
-				"remark": null,
-				"role": "User",
-				"addedBy": null
-			},
-			"sender": null,
-			"environment": {
+	"id": 54,
+	"receiver": {
+		"id": 6,
+		"firstName": "Sourav",
+		"lastName": "Debnath",
+		"phone": "01733704494",
+		"email": "sourav@gmail.com",
+		"image": "1cdb801159edac4faa44b54bd91a7e4ccec25e6f_.jpg",
+		"password": "$2a$10$mOR50NgEMfvAKADXZ02b/OBuAwoFM3zfc84Ptlidht2pLYzf.Puyu",
+		"remark": null,
+		"role": "User",
+		"addedBy": {
+			"id": 5,
+			"firstName": "Shubrato",
+			"lastName": "Debnath",
+			"phone": "01759458961",
+			"email": "shubratodn44985@gmail.com",
+			"image": "c6fdd02406cb30ded449c8fa08230511875c4607_.png",
+			"password": "$2a$10$AI92.o.RFcfJqt5ISvlOQurYPUpy8yzhRuWG4bR2pEesKukdZZ.RW",
+			"remark": null,
+			"role": "Admin",
+			"addedBy": {
 				"id": 1,
-				"plantName": "Wheat",
-				"ownedBy": null,
-				"location": {
-					"id": 1,
-					"locationName": "Location A",
-					"fullAddress": "Sirajganj, enayetpur, kyau, building - 312",
-					"length": 10.0,
-					"width": 10.0,
-					"note": "Beside the door\r\n",
-					"available": false
-				},
-				"plantDate": "2023-12-29T18:00:00.000+00:00",
-				"maturityDate": "2023-12-30T18:00:00.000+00:00",
-				"lightDuration": 8,
-				"waterPH": 5.5,
-				"temperatureC": 25.0,
-				"humidity": 8.0,
-				"minerals": null,
-				"addedEnvironmentBy": null
-			},
-			"message": "Error in Oxygen. Actual value is: 1.0 The value should be within 1.04 and 0.96",
-			"notificationType": "INVALID_MINERAL_ERROR",
-			"status": "UNREAD",
-			"timestamp": "2024-01-09T13:17:18.000+00:00"
-		},
-		{
-			"id": 63,
-			"receiver": {
-				"id": 4,
-				"firstName": "Akash",
-				"lastName": "Debnath",
-				"phone": "01303544534",
-				"email": "akash@gmail.com",
-				"image": "14c2da08ef49c793a931b895af27c6e5b55b9640_.jpg",
-				"password": null,
+				"firstName": "Admin",
+				"lastName": "Admin",
+				"phone": null,
+				"email": "admin@gmail.com",
+				"image": "AdminImage.jpg",
+				"password": "$2a$10$KhhFWSgHW2Y/q1NiEteeIefz2U5ct3Y5qvVAZBFjIjXWumnBRYqCm",
 				"remark": null,
-				"role": "User",
+				"role": "Admin",
 				"addedBy": null
-			},
-			"sender": null,
-			"environment": {
-				"id": 1,
-				"plantName": "Wheat",
-				"ownedBy": null,
-				"location": {
-					"id": 1,
-					"locationName": "Location A",
-					"fullAddress": "Sirajganj, enayetpur, kyau, building - 312",
-					"length": 10.0,
-					"width": 10.0,
-					"note": "Beside the door\r\n",
-					"available": false
-				},
-				"plantDate": "2023-12-29T18:00:00.000+00:00",
-				"maturityDate": "2023-12-30T18:00:00.000+00:00",
-				"lightDuration": 8,
-				"waterPH": 5.5,
-				"temperatureC": 25.0,
-				"humidity": 8.0,
-				"minerals": null,
-				"addedEnvironmentBy": null
-			},
-			"message": "Error in temperature. Actual value is: 10.0 The value should be within 10.4 and 9.6",
-			"notificationType": "INVALID_TEMPERATURE_ERROR",
-			"status": "UNREAD",
-			"timestamp": "2024-01-09T13:17:18.000+00:00"
+			}
 		}
-	],
-	"pageNumber": 0,
-	"pageSize": 10,
-	"totalElements": 12,
-	"totalPages": 2,
-	"numberOfElements": 10,
-	"empty": false,
-	"first": true,
-	"last": false
+	},
+	"sender": null,
+	"environment": {
+		"id": 6,
+		"plantName": "Onion",
+		"ownedBy": {
+			"id": 6,
+			"firstName": "Sourav",
+			"lastName": "Debnath",
+			"phone": "01733704494",
+			"email": "sourav@gmail.com",
+			"image": "1cdb801159edac4faa44b54bd91a7e4ccec25e6f_.jpg",
+			"password": "$2a$10$mOR50NgEMfvAKADXZ02b/OBuAwoFM3zfc84Ptlidht2pLYzf.Puyu",
+			"remark": null,
+			"role": "User",
+			"addedBy": {
+				"id": 5,
+				"firstName": "Shubrato",
+				"lastName": "Debnath",
+				"phone": "01759458961",
+				"email": "shubratodn44985@gmail.com",
+				"image": "c6fdd02406cb30ded449c8fa08230511875c4607_.png",
+				"password": "$2a$10$AI92.o.RFcfJqt5ISvlOQurYPUpy8yzhRuWG4bR2pEesKukdZZ.RW",
+				"remark": null,
+				"role": "Admin",
+				"addedBy": {
+					"id": 1,
+					"firstName": "Admin",
+					"lastName": "Admin",
+					"phone": null,
+					"email": "admin@gmail.com",
+					"image": "AdminImage.jpg",
+					"password": "$2a$10$KhhFWSgHW2Y/q1NiEteeIefz2U5ct3Y5qvVAZBFjIjXWumnBRYqCm",
+					"remark": null,
+					"role": "Admin",
+					"addedBy": null
+				}
+			}
+		},
+		"location": {
+			"id": 5,
+			"locationName": "Location E",
+			"fullAddress": "Sirajganj, enayetpur, kyau, building - 313,  section C",
+			"length": 10.0,
+			"width": 10.0,
+			"note": "",
+			"available": false
+		},
+		"plantDate": "2024-01-11T18:00:00.000+00:00",
+		"maturityDate": "2024-04-11T18:00:00.000+00:00",
+		"lightDuration": 8,
+		"waterPH": 5.5,
+		"temperatureC": 28.0,
+		"humidity": 10.0,
+		"minerals": [
+			{
+				"id": 12,
+				"mineralName": "Nitrogen",
+				"mineralUnit": "gram",
+				"mineralAmount": 120.0
+			},
+			{
+				"id": 13,
+				"mineralName": "Potassium",
+				"mineralUnit": "gram",
+				"mineralAmount": 150.0
+			},
+			{
+				"id": 14,
+				"mineralName": "phosphorus",
+				"mineralUnit": "gram",
+				"mineralAmount": 22.0
+			}
+		],
+		"addedEnvironmentBy": {
+			"id": 5,
+			"firstName": "Shubrato",
+			"lastName": "Debnath",
+			"phone": "01759458961",
+			"email": "shubratodn44985@gmail.com",
+			"image": "c6fdd02406cb30ded449c8fa08230511875c4607_.png",
+			"password": "$2a$10$AI92.o.RFcfJqt5ISvlOQurYPUpy8yzhRuWG4bR2pEesKukdZZ.RW",
+			"remark": null,
+			"role": "Admin",
+			"addedBy": {
+				"id": 1,
+				"firstName": "Admin",
+				"lastName": "Admin",
+				"phone": null,
+				"email": "admin@gmail.com",
+				"image": "AdminImage.jpg",
+				"password": "$2a$10$KhhFWSgHW2Y/q1NiEteeIefz2U5ct3Y5qvVAZBFjIjXWumnBRYqCm",
+				"remark": null,
+				"role": "Admin",
+				"addedBy": null
+			}
+		}
+	},
+	"message": "Error in humidity. Actual value is: 1.0. It should be within the range of 0.96 to 1.04.",
+	"notificationType": "INVALID_HUMIDITY_ERROR",
+	"status": "UNREAD",
+	"timestamp": "2024-01-15T09:08:14.583+00:00"
 }

@@ -2707,26 +2707,33 @@
 
 @media only screen and (max-width: 450px) {
  
-    .notification-menu.open>.dropdown-menu {
-            right: auto !important;
-            left: -350% !important;
-        }
+	.notification-menu.open>.dropdown-menu {
+        right: auto !important;
+        left: -350% !important;
+    }
     .nav-user-image {
-        width: 30px;
-        height: 30px;
+        width: 25px;
+        height: 25px;
         object-fit: cover;
     }
 
     .top-nav li a {
         /* background-color: rebeccapurple; */
-        font-size: 12px;
-        padding: 5px !important;
+        font-size: 11px;
+        padding: 3px !important;
         /* margin: 0px 5px; */
     }
+
 
     .badge {
         padding: 3px 5px;
         font-size: 10px;
+        left: 12px !important;
+    }
+    
+    
+    .f-right {
+        float: none !important;
     }
 }
 
@@ -2741,7 +2748,7 @@
     .top-nav li a {
         /* background-color: rebeccapurple; */
         font-size: 10px;
-        padding: 5px !important;
+        padding: 2px !important;
         /* margin: 0px 5px; */
     }
 
@@ -2757,6 +2764,7 @@
     .f-right {
         float: none !important;
     }
+    
 }
 
 

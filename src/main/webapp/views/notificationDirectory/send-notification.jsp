@@ -147,21 +147,17 @@
 	
 	
 
-	<!-- Web Socket -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/sockjs-client/1.6.1/sockjs.min.js"
-        integrity="sha512-1QvjE7BtotQjkq8PxLeF6P46gEpBRXuskzIVgjFpekzFVF4yjRgrQvTG1MTOJ3yQgvTteKAcO7DSZI92+u/yZw=="
-        crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/stomp.js/2.3.3/stomp.min.js"
-        integrity="sha512-iKDtgDyTHjAitUDdLljGhenhPwrbBfqTKWO1mkhSFH3A7blITC9MhYon6SjnMhp4o0rADGw9yAC6EW4t5a4K3g=="
-        crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-        
+	 <!-- Web Socket -->    
+    <script src="assets/plugins/websocket/sockjs.min.js"></script>
+    <script src="assets/plugins/websocket/stomp.min.js"></script>    
+
     <script type="text/javascript">
         // Include the base context path in a JavaScript variable
         var contextPath = '<%= request.getContextPath() %>';
         var userId = '<%=loggedUser != null ? loggedUser.getId() : null %>';
     </script>
 	<script type="text/javascript" src="${pageContext.request.contextPath}/assets/js/notification.js"></script>
-
+	
 </body>
 
 </html>

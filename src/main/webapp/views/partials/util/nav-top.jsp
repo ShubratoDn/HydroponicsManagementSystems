@@ -9,10 +9,7 @@
                 <!-- Sidebar toggle button-->
                 <a href="#!" data-toggle="offcanvas" class="sidebar-toggle"></a>
                 <ul class="top-nav lft-nav">
-                    <li><a href="#!" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"
-                            class="dropdown-toggle drop icon-circle drop-image"> <i class="ti-files"> </i><span>
-                                Files</span>
-                        </a></li>
+                    
                     <li class="dropdown"><a href="#!" data-toggle="dropdown" role="button" aria-haspopup="true"
                             aria-expanded="false" class="dropdown-toggle drop icon-circle drop-image"> <span>Dropdown
                             </span><i class=" icofont icofont-simple-down"></i>

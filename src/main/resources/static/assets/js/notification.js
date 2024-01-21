@@ -188,8 +188,8 @@ function addNewNotification(result){
 	        </a>
 	    </li>`;
 
-
-    $("#nav-notification-container").append(notificationHtml);
+	
+    $("#nav-notification-container").prepend(notificationHtml);
     // Update the unread notification count
 	$(".unread-notification-count").text(unreadMessages >= 10 ? "10+" : unreadMessages);
 	
