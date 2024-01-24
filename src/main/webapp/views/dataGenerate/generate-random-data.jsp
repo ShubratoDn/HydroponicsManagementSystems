@@ -1,16 +1,14 @@
-<%@page import="java.util.ArrayList"%>
-<%@page import="com.hydroponics.management.system.entities.Notification"%>
-<%@page import="com.hydroponics.management.system.payloads.PageableResponse"%>
+<%@page import="com.hydroponics.management.system.configs.Constants"%>
 <%@page import="com.hydroponics.management.system.payloads.ServerMessage"%>
+<%@page import="com.hydroponics.management.system.entities.Environment"%>
 <%@page import="java.util.List"%>
 
-
-<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
-    
+<%@ page language="java" contentType="text/html; charset=ISO-8859-1"
+    pageEncoding="ISO-8859-1"%>
 <!DOCTYPE html>
 <html>
 <head>
-<title>My Notifications</title>
+<title>Generate RANDOM Fake Data</title>
 <meta charset="utf-8">
 <meta name="viewport"
 	content="width=device-width, initial-scale=1, maximum-scale=1.0, user-scalable=no">
@@ -90,7 +88,7 @@
 			<div class="container-fluid">
 				<div class="row">
 					<div class="main-header">
-						<h4>My notifications</h4>
+						<h4>Add Random Fake Data</h4>
 					</div>
 				</div>
 
@@ -99,81 +97,57 @@
 				<section class="min-h-80vh">
 				    <div class="bg-white p-20 bordered">
 				    
-				    <%
-				    	PageableResponse pageableResponse = (PageableResponse) request.getAttribute("pageableNotifications");
-						
-				    	List<Notification> notifications = new ArrayList<>();
-				    
-				    	if(pageableResponse != null){
-				    		notifications = (List<Notification>) pageableResponse.getContent();
-				    	}
-				    	
-				    	
-				    	if(notifications == null || notifications.size() < 1){
-				    		%>
-				    			<h1 class="text-danger text-center">Empty Notifications</h1>
-				    		<%
-				    	}else{
-				    		for(Notification notification: notifications){
-				    			
-				    			 // Determine the CSS class based on notification type
-				                String cssClass = "";
-				    			 if(notification.getNotificationType().name().startsWith("SUCCESS")){
-				    				 cssClass = "success";
-				    			 }else if(notification.getNotificationType().name().startsWith("ERROR") || notification.getNotificationType().name().startsWith("INVALID")){
-				    				 cssClass = "danger";
-				    			 }else if(notification.getNotificationType().name().startsWith("EXPIR") || notification.getNotificationType().name().startsWith("WARN")){
-				    				 cssClass = "warning";
-				    			 }
-				    			 
-				    			 
-				    			 String shortMessage = "";
-				    			 
-				    			 if(notification.getMessage().length() > 20){
-				    				 shortMessage = notification.getMessage().substring(0, 20);
-				    			 }
-				    		
-				    		%>
-					    	<div class="accordion-panel notification-accordion-panel <%=cssClass %>" id="notification_<%=notification.getId()%>">
-	                            <div class="accordion-heading" role="tab" id="headingOne">
-	                                <h3 class="card-title accordion-title">
-	                                    <a class="accordion-msg collapsed" data-toggle="collapse" data-parent="#accordion" href="#collapse_<%=notification.getId()%>"
-	                                        aria-expanded="true" aria-controls="collapse_<%=notification.getId()%>">
-	                                        <div class="d-flex">
-	                                            <img src="<%=request.getContextPath()+"/assets/images/avatar-1.png" %>" alt="image" class="notification-image">
-	                                            <div>
-	                                                <%=notification.getNotificationType().name() %>
-	                                                <span class="short-info">(<%=shortMessage %>...)</span>
-	                                                <span class="icon collapsed-icon icon-arrow-down"></span>
-	                                            </div>
-	                                        </div>
-	                                        <span class="icon non-collapsed-icon icon-arrow-up"></span>
-	                                    </a>
-	                                </h3>
-	                            </div>
-	                            
-	                            <div id="collapse_<%=notification.getId()%>" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingOne">
-	                                <div class="accordion-content accordion-desc p-t-10">
-	                                    <div class="notification-content-container-main">
-	                                        <div class="m-r-10">
-	                                            <img src="<%=notification.getSender() == null ? request.getContextPath()+"/assets/images/avatar-1.png" : request.getContextPath()+"/assets/images/userimages/"+notification.getSender().getImage()%>" alt="image" class="notification-sender-image">
-	                                        </div>
-	                                        <div class="content">
-	                                            <h6><%= notification.getSender() == null ? "Owner" : notification.getSender().getFirstName() + " " + notification.getSender().getLastName() %></h6>
-	                                            <div>
-	                                               <%=notification.getMessage()%>
-	                                            </div>
-	                                        </div>
-	                                    </div>
-	                                </div>
-	                            </div>
-	                        </div>
-				    		<%
-				    		}
-				    	}
-				    %>				    
+				    	<%
+				    		List<Environment> environmentList = (List<Environment>) request.getAttribute("environmentList");
+				    	%>
 				    
 				    
+					   <%												
+	                    	ServerMessage  msg = (ServerMessage) request.getAttribute("serverMessage");
+	                    	if(msg != null){
+	                    		%>
+	                    			<div class="alert <%=msg.getClassName()%>">									
+										<%=msg.getMessage() %>
+									</div>
+	                    		<%
+	                    	}
+	                    %>
+				    	<form class="form-horizontal" method="post" action="/generate-data/random/environment">
+				        <table class="table table-striped bordered">
+				            
+				            <tbody>
+				            	<tr>
+				                    <th>Select Environment</th>
+				                    <td>				                    	
+				                    	<select id="selectEnvironment" class="form-control" name="environmentId" required="required" >
+									        <option value="">-- Select Environment --</option>
+									        <%										            
+									            if (environmentList != null && environmentList.size() > 0) {
+									                for (Environment environment : environmentList) {
+									        %>
+									                    <option value="<%= environment.getId() %>">
+									                        <%="ENV_"+ environment.getId() +" -> Plant: \"" +environment.getPlantName()+ "\" || Location: \"" + environment.getLocation().getFullAddress() +"\" || Owner: " + environment.getOwnedBy().getFirstName() +" "+ environment.getOwnedBy().getLastName() %>
+									                    </option>
+									        <%
+									                }
+									            }
+									        %>
+										</select>
+				                    </td>
+				                </tr>
+				                <tr>
+				                	<th>Insert number of data set generate</th>
+				                	<td><input type="number" class="form-control" name="count"></td>
+				                </tr>
+				                <tr>
+				                	<th>Percent of variance <span class="text-muted">(Base: <%=Constants.MINERAL_ALLOWENCE_PERCENT %>%)</span></th>
+				                	<td><input type="number" class="form-control" name="percent"></td>
+				                </tr>				                
+				            </tbody>
+				        </table>				        			        
+				
+				        <button type="submit" class="btn btn-primary">Generate Random data</button>
+				    </form>
 				    </div>
 				</section>
 			
@@ -219,9 +193,15 @@
 	<script type="text/javascript" src="${pageContext.request.contextPath}/assets/pages/elements.js"></script>
 	<script src="${pageContext.request.contextPath}/assets/js/menu.min.js"></script>
 	
-	
+	<script>
+    $(document).ready(function () {
+        // Initialize select2
+        $("#selectEnvironment").select2();       
+    });
+	</script>
 
-	 <!-- Web Socket -->    
+
+ <!-- Web Socket -->    
     <script src="assets/plugins/websocket/sockjs.min.js"></script>
     <script src="assets/plugins/websocket/stomp.min.js"></script>    
 
@@ -232,6 +212,8 @@
     </script>
 	<script type="text/javascript" src="${pageContext.request.contextPath}/assets/js/notification.js"></script>
 	
+
+
 </body>
 
 </html>

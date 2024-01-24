@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.hydroponics.management.system.configs.Constants;
@@ -27,8 +28,8 @@ import com.hydroponics.management.system.payloads.EnvMineralData;
 import com.hydroponics.management.system.payloads.ServerMessage;
 import com.hydroponics.management.system.services.EnvDataServices;
 import com.hydroponics.management.system.services.EnvironmentServices;
-import com.hydroponics.management.system.services.HelperServices;
 import com.hydroponics.management.system.services.NotificationServices;
+import com.hydroponics.management.system.servicesImple.HelperServices;
 
 @Controller
 public class DataGeneratorController {
@@ -98,8 +99,8 @@ public class DataGeneratorController {
 	
 	
 
-	// generating Random fake data
-	@GetMapping("/generate-data/random/environment/{envId}")
+	// generating Random fake data (JSON)
+	@GetMapping("/api/generate-data/random/environment/{envId}")
 	public ResponseEntity<?> generateEnvironmentFakedata(@PathVariable Long envId) {
 		int percent = Constants.RANDOM_GENERATE_DIFFERENCE_PERCENT;
 		Environment environment = environmentServices.getEnvironmentById(envId);
@@ -133,6 +134,68 @@ public class DataGeneratorController {
 		
 		return ResponseEntity.ok(saveData);
 	}
+	
+	
+	
+	
+	//generate random data for environment Page
+	@GetMapping("/generate-data/random/environment")
+	public String generateRandomDataPage(Model model) {		
+		List<Environment> allEnvironments = environmentServices.getAllEnvironments();
+		model.addAttribute("environmentList", allEnvironments);		
+		return "dataGenerate/generate-random-data";
+	}
+
+	//generate random data for environment
+	@PostMapping("/generate-data/random/environment")
+	public String generateRandomData(
+			@RequestParam(name = "environmentId", required = true) Long environmentId,
+			@RequestParam(name = "count", required = false, defaultValue = "1") Integer count,
+			@RequestParam(name = "percent", required = false, defaultValue = ""+Constants.MINERAL_ALLOWENCE_PERCENT) double percentDouble,
+			RedirectAttributes redirectAttributes) {
+		int percent = (int) percentDouble;
+		Environment environment = environmentServices.getEnvironmentById(environmentId);
+		if (environment == null) {
+			redirectAttributes.addFlashAttribute("serverMessage", new ServerMessage("Environment not found!!", "error", "alert-danger"));
+			return "redirect:/generate-data/random/environment";
+		}
+		
+		
+		for(int i = 0; i<=count; i++) {
+			FieldData fieldData = new FieldData();
+			fieldData.setEnvironment(environment);
+			fieldData.setLightDuration(environment.getLightDuration());
+			fieldData.setWaterPH(helperServices.generateRandomValue(environment.getWaterPH(), percent, percent));
+			fieldData.setTemperatureC(helperServices.generateRandomValue(environment.getTemperatureC(), percent, percent));
+			fieldData.setHumidity(helperServices.generateRandomValue(environment.getHumidity(), percent, percent));
+
+			// creating mineral Data list
+			List<MineralData> mineralDataList = new ArrayList<>();
+			for (Mineral mineral : environment.getMinerals()) {
+				MineralData mineralData = new MineralData();
+				mineralData.setFieldData(fieldData);
+				mineralData.setMineral(mineral);
+				mineralData.setMineralValue(helperServices.generateRandomValue(mineral.getMineralAmount(), percent, percent));
+				mineralDataList.add(mineralData);
+			}
+
+			fieldData.setMineralDataList(mineralDataList);
+
+			FieldData saveData = envDataServices.saveData(fieldData);
+			
+			//validating and notifying if there is any error in field data
+			envDataServices.validateLastFieldDataAndNotify(saveData);
+		}
+		
+		
+		
+		
+		redirectAttributes.addFlashAttribute("serverMessage", new ServerMessage("Generated value "+count+" times with the variance of "+percent+"% for the Environment ENV_"+environmentId, "success", "alert-success"));
+		return "redirect:/generate-data/random/environment";
+	}
+	
+	
+	
 
 	// get all fields data
 	@GetMapping("/data/getFieldsData")
@@ -141,6 +204,8 @@ public class DataGeneratorController {
 		return ResponseEntity.ok(allFieldsData);
 	}
 
+	
+	
 	//MAYBE USE HOCCHENA ETA
 	// get all fields data for a Specific Environment
 	@GetMapping("/data/getFieldsData/env/{envId}")

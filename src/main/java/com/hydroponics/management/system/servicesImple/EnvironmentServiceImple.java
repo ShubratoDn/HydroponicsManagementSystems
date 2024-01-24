@@ -117,5 +117,20 @@ public class EnvironmentServiceImple implements EnvironmentServices {
 	public void deleteEnvironment(Long id) {
 		environmentRepo.deleteById(id);		
 	}
+
+	@Override
+	public List<Environment> getAllEnvironmentsByUser(int id) {
+		User user = new User();
+		user.setId(id);
+		
+		List<Environment> findByOwnedBy = environmentRepo.findByOwnedBy(user);
+		return findByOwnedBy;
+	}
+	
+	@Override
+	public List<Environment> getAllEnvironmentsByUser(User user) {		
+		List<Environment> findByOwnedBy = environmentRepo.findByOwnedBy(user);
+		return findByOwnedBy;
+	}
 	
 }

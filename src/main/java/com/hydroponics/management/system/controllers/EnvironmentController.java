@@ -5,6 +5,7 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.format.annotation.DateTimeFormat;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -22,6 +23,7 @@ import com.hydroponics.management.system.DTO.UserDTO;
 import com.hydroponics.management.system.annotation.PreAuthorized;
 import com.hydroponics.management.system.entities.Environment;
 import com.hydroponics.management.system.entities.Mineral;
+import com.hydroponics.management.system.entities.User;
 import com.hydroponics.management.system.payloads.ServerMessage;
 import com.hydroponics.management.system.services.EnvironmentServices;
 import com.hydroponics.management.system.services.LocationService;
@@ -165,4 +167,19 @@ public class EnvironmentController {
 		return "redirect:/?delete=success";
 	}
 	
+	
+	@PostMapping("/api/environments/by-user/{id}")
+	public ResponseEntity<?> getUsersEnvironment(@PathVariable int id){
+		UserDTO userById = userServices.getUserById(id);
+		if(userById == null) {
+			return new ResponseEntity<>("User not found",HttpStatus.NOT_FOUND);
+		}
+		
+		User user = new User();
+		user.setId(userById.getId());
+		
+		List<Environment> allEnvironmentsByUser = environmentServices.getAllEnvironmentsByUser(user);
+		
+		return ResponseEntity.ok(allEnvironmentsByUser);
+	}
 }

@@ -8791,6 +8791,15 @@ svg#sun {
     background-color: #fff1f1;
 }
 
+.notification-accordion-panel.warning .accordion-heading{
+    background-color: #fff5e0;
+}
+
+.notification-accordion-panel.warning .accordion-content{
+    background-color: #fffcf0;
+}
+
+
 .accordion-msg{
     border: none;
 }

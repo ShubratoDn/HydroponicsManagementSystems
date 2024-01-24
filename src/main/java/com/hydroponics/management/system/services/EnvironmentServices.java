@@ -6,6 +6,7 @@ import java.util.List;
 import com.hydroponics.management.system.DTO.EnvironmentDTO;
 import com.hydroponics.management.system.entities.Environment;
 import com.hydroponics.management.system.entities.Mineral;
+import com.hydroponics.management.system.entities.User;
 
 public interface EnvironmentServices {
 
@@ -14,6 +15,10 @@ public interface EnvironmentServices {
 	Environment getEnvironmentById(Long id);
 	
 	List<Environment> getAllEnvironments();
+	
+	List<Environment> getAllEnvironmentsByUser(int id);
+
+	List<Environment> getAllEnvironmentsByUser(User user);
 	
 	List<Environment> searchEnvironments(String plantName, Integer userId, Long locationId, Date startDate, Date endDate);
 	

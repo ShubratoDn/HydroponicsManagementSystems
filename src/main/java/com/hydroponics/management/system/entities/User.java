@@ -1,5 +1,7 @@
 package com.hydroponics.management.system.entities;
 
+import java.sql.Timestamp;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -44,4 +46,8 @@ public class User {
 	@ManyToOne
 	@JoinColumn(name = "added_by_user_id")
 	private User addedBy;
+	
+
+    private Timestamp registrationDate = new Timestamp(System.currentTimeMillis());
+
 }

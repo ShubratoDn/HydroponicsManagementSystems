@@ -1,5 +1,7 @@
 package com.hydroponics.management.system.DTO;
 
+import java.sql.Timestamp;
+
 import org.springframework.web.multipart.MultipartFile;
 
 import com.hydroponics.management.system.entities.User;
@@ -49,6 +51,8 @@ public class UserDTO {
     private String role;
     
     private User addedBy;
+    
+    private Timestamp registrationDate;
 
     @Override
     public String toString() {

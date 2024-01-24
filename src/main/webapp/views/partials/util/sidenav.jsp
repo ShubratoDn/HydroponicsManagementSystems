@@ -40,6 +40,11 @@
                             <i class="icon-people"></i><span>Fake data Form</span>
                         </a>
                     </li>
+                    <li class="treeview">
+                        <a class="waves-effect waves-dark" href="/generate-data/random/environment">
+                            <i class="icon-people"></i><span>Generate Random Data</span>
+                        </a>
+                    </li>
                     
 					<li class="nav-level">--- Notification</li>
                     <li class="treeview">

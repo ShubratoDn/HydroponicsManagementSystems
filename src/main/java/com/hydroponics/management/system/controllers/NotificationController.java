@@ -8,12 +8,18 @@ import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import com.hydroponics.management.system.DTO.UserDTO;
 import com.hydroponics.management.system.annotation.LoginRequired;
+import com.hydroponics.management.system.annotation.PreAuthorized;
 import com.hydroponics.management.system.configs.Constants;
 import com.hydroponics.management.system.entities.Environment;
 import com.hydroponics.management.system.entities.FieldData;
@@ -22,11 +28,14 @@ import com.hydroponics.management.system.entities.Notification;
 import com.hydroponics.management.system.entities.User;
 import com.hydroponics.management.system.entities.enums.NotificationStatus;
 import com.hydroponics.management.system.entities.enums.NotificationType;
+import com.hydroponics.management.system.payloads.NotificationForm;
 import com.hydroponics.management.system.payloads.PageableResponse;
+import com.hydroponics.management.system.payloads.ServerMessage;
 import com.hydroponics.management.system.services.EnvDataServices;
 import com.hydroponics.management.system.services.EnvironmentServices;
-import com.hydroponics.management.system.services.HelperServices;
 import com.hydroponics.management.system.services.NotificationServices;
+import com.hydroponics.management.system.services.UserServices;
+import com.hydroponics.management.system.servicesImple.HelperServices;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -50,12 +59,106 @@ public class NotificationController {
 	@Autowired
 	private SimpMessagingTemplate simpMessagingTemplate;
 	
-	@LoginRequired
+	@Autowired
+	private UserServices userServices;	
+	
+	
+	@PreAuthorized(roles = {"admin", "owner"})
 	@GetMapping("/send-notification")
-	public String sendNotificationPage() {
+	public String sendNotificationPage(Model model) {
+		
+		List<UserDTO> allUser = userServices.getAllUser();
+		
+		
+		model.addAttribute("userList", allUser);		
 		return "notificationDirectory/send-notification";
 	}
 	
+	
+	@PreAuthorized(roles = {"admin", "owner"})
+	@PostMapping("/send-notification")
+	public String sendNotification(@ModelAttribute NotificationForm notificationForm,
+			BindingResult bindingResult, RedirectAttributes redirectAttributes) {
+
+		Integer userId = notificationForm.getReceiverId();
+		Integer envId = notificationForm.getEnvironmentId();
+		
+		User receiver = null;
+		Environment environment = null;
+		NotificationType notificationType = null;
+		String message = "";
+		
+		//receiver validation
+		if (userId == null) {
+			bindingResult.rejectValue("receiverId", "NotEmpty", "Receiver user id cannot be empty");
+		}else {
+			UserDTO userById = userServices.getUserById(userId);
+			if(userById == null) {
+				bindingResult.rejectValue("receiverId", "NotFound", "Receiver Not found");	
+			}else {
+				receiver = new User();
+				receiver.setId(userById.getId());
+			}
+		}
+
+		
+		//environment validation
+		if (envId != null) {
+			Environment environmentById = environmentServices.getEnvironmentById(envId.longValue());
+			if(environmentById == null) {
+				bindingResult.rejectValue("environmentId", "NotFound", "Environment Not found");
+			}else {
+				environment = environmentById;
+			}
+		}
+		
+		
+		
+		//notification type validation
+	    if (notificationForm.getNotificationType() == null) {
+	        bindingResult.rejectValue("notificationType", "NotNull", "Notification Type cannot be null");
+	    }else {
+	    	notificationType = notificationForm.getNotificationType();
+	    }
+		
+	    
+	    //message validation
+	    if(notificationForm.getMessage() == null || notificationForm.getMessage().length() < 7) {
+	    	bindingResult.rejectValue("message", "Invalid", "Please write a valid message");
+	    }else {
+	    	message = notificationForm.getMessage();
+	    }
+	    
+	    
+	    
+	    System.out.println(notificationForm);
+	    
+	    if(bindingResult.hasErrors()) {			
+			redirectAttributes.addFlashAttribute("inputErrors", bindingResult);
+			return "redirect:/send-notification";
+		}
+
+	    
+	    Notification notification = new Notification();
+	    notification.setEnvironment(environment);
+	    notification.setReceiver(receiver);
+	    notification.setStatus(NotificationStatus.UNREAD);
+	    notification.setNotificationType(notificationType);	    
+	    notification.setMessage(message);
+	    notification.setSender(helperServices.getLoggedUser());
+	    
+	    Notification sendNotificationAndNotify = notificationServices.sendNotificationAndNotify(notification);
+	    if(sendNotificationAndNotify == null) {
+	    	redirectAttributes.addFlashAttribute("serverMessage", new ServerMessage("Failed to sent notification!!", "error", "alert-danger"));
+	    }else {	    	
+	    	redirectAttributes.addFlashAttribute("serverMessage", new ServerMessage("Notification sent successfully", "success", "alert-success"));
+	    }
+	    
+	    redirectAttributes.addFlashAttribute("inputErrors", null);
+		return "redirect:/send-notification";
+
+	    
+	}
 	
 	
 	@LoginRequired

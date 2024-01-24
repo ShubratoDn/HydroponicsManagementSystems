@@ -20,7 +20,6 @@ import com.hydroponics.management.system.entities.enums.NotificationStatus;
 import com.hydroponics.management.system.entities.enums.NotificationType;
 import com.hydroponics.management.system.payloads.PageableResponse;
 import com.hydroponics.management.system.reopository.NotificationRepository;
-import com.hydroponics.management.system.services.HelperServices;
 import com.hydroponics.management.system.services.NotificationServices;
 
 import lombok.extern.slf4j.Slf4j;
@@ -70,7 +69,7 @@ public class NotificationServiceImple implements NotificationServices  {
 	}
 	
 	
-	
+	//get my notifications
 	@Override
 	public PageableResponse getMyNotifications(User user,int pageNumber, int pageSize, String sortBy, String sortDirection){
 		Sort sort = null;
@@ -95,11 +94,13 @@ public class NotificationServiceImple implements NotificationServices  {
 		
 		List<Notification> notifications = new ArrayList<>();
 		for(Notification notification : content) {
-			notification.getEnvironment().setOwnedBy(null);
-			notification.getEnvironment().setAddedEnvironmentBy(null);
-			notification.getReceiver().setAddedBy(null);
-			notification.getReceiver().setPassword(null);
-			notification.getEnvironment().setMinerals(null);
+			if(notification.getEnvironment() != null) {
+				notification.getEnvironment().setOwnedBy(null);
+				notification.getEnvironment().setAddedEnvironmentBy(null);
+				notification.getReceiver().setAddedBy(null);
+				notification.getReceiver().setPassword(null);
+				notification.getEnvironment().setMinerals(null);
+			}
 			
 			notifications.add(notification);
 		}

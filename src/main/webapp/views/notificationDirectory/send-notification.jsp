@@ -1,3 +1,6 @@
+<%@page import="com.hydroponics.management.system.entities.enums.NotificationType"%>
+<%@page import="org.springframework.validation.BindingResult"%>
+<%@page import="com.hydroponics.management.system.entities.Notification"%>
 <%@page import="com.hydroponics.management.system.payloads.ServerMessage"%>
 <%@page import="com.hydroponics.management.system.entities.Environment"%>
 <%@page import="java.util.List"%>
@@ -87,7 +90,7 @@
 			<div class="container-fluid">
 				<div class="row">
 					<div class="main-header">
-						<h4>Add Fake Data</h4>
+						<h4>Send Notification</h4>
 					</div>
 				</div>
 
@@ -95,10 +98,104 @@
 
 				<section class="min-h-80vh">
 				    <div class="bg-white p-20 bordered">
-				    	 <form id="notificationForm" onsubmit="sendNotification(event)">
-	                        <input type="number" placeholder="user id" id="userId">
-	                        <input type="text" placeholder="message" id="message">
-	                        <input type="submit" value="Send Notification">
+				    	 <form id="notificationForm" method="post" action="/send-notification">
+				    	 
+	    	 			<%
+		                    
+					      	Notification notification = null;
+		                    BindingResult inputErrors = null;
+	
+		                    
+		                    if (request.getAttribute("currentNotification") != null) {
+		                    	notification = (Notification) request.getAttribute("currentNotification");
+		                    }
+		
+		
+		                    if (request.getAttribute("inputErrors") != null) {
+		                        inputErrors = (BindingResult) request.getAttribute("inputErrors");
+		                    }
+		                %>
+					
+			 				<%												
+		                    	ServerMessage  msg = (ServerMessage) request.getAttribute("serverMessage");
+		                    	if(msg != null){
+		                    		%>
+		                    			<div class="alert <%=msg.getClassName()%>">									
+											<%=msg.getMessage() %>
+										</div>
+		                    		<%
+		                    	}
+		                    %>
+				    	 
+	    	 				<!-- Select User -->
+							<div class="form-group">
+							    <label for="selectUser" class="form-control-label">Select Receiver</label>
+							    <select id="receiverUser" class="form-control" name="receiverId">
+							        <option value="">-- Select User --</option>
+							        
+							        							        
+							        <%
+							            List<UserDTO> userList = (List<UserDTO>) request.getAttribute("userList");
+							            if (userList != null && userList.size() > 0) {
+							                for (UserDTO user : userList) {
+							        %>
+							                    <option value="<%= user.getId() %>">							                    
+							                        User Id: <%=user.getId() %> ||Name: <%= user.getFirstName() %> || Email: <%= user.getEmail() %>
+							                    </option>
+							        <%
+							                }
+							            }
+							        %>
+							    </select>
+							    <% if (inputErrors != null && inputErrors.getFieldErrors("receiverId").size() > 0) { %>
+							    <small class="form-text text-muted text-danger"><%= inputErrors.getFieldError("receiverId").getDefaultMessage() %></small>
+							    <% } %>
+							</div>
+
+
+							<!-- Select Environment -->
+							<div class="form-group">
+							    <label for="selectUser" class="form-control-label">Select Environment <span class="text-muted">(optional)</span></label>
+							    <!-- Your existing HTML code for the second dropdown -->
+								<select id="selectEnv" class="form-control" name="environmentId">
+								    <option value="">-- First select receiver --</option>
+								</select>
+							    <% if (inputErrors != null && inputErrors.getFieldErrors("environmentId").size() > 0) { %>
+							    <small class="form-text text-muted text-danger"><%= inputErrors.getFieldError("environmentId").getDefaultMessage() %></small>
+							    <% } %>
+							</div>
+							
+							
+							<!-- Select Notification Type -->
+							<div class="form-group">
+							    <label class="form-control-label">Select Notification Type <span class="text-muted"></span></label>
+							    <select class="form-control" name="notificationType">
+							        <option value="">-- Select Notification Type --</option>
+							        <%
+							        	for(NotificationType notificationType: NotificationType.values()){
+							        		%>
+							        		<option value="<%=notificationType.name() %>">
+												<%=notificationType.name() %>
+											</option>	
+							        		<%
+							        	}
+							        %>							        
+							    </select>
+							    <% if (inputErrors != null && inputErrors.getFieldErrors("notificationType").size() > 0) { %>
+							    <small class="form-text text-muted text-danger"><%= inputErrors.getFieldError("notificationType").getDefaultMessage() %></small>
+							    <% } %>
+							</div>
+							
+							<div class="form-control">
+								<label class="form-control-label">Write the notification content</label>
+								<textarea id="mytextarea" name="message"></textarea>					
+								<% if (inputErrors != null && inputErrors.getFieldErrors("message").size() > 0) { %>
+							    <small class="form-text text-muted text-danger"><%= inputErrors.getFieldError("message").getDefaultMessage() %></small>
+							    <% } %>
+							</div>
+							
+					
+	                        <input type="submit" value="Send Notification" class="btn btn-success d-block m-x-auto m-t-20">
 	                    </form>
 				    </div>
 				</section>
@@ -139,6 +236,9 @@
 	<!-- Echart js -->
 	<script src="${pageContext.request.contextPath}/assets/plugins/charts/echarts/js/echarts-all.js"></script>
 
+	<!-- Rich text editor js -->
+	<script src="${pageContext.request.contextPath}/assets/plugins/rich-text-editor/tinymce.min.js"></script>
+
 	<!-- custom js -->
 	<script type="text/javascript" src="${pageContext.request.contextPath}/assets/js/main.min.js"></script>
 	<script type="text/javascript" src="${pageContext.request.contextPath}/assets/pages/dashboard.js"></script>
@@ -157,6 +257,68 @@
         var userId = '<%=loggedUser != null ? loggedUser.getId() : null %>';
     </script>
 	<script type="text/javascript" src="${pageContext.request.contextPath}/assets/js/notification.js"></script>
+	
+	
+    <script>
+    	tinymce.init({
+    	  selector: '#mytextarea',
+    	  placeholder: 'Enter your text here...',
+    	  setup: function (editor) {
+    	    // Remove the default content
+    	    editor.on('init', function () {
+    	      editor.setContent('');
+    	    });
+    	  }
+    	});
+	</script>
+
+	<script type="text/javascript">
+		$("#receiverUser").select2();
+	</script>
+	
+	<script>
+    $(document).ready(function () {
+        // Event listener for the first dropdown change
+        $('#receiverUser').change(function () {
+            var selectedUserId = $(this).val();
+
+            // Make an AJAX request to get environments based on the selected user
+            $.ajax({
+                type: 'POST',
+                url: '/api/environments/by-user/' + selectedUserId,
+                dataType: 'json',
+                success: function (environments) {
+                    // Clear existing options in the second dropdown
+                    $('#selectEnv').empty();
+
+                    // Populate the second dropdown with received data
+                    if (environments.length > 0) {
+                    	$('#selectEnv').append($('<option>', {
+                            value: '',
+                            text: "-- You can select Environment now --"
+                        }));
+                        environments.forEach(function (environment) {
+                            var optionText = 'ENV_' + environment.id + ' -> Plant: "' + environment.plantName + '" || Location: "' + environment.location.fullAddress + '" || Owner: ' + environment.ownedBy.firstName + ' ' + environment.ownedBy.lastName;
+                            $('#selectEnv').append($('<option>', {
+                                value: environment.id,
+                                text: optionText
+                            }));
+                        });
+                    } else {
+                        // If no environments are found, add a default option
+                        $('#selectEnv').append($('<option>', {
+                            value: '',
+                            text: '-- No Environments Found --'
+                        }));
+                    }
+                },
+                error: function () {
+                    console.error('Error fetching environments.');
+                }
+            });
+        });
+    });
+</script>
 	
 </body>
 

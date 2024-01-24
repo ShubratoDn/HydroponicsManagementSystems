@@ -9,6 +9,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
 import com.hydroponics.management.system.entities.Environment;
+import com.hydroponics.management.system.entities.User;
 
 public interface EnvironmentRepo extends JpaRepository<Environment, Long>, JpaSpecificationExecutor<Environment> {
 
@@ -75,5 +76,9 @@ public interface EnvironmentRepo extends JpaRepository<Environment, Long>, JpaSp
             @Param("addedByUserEmail") String addedByUserEmail,
             @Param("addedByUserRole") String addedByUserRole
     );
+	
+	
+	
+	List<Environment> findByOwnedBy(User user);
 	
 }
