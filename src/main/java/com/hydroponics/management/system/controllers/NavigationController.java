@@ -1,5 +1,8 @@
 package com.hydroponics.management.system.controllers;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -7,8 +10,11 @@ import org.springframework.web.bind.annotation.GetMapping;
 
 import com.hydroponics.management.system.annotation.LoginRequired;
 import com.hydroponics.management.system.annotation.PreAuthorized;
+import com.hydroponics.management.system.entities.Environment;
+import com.hydroponics.management.system.entities.FieldData;
 import com.hydroponics.management.system.entities.User;
 import com.hydroponics.management.system.payloads.AdminHomePageData;
+import com.hydroponics.management.system.payloads.EnvAndFieldData;
 import com.hydroponics.management.system.payloads.UserHomePageData;
 import com.hydroponics.management.system.services.EnvironmentServices;
 import com.hydroponics.management.system.servicesImple.HelperServices;
@@ -55,8 +61,18 @@ public class NavigationController {
 			return "indexAdmin";
 		}else {
 			
+			List<Environment> allEnvironmentsByUser = environmentServices.getAllEnvironmentsByUser(loggedUser);
+			
 			UserHomePageData  userHomeData = new UserHomePageData();
-			userHomeData.setAllEnvironmentsByUser(environmentServices.getAllEnvironmentsByUser(loggedUser));
+			userHomeData.setAllEnvironmentsByUser(allEnvironmentsByUser);
+			
+			List<EnvAndFieldData> fieldDataMultipleList = new ArrayList<>();
+			for(Environment env : allEnvironmentsByUser) {
+				EnvAndFieldData lastNFieldDataByEnvironmentAndFieldData = reportServices.getLastNFieldDataByEnvironmentAndFieldData(env, 5);
+				fieldDataMultipleList.add(lastNFieldDataByEnvironmentAndFieldData);
+			}
+			
+			userHomeData.setFieldDataMultipleList(fieldDataMultipleList);
 			
 			model.addAttribute("reportData", userHomeData);
 			return "index";

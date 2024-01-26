@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 import com.hydroponics.management.system.entities.Environment;
 import com.hydroponics.management.system.entities.FieldData;
 import com.hydroponics.management.system.entities.User;
+import com.hydroponics.management.system.payloads.EnvAndFieldData;
 import com.hydroponics.management.system.reopository.EnvironmentRepo;
 import com.hydroponics.management.system.reopository.FieldDataRepository;
 import com.hydroponics.management.system.reopository.LocationRepository;
@@ -99,8 +100,18 @@ public class ReportServices {
 	
 	
 	
-	public List<FieldData> getLastNFieldDataByEnvironment(Environment environment, int limit){
+	public List<FieldData> getLastNFieldDataByEnvironment(Environment environment, int limit){		
 		return fieldDataRepository.findLastNFieldDataByEnvironment(environment, limit);
+	}
+	
+	
+	public EnvAndFieldData getLastNFieldDataByEnvironmentAndFieldData(Environment environment, int limit){		
+		List<FieldData> findLastNFieldDataByEnvironment = fieldDataRepository.findLastNFieldDataByEnvironment(environment, limit);
+		
+		EnvAndFieldData andFieldData = new EnvAndFieldData();
+		andFieldData.setEnvironment(environment);
+		andFieldData.setFieldData(findLastNFieldDataByEnvironment);
+		return andFieldData;
 	}
 	
 }

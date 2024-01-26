@@ -1,4 +1,13 @@
 <!DOCTYPE html>
+<%@page import="java.util.HashMap"%>
+<%@page import="java.util.Map"%>
+<%@page import="java.util.Arrays"%>
+<%@page import="com.hydroponics.management.system.entities.MineralData"%>
+<%@page import="java.util.ArrayList"%>
+<%@page import="com.hydroponics.management.system.payloads.EnvAndFieldData"%>
+<%@page import="com.hydroponics.management.system.entities.FieldData"%>
+<%@page import="java.util.List"%>
+<%@page import="com.hydroponics.management.system.servicesImple.ReportServices"%>
 <%@page import="java.util.Date"%>
 <%@page import="com.hydroponics.management.system.entities.Environment"%>
 <%@page import="com.hydroponics.management.system.payloads.UserHomePageData"%>
@@ -71,6 +80,8 @@
 		
 		<%
 			HelperServices helperServices = new HelperServices();
+			ReportServices reportServices = new ReportServices();
+			
 			UserHomePageData reportData = new UserHomePageData();
 			
 			reportData = (UserHomePageData) request.getAttribute("reportData");
@@ -235,6 +246,24 @@
                 <div class="row">
                     
                     <div class="col-lg-8">
+                    
+                    	<!-- GENERATING CHARTS -->
+                    	<%
+                    		for(EnvAndFieldData fieldDataList :reportData.getFieldDataMultipleList()){
+                    			
+                    			%>
+                    				<div class="card">
+			                            <div class="card-header">
+			                                <h5 class="card-header-text">Bar chart : ENV_<%=fieldDataList.getEnvironment().getId() %></h5>			                                
+			                            </div>
+			                            <div class="card-block">
+			                                <div id="barchart_ENV_<%=fieldDataList.getEnvironment().getId()%>" style="min-width: 250px; height: 330px; margin: 0 auto"></div>
+			                            </div>
+			                        </div>                        
+                    			<%                    			
+                    		}		
+                    	%>
+                    
                         <div class="card">
                             <div class="card-header">
                                 <h5 class="card-header-text">Bar chart</h5>
@@ -243,6 +272,8 @@
                                 <div id="barchart" style="min-width: 250px; height: 330px; margin: 0 auto"></div>
                             </div>
                         </div>
+                        
+                        
                     </div>
                     <div class="col-xl-4 col-lg-12 grid-item">
                         <div class="card">
@@ -358,6 +389,148 @@
             }
         });
     </script>
+    
+		<%
+    		for (EnvAndFieldData fieldDataList : reportData.getFieldDataMultipleList()) {
+		        Environment env = fieldDataList.getEnvironment();
+		        List<FieldData> fieldDatas = fieldDataList.getFieldData();
+		      	
+    			        
+    			        
+    			List<String> mineralNames = new ArrayList<>();
+    		    List<List<Double>> mineralValuesList = new ArrayList<>();
+    		    
+    		    
+    			int count = 0;
+    			for (FieldData fieldData : fieldDatas) {				
+    			 	//getting the mineral names from first index only
+    				if (count == 0) {
+    					List<MineralData> mineralDataList = fieldData.getMineralDataList();
+        				for (MineralData mineralData : mineralDataList) {
+        					mineralNames.add("'" + mineralData.getMineral().getMineralName() + "'");
+        				}
+    				}
+    				
+    				List<Double> mineralValues = new ArrayList<>();
+    	            for (MineralData mineralData : fieldData.getMineralDataList()) {
+    	                mineralValues.add(mineralData.getMineralValue());
+    	            }
+    	            mineralValuesList.add(mineralValues);			
+    				
+        			count++;
+    			}
+    		%>
+			<script type="text/javascript">
+			    Highcharts.chart('barchart_ENV_<%=fieldDataList.getEnvironment().getId()%>', {
+			        title: {
+			            text: 'Environment Data Analysis'
+			        },
+			        xAxis: {
+			            categories: [<%
+			                for (FieldData fieldData : fieldDatas) {
+			                    // Format timestamp as "hh:mm a, dd MMM, yyyy"
+			                    String formattedTimestamp = new java.text.SimpleDateFormat("hh:mm a; dd MMM, yyyy")
+			                        .format(fieldData.getTimestamp());
+			                    out.print("'" + formattedTimestamp + "', ");
+			                }
+			            %>]
+			        },
+			        labels: {
+			            items: [{
+			                html: 'Field Data Analysis HTML',
+			                style: {
+			                    left: '130px',
+			                    top: '18px',
+			                    color: (Highcharts.theme && Highcharts.theme.textColor) || 'black'
+			                }
+			            }]
+			        },
+			        series: [{
+			            type: 'column',
+			            name: 'Light Duration',
+			            data: [<%
+			                for (FieldData fieldData : fieldDatas) {
+			                    out.print(fieldData.getLightDuration() + ", ");
+			                }
+			            %>],
+			            color: '#f57c00'
+			        }, {
+			            type: 'column',
+			            name: 'Water PH',
+			            data: [<%
+			                for (FieldData fieldData : fieldDatas) {
+			                    out.print(fieldData.getWaterPH() + ", ");
+			                }
+			            %>],
+			            color: '#2BBBAD'
+			        }, {
+			            type: 'column',
+			            name: 'Water Tempareture',
+			            data: [<%
+			                for (FieldData fieldData : fieldDatas) {
+			                    out.print(fieldData.getTemperatureC() + ", ");
+			                }
+			            %>],
+			            color: '#39444e'
+			        }, {
+			            type: 'column',
+			            name: 'Humidity',
+			            data: [<%
+			                for (FieldData fieldData : fieldDatas) {
+			                    out.print(fieldData.getHumidity() + ", ");
+			                }
+			            %>]
+			        	
+			        },	
+			        
+			        <%
+			        	for (int i = 0; i < mineralNames.size(); i++) {
+			        		%>
+			        		{
+			        	        type: 'column',
+			        	        name: <%= mineralNames.get(i) %>,
+			        	        data: [<%
+			        	               for (List<Double> mineralValues : mineralValuesList) {
+			                               for (Double value : mineralValues) {
+			                                   out.print(value + ", ");
+			                               }
+			                           }
+			        	        %>],
+			        	        color: '#39444e'
+			        	    },
+			        		<%
+			        	}
+			        %>
+			        			        
+			        {
+			            type: 'pie',
+			            name: 'Total consumption',
+			            data: [{
+			                name: 'Jane',
+			                y: 13,
+			                color: '#f57c00'
+			            }, {
+			                name: 'John',
+			                y: 23,
+			                color: '#2BBBAD'
+			            }, {
+			                name: 'Joe',
+			                y: 19,
+			                color: '#39444e'
+			            }],
+			            center: [40, 20],
+			            size: 100,
+			            showInLegend: false,
+			            dataLabels: {
+			                enabled: false
+			            }
+			        }]
+			    });
+			</script>
+			<%
+			    }
+			%>
+
 
 </body>
 
