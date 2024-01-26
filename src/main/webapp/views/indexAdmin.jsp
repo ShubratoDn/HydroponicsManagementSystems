@@ -1,4 +1,10 @@
 <!DOCTYPE html>
+<%@page import="java.util.Locale"%>
+<%@page import="java.text.SimpleDateFormat"%>
+<%@page import="java.util.ArrayList"%>
+<%@page import="java.util.List"%>
+<%@page import="java.util.Map"%>
+<%@page import="com.hydroponics.management.system.entities.User"%>
 <%@page import="com.hydroponics.management.system.payloads.AdminHomePageData"%>
 <html lang="en">
 
@@ -126,53 +132,74 @@
 
                 <!-- 1-3-block row start -->
                 <div class="row">
-                    <div class="col-lg-4">
-                        <div class="card">
-                            <div class="user-block-2">
-                                <img class="img-fluid" src="assets/images/widget/user-1.png" alt="user-header">
-                                <h5>Josephin Villa</h5>
-                                <h6>Software Engineer</h6>
-                            </div>
-                            <div class="card-block">
-                                <div class="user-block-2-activities">
-                                    <div class="user-block-2-active">
-                                        <i class="icofont icofont-clock-time"></i> Recent Activities
-                                        <label class="label label-primary">480</label>
-                                    </div>
-                                </div>
-                                <div class="user-block-2-activities">
-                                    <div class="user-block-2-active">
-                                        <i class="icofont icofont-users"></i> Current Employees
-                                        <label class="label label-primary">390</label>
-                                    </div>
-                                </div>
-
-                                <div class="user-block-2-activities">
-                                    <div class="user-block-2-active">
-                                        <i class="icofont icofont-ui-user"></i> Following
-                                        <label class="label label-primary">485</label>
-                                    </div>
-
-                                </div>
-                                <div class="user-block-2-activities">
-                                    <div class="user-block-2-active">
-                                        <i class="icofont icofont-picture"></i> Pictures
-                                        <label class="label label-primary">506</label>
-                                    </div>
-                                </div>
-                                <div class="text-center">
-                                    <button type="button"
-                                        class="btn btn-warning waves-effect waves-light text-uppercase m-r-30">
-                                        Follows
-                                    </button>
-                                    <button type="button"
-                                        class="btn btn-primary waves-effect waves-light text-uppercase">
-                                        Message
-                                    </button>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+                    
+                    <%
+                    
+                    	if(reportData.getUserWithMostAddedUser() != null){
+                    		 Map<User, Long> userTopMap = reportData.getUserWithMostAddedUser();
+                   	        List<Map.Entry<User, Long>> entryList = new ArrayList<>(userTopMap.entrySet());
+                   	        
+                   	        if (entryList.size() > 0) {
+                   	            Map.Entry<User, Long> thirdEntry = entryList.get(0);
+                   	            User userTop = thirdEntry.getKey();
+                   	            Long count = thirdEntry.getValue();
+                    		%>
+                    		<div class="col-lg-4">
+		                        <div class="card">
+		                            <div class="user-block-2">
+		                                <img class="img-fluid" style="height: 140px; width: 140px; object-fit:cover" src="<%=userTop.getImage() == null? "assets/images/widget/user-1.png" : "assets/images/userimages/"+userTop.getImage() %>" alt="user-header">
+		                                <h5><%=userTop.getFirstName() + " " + userTop.getLastName() %></h5>
+		                                <h6><%=userTop.getRole() %></h6>
+		                            </div>
+		                            <div class="card-block">
+		                                
+		                                <div class="user-block-2-activities">
+		                                    <div class="user-block-2-active">
+		                                        <i class="icofont icofont-users"></i> Added User
+		                                        <label class="label label-primary"><%=count %></label>
+		                                    </div>
+		                                </div>
+		
+		
+										<div class="user-block-2-activities">
+		                                    <div class="user-block-2-active">
+		                                        <i class="icofont icofont-clock-time"></i> Recent Activities
+		                                        <label class="label label-primary">480</label>
+		                                    </div>
+		                                </div>
+		
+		                                <div class="user-block-2-activities">
+		                                    <div class="user-block-2-active">
+		                                        <i class="icofont icofont-ui-user"></i> Following
+		                                        <label class="label label-primary">485</label>
+		                                    </div>
+		
+		                                </div>
+		                                <div class="user-block-2-activities">
+		                                    <div class="user-block-2-active">
+		                                        <i class="icofont icofont-picture"></i> Pictures
+		                                        <label class="label label-primary">506</label>
+		                                    </div>
+		                                </div>
+		                                <div class="text-center">
+		                                    <button type="button"
+		                                        class="btn btn-warning waves-effect waves-light text-uppercase m-r-30">
+		                                        Follows
+		                                    </button>
+		                                    <button type="button"
+		                                        class="btn btn-primary waves-effect waves-light text-uppercase">
+		                                        Message
+		                                    </button>
+		                                </div>
+		                            </div>
+		                        </div>
+		                    </div>
+                    		<%
+                    		}
+                    	}
+                    %>
+                    
+                    
                     <div class="col-lg-8">
                         <div class="card">
                             <div class="card-header">
@@ -217,151 +244,56 @@
                     <div class="col-xl-8 col-lg-12">
                         <div class="card">
                             <div class="card-block">
+                            	<h5 class="card-header-text">ENVIRONMENt ANALYSIS</h5>
                                 <div class="table-responsive">
                                     <table class="table m-b-0 photo-table">
                                         <thead>
                                             <tr class="text-uppercase">
                                                 <th>Photo</th>
-                                                <th>Project</th>
-                                                <th>Completed</th>
-                                                <th>Status</th>
-                                                <th>Date</th>
+                                                <th>Name</th>
+                                                <th>Environment Owned</th>
+                                                <th>Date Joined</th>                                                   
                                             </tr>
                                         </thead>
                                         <tbody>
-                                            <tr>
-                                                <th>
-                                                    <img class="img-fluid img-circle" src="assets/images/avatar-2.png"
-                                                        alt="User">
-                                                </th>
-                                                <td>Appestia Project
-                                                    <p><i class="icofont icofont-clock-time"></i>Created 14.9.2016</p>
-                                                </td>
-                                                <td>
-                                                    <span class="pie" style="display: none;">226,134</span><svg
-                                                        class="peity" height="30" width="30">
-                                                        <path
-                                                            d="M 15.000000000000002 0 A 15 15 0 1 1 4.209902994920235 25.41987555688496 L 15 15"
-                                                            fill="#2196F3"></path>
-                                                        <path
-                                                            d="M 4.209902994920235 25.41987555688496 A 15 15 0 0 1 14.999999999999996 0 L 15 15"
-                                                            fill="#ccc"></path>
-                                                    </svg>
-                                                </td>
-                                                <td>50%</td>
-                                                <td>October 21, 2015</td>
-                                            </tr>
-                                            <tr>
-                                                <th>
-                                                    <img class="img-fluid img-circle" src="assets/images/avatar-4.png"
-                                                        alt="User">
-                                                </th>
-                                                <td>Contract with belife Company
-                                                    <p><i class="icofont icofont-clock-time"></i>Created 20.10.2016</p>
-                                                </td>
-                                                <td>
-                                                    <span class="pie" style="display: none;">0.52/1.561</span><svg
-                                                        class="peity" height="30" width="30">
-                                                        <path
-                                                            d="M 15.000000000000002 0 A 15 15 0 0 1 28.00043211809656 22.482564048691025 L 15 15"
-                                                            fill="#2196F3"></path>
-                                                        <path
-                                                            d="M 28.00043211809656 22.482564048691025 A 15 15 0 1 1 14.999999999999996 0 L 15 15"
-                                                            fill="#ccc"></path>
-                                                    </svg>
-                                                </td>
-                                                <td>70%</td>
-                                                <td>November 21, 2015</td>
-                                            </tr>
-                                            <tr>
-                                                <th>
-                                                    <img class="img-fluid img-circle" src="assets/images/avatar-1.png"
-                                                        alt="User">
-                                                </th>
-                                                <td>Web Consultancy project
-                                                    <p><i class="icofont icofont-clock-time"></i>Created 20.10.2016</p>
-                                                </td>
-                                                <td>
-                                                    <span class="pie" style="display: none;">1,4</span><svg
-                                                        class="peity" height="30" width="30">
-                                                        <path
-                                                            d="M 15.000000000000002 0 A 15 15 0 0 1 29.265847744427305 10.36474508437579 L 15 15"
-                                                            fill="#2196F3"></path>
-                                                        <path
-                                                            d="M 29.265847744427305 10.36474508437579 A 15 15 0 1 1 14.999999999999996 0 L 15 15"
-                                                            fill="#ccc"></path>
-                                                    </svg>
-                                                </td>
-                                                <td>40%</td>
-                                                <td>September 21, 2015</td>
-                                            </tr>
-                                            <tr>
-                                                <th>
-                                                    <img class="img-fluid img-circle" src="assets/images/avatar-3.png"
-                                                        alt="User">
-                                                </th>
-                                                <td>Contract with belife Company
-                                                    <p><i class="icofont icofont-clock-time"></i>Created 20.10.2016</p>
-                                                </td>
-                                                <td>
-                                                    <span class="pie" style="display: none;">0.52/1.561</span><svg
-                                                        class="peity" height="30" width="30">
-                                                        <path
-                                                            d="M 15.000000000000002 0 A 15 15 0 0 1 28.00043211809656 22.482564048691025 L 15 15"
-                                                            fill="#2196F3"></path>
-                                                        <path
-                                                            d="M 28.00043211809656 22.482564048691025 A 15 15 0 1 1 14.999999999999996 0 L 15 15"
-                                                            fill="#ccc"></path>
-                                                    </svg>
-                                                </td>
-                                                <td>70%</td>
-                                                <td>November 21, 2015</td>
-                                            </tr>
-                                            <tr>
-                                                <th>
-                                                    <img class="img-fluid img-circle" src="assets/images/avatar-1.png"
-                                                        alt="User">
-                                                </th>
-                                                <td>Contract with belife Company
-                                                    <p><i class="icofont icofont-clock-time"></i>Created 20.10.2016</p>
-                                                </td>
-                                                <td>
-                                                    <span class="pie" style="display: none;">0.52/1.561</span><svg
-                                                        class="peity" height="30" width="30">
-                                                        <path
-                                                            d="M 15.000000000000002 0 A 15 15 0 0 1 28.00043211809656 22.482564048691025 L 15 15"
-                                                            fill="#2196F3"></path>
-                                                        <path
-                                                            d="M 28.00043211809656 22.482564048691025 A 15 15 0 1 1 14.999999999999996 0 L 15 15"
-                                                            fill="#ccc"></path>
-                                                    </svg>
-                                                </td>
-                                                <td>70%</td>
-                                                <td>November 21, 2015</td>
-                                            </tr>
-                                            <tr>
-                                                <th>
-                                                    <img class="img-fluid img-circle" src="assets/images/avatar-2.png"
-                                                        alt="User">
-                                                </th>
-                                                <td>Contract with belife Company
-                                                    <p><i class="icofont icofont-clock-time"></i>Created 20.10.2016</p>
-                                                </td>
-                                                <td>
-                                                    <span class="pie" style="display: none;">0.52/1.561</span><svg
-                                                        class="peity" height="30" width="30">
-                                                        <path
-                                                            d="M 15.000000000000002 0 A 15 15 0 0 1 28.00043211809656 22.482564048691025 L 15 15"
-                                                            fill="#2196F3"></path>
-                                                        <path
-                                                            d="M 28.00043211809656 22.482564048691025 A 15 15 0 1 1 14.999999999999996 0 L 15 15"
-                                                            fill="#ccc"></path>
-                                                    </svg>
-                                                </td>
-                                                <td>70%</td>
-                                                <td>November 21, 2015</td>
-                                            </tr>
-
+                                        	<%
+                                        		if(reportData.getUsersWithEnvironmentCount().size() > 0){
+                                        			Map<User, Long> userEnvironmentCountMap = reportData.getUsersWithEnvironmentCount(); 
+		                                        	for (Map.Entry<User, Long> entry : userEnvironmentCountMap.entrySet()) {
+		                                        	    User user = entry.getKey();
+		                                        	    Long environmentCount = entry.getValue();
+		                                        	    
+		                                        	    %>
+		                                        	    <tr>
+			                                                <th>
+			                                                    <img class="img-fluid img-circle" style="height: 40px; width: 40px; object-fit:cover" src="<%=user.getImage() == null? "assets/images/widget/user-1.png" : "assets/images/userimages/"+user.getImage() %>"
+			                                                        alt="User">
+			                                                </th>
+			                                                <td>
+			                                                	<%=user.getFirstName() +" " + user.getLastName() %>			                                                	
+			                                                	<p class="text-muted"><i class="icofont icofont-user"></i><%=user.getRole() %></p>
+			                                                </td>
+			                                                <td>
+			                                                    <%=environmentCount %>
+			                                                </td>			                                                
+			                                                <td>
+			                                                	<%
+			                                                	if(user.getRegistrationDate() != null){
+				                                                	SimpleDateFormat sdf = new SimpleDateFormat("dd MMMM, yyyy", new Locale("en"));			                                                    
+			                                                		%>
+			                                                			<%=sdf.format(user.getRegistrationDate())%>
+			                                                		<%
+			                                                	}			                                                	
+			                                                	%>
+			                                                </td>
+			                                            </tr>
+                                            
+		                                        	    <%
+		                                        	}
+                                        		}
+                                        	%>                                        
+                                            
+                                            
                                         </tbody>
                                     </table>
                                 </div>

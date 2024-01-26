@@ -7,7 +7,10 @@ import org.springframework.web.bind.annotation.GetMapping;
 
 import com.hydroponics.management.system.annotation.LoginRequired;
 import com.hydroponics.management.system.annotation.PreAuthorized;
+import com.hydroponics.management.system.entities.User;
 import com.hydroponics.management.system.payloads.AdminHomePageData;
+import com.hydroponics.management.system.payloads.UserHomePageData;
+import com.hydroponics.management.system.services.EnvironmentServices;
 import com.hydroponics.management.system.servicesImple.HelperServices;
 import com.hydroponics.management.system.servicesImple.ReportServices;
 
@@ -21,12 +24,16 @@ public class NavigationController {
 	@Autowired
 	private ReportServices reportServices;
 	
+	@Autowired
+	private EnvironmentServices environmentServices;
+	
 	@LoginRequired
 	@GetMapping(value = {"/home","/"})
 	public String home(Model model) {
 		
 		//getting the user role
 		String role = helperServices.getLoggedUser().getRole();
+		User loggedUser = helperServices.getLoggedUser();
 		
 		
 		//if the user is admin
@@ -40,13 +47,21 @@ public class NavigationController {
 			data.setAvailableLocation(reportServices.countAvailableLocation());
 			data.setAssignedLocation(reportServices.countAssignedLocation());
 			data.setUsersRegisterToday(reportServices.getUsersRegisteredToday());
+			data.setUserWithMostAddedUser(reportServices.getUserWithMostAddedUsers());
+			data.setUsersWithEnvironmentCount(reportServices.getUserEnvironmentCountMap());
 			
 			model.addAttribute("reportData", data);
 			
 			return "indexAdmin";
+		}else {
+			
+			UserHomePageData  userHomeData = new UserHomePageData();
+			userHomeData.setAllEnvironmentsByUser(environmentServices.getAllEnvironmentsByUser(loggedUser));
+			
+			model.addAttribute("reportData", userHomeData);
+			return "index";
 		}
 		
-		return "index";
 	}
 	
 	@GetMapping(value = {"/index2"})

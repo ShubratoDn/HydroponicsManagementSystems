@@ -1,5 +1,7 @@
 package com.hydroponics.management.system.servicesImple;
 
+import java.text.DecimalFormat;
+import java.util.Date;
 import java.util.Random;
 
 import org.modelmapper.ModelMapper;
@@ -87,6 +89,30 @@ public class HelperServices {
         }
 
         return null;
+    }
+    
+    
+ // Assuming this method is part of your service class
+ // Assuming this method is part of your service class
+    public double calculateCompletionPercentage(Date plantingDate, Date maturityDate) {
+        // Get the current date
+        Date currentDate = new Date();
+
+        // Calculate the total duration in milliseconds
+        long totalDuration = maturityDate.getTime() - plantingDate.getTime();
+
+        // Calculate the elapsed duration in milliseconds
+        long elapsedDuration = currentDate.getTime() - plantingDate.getTime();
+
+        // Calculate the percentage completion
+        double completionPercentage = ((double) elapsedDuration / totalDuration) * 100;
+
+        // Ensure the percentage is within the valid range (0% to 100%)
+        completionPercentage = Math.min(Math.max(completionPercentage, 0.0), 100.0);
+
+        // Format the result to have two decimal places
+        DecimalFormat decimalFormat = new DecimalFormat("#.##");
+        return Double.parseDouble(decimalFormat.format(completionPercentage));
     }
 	
 }

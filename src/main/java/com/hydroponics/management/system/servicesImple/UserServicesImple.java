@@ -1,5 +1,6 @@
 package com.hydroponics.management.system.servicesImple;
 
+import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -33,6 +34,7 @@ public class UserServicesImple implements UserServices {
 		userDto.setPassword(this.hashPassword(userDto.getPassword()));
 		
 		User user = modelMapper.map(userDto, User.class);
+		user.setRegistrationDate(new Timestamp(System.currentTimeMillis()));
 		User save = userRepository.save(user);
 		return modelMapper.map(save, UserDTO.class);
 	}

@@ -2,13 +2,18 @@ package com.hydroponics.management.system.servicesImple;
 
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.hydroponics.management.system.entities.Environment;
+import com.hydroponics.management.system.entities.FieldData;
 import com.hydroponics.management.system.entities.User;
 import com.hydroponics.management.system.reopository.EnvironmentRepo;
+import com.hydroponics.management.system.reopository.FieldDataRepository;
 import com.hydroponics.management.system.reopository.LocationRepository;
 import com.hydroponics.management.system.reopository.UserRepository;
 
@@ -23,6 +28,9 @@ public class ReportServices {
 
 	@Autowired
 	private LocationRepository locationRepository;
+	
+	@Autowired
+	private FieldDataRepository fieldDataRepository;
 
 	public int countActiveUsers() {
 		return userRepository.findAll().size();
@@ -57,4 +65,42 @@ public class ReportServices {
 		Timestamp endTime = Timestamp.valueOf(today);
 		return userRepository.findUsersRegisteredToday(startTime, endTime);
 	}
+	
+	
+	
+	public Map<User, Long> getUserWithMostAddedUsers() {
+        List<Object[]> result = userRepository.findUserWithMostAddedUsers();
+        Map<User, Long> userAdditionStatsMap = new HashMap<>();
+
+        for (Object[] userAndCount : result) {
+            User addedByUser = (User) userAndCount[0];
+            Long addedUserCount = (Long) userAndCount[1];            
+            userAdditionStatsMap.put(addedByUser, addedUserCount);
+        }
+
+        return userAdditionStatsMap;
+    }
+	
+	
+	
+	public Map<User, Long> getUserEnvironmentCountMap() {
+        List<Object[]> userEnvironmentCounts = userRepository.findUsersWithEnvironmentCount();
+//        List<Object[]> userEnvironmentCounts = userRepository.findUsersAndEnvironmentCountOrderByEnvironmentCountDesc();
+        Map<User, Long> userEnvironmentCountMap = new HashMap<>();
+
+        for (Object[] result : userEnvironmentCounts) {
+            User user = (User) result[0];
+            Long environmentCount = (Long) result[1];
+            userEnvironmentCountMap.put(user, environmentCount);
+        }
+
+        return userEnvironmentCountMap;
+    }
+	
+	
+	
+	public List<FieldData> getLastNFieldDataByEnvironment(Environment environment, int limit){
+		return fieldDataRepository.findLastNFieldDataByEnvironment(environment, limit);
+	}
+	
 }

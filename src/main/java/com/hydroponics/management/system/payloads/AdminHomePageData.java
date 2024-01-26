@@ -1,6 +1,7 @@
 package com.hydroponics.management.system.payloads;
 
 import java.util.List;
+import java.util.Map;
 
 import com.hydroponics.management.system.entities.User;
 
@@ -23,5 +24,7 @@ public class AdminHomePageData {
 	
 	private List<User> usersRegisterToday;
 	
+	private Map<User, Long> userWithMostAddedUser;
 	
+	private Map<User, Long> usersWithEnvironmentCount;
 }

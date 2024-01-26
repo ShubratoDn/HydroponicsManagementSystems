@@ -21,4 +21,11 @@ public interface UserRepository extends JpaRepository<User, Integer> {
 
 	@Query("SELECT u FROM User u WHERE u.registrationDate >= :startTime AND u.registrationDate <= :endTime")
 	List<User> findUsersRegisteredToday(Timestamp startTime, Timestamp endTime);
+
+	@Query("SELECT u.addedBy, COUNT(u.id) FROM User u WHERE u.addedBy IS NOT NULL GROUP BY u.addedBy ORDER BY COUNT(u.id) DESC")
+	List<Object[]> findUserWithMostAddedUsers();
+
+	@Query("SELECT u, COUNT(e) AS environment_count FROM User u LEFT JOIN Environment e ON u = e.ownedBy GROUP BY u ORDER BY environment_count DESC")
+	List<Object[]> findUsersWithEnvironmentCount();
+
 }
