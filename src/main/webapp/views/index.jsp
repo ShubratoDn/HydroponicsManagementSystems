@@ -101,9 +101,9 @@
                 <div class="row dashboard-header">
                     <div class="col-lg-3 col-md-6">
                         <div class="card dashboard-product">
-                            <span>Products</span>
-                            <h2 class="dashboard-total-products">4500</h2>
-                            <span class="label label-warning">Sales</span>Arriving Today
+                            <span>Environment Owned</span>
+                            <h2 class="dashboard-total-products">1</h2>
+                            <span class="label label-warning">Environment</span>Environment Owned
                             <div class="side-box">
                                 <i class="ti-signal text-warning-color"></i>
                             </div>
@@ -355,9 +355,9 @@
     <!-- Echart js -->
     <script src="assets/plugins/charts/echarts/js/echarts-all.js"></script>
 
-    <script src="https://code.highcharts.com/highcharts.js"></script>
-    <script src="https://code.highcharts.com/modules/exporting.js"></script>
-    <script src="https://code.highcharts.com/highcharts-3d.js"></script>
+    <script src="assets/plugins/charts/highchart/highcharts.js"></script>
+    <script src="assets/plugins/charts/highchart/modules/exporting.js"></script>
+    <script src="assets/plugins/charts/highchart/highcharts-3d.js"></script>
 
     <!-- custom js -->
     <script type="text/javascript" src="assets/js/main.min.js"></script>
@@ -481,22 +481,23 @@
 			                }
 			            %>]
 			        	
-			        },	
+			        },
 			        
-			        <%
-			        	for (int i = 0; i < mineralNames.size(); i++) {
-			        		%>
+			        <%for (int i = 0; i < mineralNames.size(); i++) {
+			        	
+	       	               	String valueSet = "";	       	             
+			       	          for (FieldData fieldData : fieldDatas) {
+			       	              for (MineralData mineralData : fieldData.getMineralDataList()) {
+			       	                  if (mineralData.getMineral().getMineralName().equals(mineralNames.get(i).replace("'", ""))) {
+			       	                      valueSet += mineralData.getMineralValue() + ",";
+			       	                  }
+			       	              }
+			       	          }
+							%>
 			        		{
 			        	        type: 'column',
 			        	        name: <%= mineralNames.get(i) %>,
-			        	        data: [<%
-			        	               for (List<Double> mineralValues : mineralValuesList) {
-			                               for (Double value : mineralValues) {
-			                                   out.print(value + ", ");
-			                               }
-			                           }
-			        	        %>],
-			        	        color: '#39444e'
+			        	        data: [<%=valueSet%>]			        	        
 			        	    },
 			        		<%
 			        	}
@@ -507,19 +508,19 @@
 			            name: 'Total consumption',
 			            data: [{
 			                name: 'Jane',
-			                y: 13,
+			                y: 10,
 			                color: '#f57c00'
 			            }, {
 			                name: 'John',
-			                y: 23,
+			                y: 10,
 			                color: '#2BBBAD'
 			            }, {
 			                name: 'Joe',
 			                y: 19,
 			                color: '#39444e'
 			            }],
-			            center: [40, 20],
-			            size: 100,
+			            center: [20, 20],
+			            size: 50,
 			            showInLegend: false,
 			            dataLabels: {
 			                enabled: false
