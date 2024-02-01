@@ -20,15 +20,18 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.hydroponics.management.system.DTO.EnvironmentDTO;
 import com.hydroponics.management.system.DTO.UserDTO;
+import com.hydroponics.management.system.annotation.LoginRequired;
 import com.hydroponics.management.system.annotation.PreAuthorized;
 import com.hydroponics.management.system.entities.Environment;
 import com.hydroponics.management.system.entities.Mineral;
 import com.hydroponics.management.system.entities.User;
+import com.hydroponics.management.system.payloads.PageableResponse;
 import com.hydroponics.management.system.payloads.ServerMessage;
 import com.hydroponics.management.system.services.EnvironmentServices;
 import com.hydroponics.management.system.services.LocationService;
 import com.hydroponics.management.system.services.NotificationServices;
 import com.hydroponics.management.system.services.UserServices;
+import com.hydroponics.management.system.servicesImple.HelperServices;
 
 import jakarta.validation.Valid;
 
@@ -46,6 +49,9 @@ public class EnvironmentController {
 	
 	@Autowired
 	private NotificationServices notificationServices;
+	
+	@Autowired
+	private HelperServices helperServices;
 	
 	
 	//get environment page
@@ -181,5 +187,28 @@ public class EnvironmentController {
 		List<Environment> allEnvironmentsByUser = environmentServices.getAllEnvironmentsByUser(user);
 		
 		return ResponseEntity.ok(allEnvironmentsByUser);
+	}
+	
+	
+	
+	@LoginRequired
+	@GetMapping("/my-environments")
+	public String myEnvironmentsPage(
+			@RequestParam(value = "page", defaultValue = "1", required = false) int page,
+			@RequestParam(value = "size", defaultValue = "5", required = false) int size,
+			@RequestParam(value = "sortBy", defaultValue = "id", required = false) String sortBy,
+			@RequestParam(value = "sortDirection", defaultValue = "desc", required = false) String sortDirection,
+			Model model) {
+		
+		if(page != 0) {
+			page = page - 1;			
+		}
+		
+		
+		User loggedUser = helperServices.getLoggedUser();
+		PageableResponse allEnvironmentsByUser = environmentServices.getAllEnvironmentsByUser(loggedUser, page, size, sortBy, sortDirection);
+		
+		model.addAttribute("environmentList", allEnvironmentsByUser);
+		return "environmentDirectory/my-environments";
 	}
 }

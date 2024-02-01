@@ -1,6 +1,14 @@
 		<!-- Side-Nav-->
         <aside class="main-sidebar hidden-print ">
             <section class="sidebar" id="sidebar-scroll">
+            
+            	<%            	
+            	
+            		String role = loggedUser.getRole().toLowerCase();            		
+            		if(role.equals("admin") || role.equals("owner") || role.equals("staff")){            			
+            		
+            	%>
+            
                 <!-- Sidebar Menu-->
                 <ul class="sidebar-menu">
                 	<li class="nav-level">--- Navigation </li>
@@ -109,7 +117,127 @@
                             </li>
                         </ul>
                     </li>
-                </ul>
+                </ul>                
+                <%
+            		}
+                %>
+                
+                
+                
+                
+                
+                
+                <!-- =================================================== -->
+				<!-- NORMAL USER's SIDENAVE -->
+				<!-- =================================================== -->
+                <%            	
+            	            		
+            		if(role.equals("user")){            			
+            		
+            	%>
+            
+                <!-- Sidebar Menu-->
+                <ul class="sidebar-menu">
+                	<li class="nav-level">--- Navigation </li>
+                    <li class="treeview">
+                        <a class="waves-effect waves-dark" href="/">
+                            <i class="icon-home"></i><span>Home</span>
+                        </a>
+                    </li>
+                    <li class="nav-level">--- Environments</li>
+                    <li class="treeview">
+                        <a class="waves-effect waves-dark" href="/my-environments">
+                            <i class="icon-map"></i><span> My Environments</span>
+                        </a>
+                    </li>
+                    <li class="treeview">
+                        <a class="waves-effect waves-dark" href="/find-environments">
+                            <i class="icon-magnifier"></i><span>Find Environments</span>
+                        </a>
+                    </li>
+                    
+                    
+                    <li class="nav-level">--- Notification</li>
+                    <li class="treeview">
+                        <a class="waves-effect waves-dark" href="/my-notifications">
+                            <i class="icon-bell"></i><span>Notifications</span>
+                        </a>
+                    </li>
+                    
+                    
+                    
+                    
+                    <li class="nav-level">--- Support</li>
+                    <li class="treeview">
+                        <a class="waves-effect waves-dark" href="/contact-us">
+                            <i class="icofont-envelope"></i><span>Contact Us</span>
+                        </a>
+                    </li>
+                    
+                    
+                                       
+                    <li class="nav-level">--- Menu Level</li>
+
+                    <li class="treeview"><a class="waves-effect waves-dark" href="#!"><i
+                                class="icofont icofont-company"></i><span>Menu Level 1</span><i
+                                class="icon-arrow-down"></i></a>
+                        <ul class="treeview-menu">
+                            <li>
+                                <a class="waves-effect waves-dark" href="#!">
+                                    <i class="icon-arrow-right"></i>
+                                    Level Two
+                                </a>
+                            </li>
+                            <li class="treeview">
+                                <a class="waves-effect waves-dark" href="#!">
+                                    <i class="icon-arrow-right"></i>
+                                    <span>Level Two</span>
+                                    <i class="icon-arrow-down"></i>
+                                </a>
+                                <ul class="treeview-menu">
+                                    <li>
+                                        <a class="waves-effect waves-dark" href="#!">
+                                            <i class="icon-arrow-right"></i>
+                                            Level Three
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a class="waves-effect waves-dark" href="#!">
+                                            <i class="icon-arrow-right"></i>
+                                            <span>Level Three</span>
+                                            <i class="icon-arrow-down"></i>
+                                        </a>
+                                        <ul class="treeview-menu">
+                                            <li>
+                                                <a class="waves-effect waves-dark" href="#!">
+                                                    <i class="icon-arrow-right"></i>
+                                                    Level Four
+                                                </a>
+                                            </li>
+                                            <li>
+                                                <a class="waves-effect waves-dark" href="#!">
+                                                    <i class="icon-arrow-right"></i>
+                                                    Level Four
+                                                </a>
+                                            </li>
+                                        </ul>
+                                    </li>
+                                </ul>
+                            </li>
+                        </ul>
+                    </li>
+                </ul>                
+                <%
+            		}
+                %>
+                
+                
+                
+                
+                
+                
+                
+                
             </section>
         </aside>
         

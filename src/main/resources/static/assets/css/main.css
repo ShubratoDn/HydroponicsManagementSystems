@@ -7169,14 +7169,20 @@ input[type="checkbox"].green.ios-switch:checked+div>div {
 
 /*widget horizontal cards css*/
 .rotate-txt {
-    float: right;
-    bottom: -5;
-    position: absolute;
-    -webkit-transform: rotateZ(90deg);
-    -moz-transform: rotateZ(90deg);
-    -ms-transform: rotateZ(90deg);
-    transform: rotateZ(90deg);
-    right: -20px;
+/*    float: right;*/
+/*    bottom: -5;*/
+/*    position: absolute;*/
+/*    -webkit-transform: rotateZ(90deg);*/
+/*    -moz-transform: rotateZ(90deg);*/
+/*    -ms-transform: rotateZ(90deg);*/
+/*    transform: rotateZ(90deg);*/
+/*    right: -20px;*/
+
+position: absolute;
+    left: 97%;
+    transform: translate(-50%, -50%) rotate(90deg);
+    top: 50%;
+
 }
 
 .horizontal-card-img {

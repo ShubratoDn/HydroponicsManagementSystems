@@ -7,6 +7,7 @@ import com.hydroponics.management.system.DTO.EnvironmentDTO;
 import com.hydroponics.management.system.entities.Environment;
 import com.hydroponics.management.system.entities.Mineral;
 import com.hydroponics.management.system.entities.User;
+import com.hydroponics.management.system.payloads.PageableResponse;
 
 public interface EnvironmentServices {
 
@@ -17,6 +18,10 @@ public interface EnvironmentServices {
 	List<Environment> getAllEnvironments();
 	
 	List<Environment> getAllEnvironmentsByUser(int id);
+	
+	PageableResponse getAllEnvironmentsByUser(User user, int pageNumber, int pageSize, String sortBy, String sortDirection);
+	
+	PageableResponse getAllEnvironmentsByUser(int id, int pageNumber, int pageSize, String sortBy, String sortDirection);
 
 	List<Environment> getAllEnvironmentsByUser(User user);
 	

@@ -111,11 +111,11 @@
                     </div>
                     <div class="col-lg-3 col-md-6">
                         <div class="card dashboard-product">
-                            <span>Products</span>
-                            <h2 class="dashboard-total-products">37,500</h2>
-                            <span class="label label-primary">Views</span>View Today
+                            <span>Unread notifications</span>
+                            <h2 class="dashboard-total-products">1</h2>
+                            <span class="label label-primary">Notifications</span>Read them!
                             <div class="side-box ">
-                                <i class="ti-gift text-primary-color"></i>
+                                <i class="ti-bell text-primary-color"></i>
                             </div>
                         </div>
                     </div>
@@ -131,9 +131,9 @@
                     </div>
                     <div class="col-lg-3 col-md-6">
                         <div class="card dashboard-product">
-                            <span>Products</span>
-                            <h2 class="dashboard-total-products">$<span>30,780</span></h2>
-                            <span class="label label-danger">Sales</span>Reviews
+                            <span>Your Role</span>
+                            <h2 class="dashboard-total-products">User</h2>
+                            <span class="label label-danger">Role</span>Your role
                             <div class="side-box">
                                 <i class="ti-rocket text-danger-color"></i>
                             </div>
@@ -281,10 +281,10 @@
                                 <img class="media-object img-circle" src="assets/images/avatar-3.png"
                                     alt="Generic placeholder image">
                                 <div class="d-inlineblock  p-l-20">
-                                    <h6>Josephin Doe</h6>
+                                    <h6>Shubrato </h6>
                                     <a href="#">contact@admin.com</a>
                                 </div>
-                                <h6 class="txt-warning rotate-txt">Designer</h6>
+                                <h6 class="txt-warning rotate-txt">Admin</h6>
                             </div>
                         </div>
                     </div>
@@ -294,8 +294,8 @@
                                 <img class="media-object img-circle" src="assets/images/lockscreen.png"
                                     alt="Generic placeholder image">
                                 <div class="d-inlineblock  p-l-20">
-                                    <h6>Josephin Doe</h6>
-                                    <a href="#">contact@admin.com</a>
+                                    <h6>Shubrato Debnath</h6>
+                                    <a href="#">shubratodn44985@gmail.com</a>
                                 </div>
                                 <h6 class="txt-danger rotate-txt">Developer</h6>
                             </div>

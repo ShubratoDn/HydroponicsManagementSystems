@@ -1,16 +1,22 @@
 package com.hydroponics.management.system.servicesImple;
 
+
 import java.util.Date;
 import java.util.List;
 
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import com.hydroponics.management.system.DTO.EnvironmentDTO;
 import com.hydroponics.management.system.entities.Environment;
 import com.hydroponics.management.system.entities.Mineral;
 import com.hydroponics.management.system.entities.User;
+import com.hydroponics.management.system.payloads.PageableResponse;
 import com.hydroponics.management.system.reopository.EnvironmentRepo;
 import com.hydroponics.management.system.reopository.MineralRepository;
 import com.hydroponics.management.system.services.EnvironmentServices;
@@ -131,6 +137,54 @@ public class EnvironmentServiceImple implements EnvironmentServices {
 	public List<Environment> getAllEnvironmentsByUser(User user) {		
 		List<Environment> findByOwnedBy = environmentRepo.findByOwnedBy(user);
 		return findByOwnedBy;
+	}
+
+	
+	@Override
+	public PageableResponse getAllEnvironmentsByUser(User user, int pageNumber, int pageSize, String sortBy, String sortDirection) {
+	
+		Sort sort = null;
+		if(sortBy != null && sortDirection != null && sortDirection.equalsIgnoreCase("asc")) {
+			sort =  Sort.by(sortBy).ascending();
+		}else {
+			sort =  Sort.by(sortBy).descending();
+		}
+		
+		Page<Environment> pageInfo;
+		
+		try {
+			Pageable pageable = PageRequest.of(pageNumber, pageSize, sort);
+			pageInfo = environmentRepo.findByOwnedBy(user, pageable);
+			
+		}catch (Exception e) {
+			Pageable pageable = PageRequest.of(pageNumber, pageSize, Sort.by("id").descending());
+			pageInfo = environmentRepo.findByOwnedBy(user, pageable);
+		}
+		
+		
+		
+		PageableResponse pageData = new PageableResponse();
+		pageData.setContent(pageInfo.getContent());
+		pageData.setPageNumber(pageInfo.getNumber());
+		pageData.setPageSize(pageInfo.getSize());
+		pageData.setTotalElements(pageInfo.getTotalElements());
+		pageData.setTotalPages(pageInfo.getTotalPages());
+		pageData.setNumberOfElements(pageInfo.getNumberOfElements());
+
+		pageData.setEmpty(pageInfo.isEmpty());
+		pageData.setFirst(pageInfo.isFirst());
+		pageData.setLast(pageInfo.isLast());
+		
+		
+		return pageData;
+	}
+
+	
+	@Override
+	public PageableResponse getAllEnvironmentsByUser(int id, int pageNumber, int pageSize, String sortBy, String sortDirection) {
+		User user = new User();
+		user.setId(id);		
+		return this.getAllEnvironmentsByUser(user, pageNumber, pageSize, sortBy, sortDirection);
 	}
 	
 }

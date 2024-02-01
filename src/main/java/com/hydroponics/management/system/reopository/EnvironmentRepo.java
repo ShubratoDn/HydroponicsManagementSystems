@@ -3,6 +3,7 @@ package com.hydroponics.management.system.reopository;
 import java.util.Date;
 import java.util.List;
 
+import org.springframework.data.domain.Page;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.data.jpa.repository.Query;
@@ -81,4 +82,5 @@ public interface EnvironmentRepo extends JpaRepository<Environment, Long>, JpaSp
 	
 	List<Environment> findByOwnedBy(User user);
 	
+	Page<Environment> findByOwnedBy(User user, org.springframework.data.domain.Pageable pageable);
 }
