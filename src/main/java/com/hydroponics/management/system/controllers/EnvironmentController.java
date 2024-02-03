@@ -25,6 +25,7 @@ import com.hydroponics.management.system.annotation.PreAuthorized;
 import com.hydroponics.management.system.entities.Environment;
 import com.hydroponics.management.system.entities.Mineral;
 import com.hydroponics.management.system.entities.User;
+import com.hydroponics.management.system.payloads.EnvAndFieldData;
 import com.hydroponics.management.system.payloads.PageableResponse;
 import com.hydroponics.management.system.payloads.ServerMessage;
 import com.hydroponics.management.system.services.EnvironmentServices;
@@ -32,6 +33,7 @@ import com.hydroponics.management.system.services.LocationService;
 import com.hydroponics.management.system.services.NotificationServices;
 import com.hydroponics.management.system.services.UserServices;
 import com.hydroponics.management.system.servicesImple.HelperServices;
+import com.hydroponics.management.system.servicesImple.ReportServices;
 
 import jakarta.validation.Valid;
 
@@ -53,6 +55,8 @@ public class EnvironmentController {
 	@Autowired
 	private HelperServices helperServices;
 	
+	@Autowired
+	private ReportServices reportServices;
 	
 	//get environment page
 	@PreAuthorized(role = "admin")
@@ -211,4 +215,28 @@ public class EnvironmentController {
 		model.addAttribute("environmentList", allEnvironmentsByUser);
 		return "environmentDirectory/my-environments";
 	}
+	
+	
+	@LoginRequired
+	@GetMapping("/environment/{envId}")
+	public String environment (@PathVariable Long envId, Model model) {
+		
+		User loggedUser = helperServices.getLoggedUser();
+		
+		Environment env = null;
+		
+		if(loggedUser.getRole().equals("owner") || loggedUser.getRole().equalsIgnoreCase("admin")) {
+			env = environmentServices.getEnvironmentById(envId);
+		}else {
+			env = environmentServices.getEnvironmentByIdAndOwnedBy(envId, loggedUser);
+		}
+		
+		EnvAndFieldData envFieldData = reportServices.getLastNFieldDataByEnvironmentAndFieldData(env, 10);
+		
+		model.addAttribute("environment", env);
+		model.addAttribute("envFieldData", envFieldData);
+		
+		return "environmentDirectory/environment";
+	}
+	
 }

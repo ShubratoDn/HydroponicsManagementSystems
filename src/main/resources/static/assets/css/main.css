@@ -8839,3 +8839,7 @@ svg#sun {
 	display: flex;
 	align-items: flex-start;
 }
+
+.highcharts-credits{
+	display: none;
+}

@@ -1,3 +1,12 @@
+<%@page import="com.hydroponics.management.system.payloads.EnvAndFieldData"%>
+<%@page import="com.hydroponics.management.system.entities.FieldData"%>
+<%@page import="com.hydroponics.management.system.entities.MineralData"%>
+<%@page import="com.hydroponics.management.system.servicesImple.HelperServices"%>
+<%@page import="java.util.Date"%>
+<%@page import="java.util.Locale"%>
+<%@page import="java.text.SimpleDateFormat"%>
+<%@page import="com.hydroponics.management.system.entities.Mineral"%>
+<%@page import="com.hydroponics.management.system.entities.Environment"%>
 <%@page import="java.util.ArrayList"%>
 <%@page import="com.hydroponics.management.system.entities.Notification"%>
 <%@page import="com.hydroponics.management.system.payloads.PageableResponse"%>
@@ -83,103 +92,96 @@
 		<%@include file="../partials/util/sidebar-chat.jsp"%>
 
 
-
+		<%	
+			HelperServices helperServices = new HelperServices();
+    		Environment env = (Environment) request.getAttribute("environment");						
+		%>
+		
 		<div class="content-wrapper">
-			<!-- Container-fluid starts -->
-			<!-- Main content starts -->
-			<div class="container-fluid">
-				<div class="row">
-					<div class="main-header">
-						<h4>My notifications</h4>
-					</div>
-				</div>
-
-
-
-				<section class="min-h-80vh">
-				    <div class="bg-white p-20 bordered">
-				    
-				    <%
-				    	PageableResponse pageableResponse = (PageableResponse) request.getAttribute("pageableNotifications");
-						
-				    	List<Notification> notifications = new ArrayList<>();
-				    
-				    	if(pageableResponse != null){
-				    		notifications = (List<Notification>) pageableResponse.getContent();
-				    	}
-				    	
-				    	
-				    	if(notifications == null || notifications.size() < 1){
-				    		%>
-				    			<h1 class="text-danger text-center">Empty Notifications</h1>
-				    		<%
-				    	}else{
-				    		for(Notification notification: notifications){
-				    			
-				    			 // Determine the CSS class based on notification type
-				                String cssClass = "";
-				    			 if(notification.getNotificationType().name().startsWith("SUCCESS")){
-				    				 cssClass = "success";
-				    			 }else if(notification.getNotificationType().name().startsWith("ERROR") || notification.getNotificationType().name().startsWith("INVALID")){
-				    				 cssClass = "danger";
-				    			 }else if(notification.getNotificationType().name().startsWith("EXPIR") || notification.getNotificationType().name().startsWith("WARN")){
-				    				 cssClass = "warning";
-				    			 }
-				    			 
-				    			 
-				    			 String shortMessage = "";
-				    			 
-				    			 if(notification.getMessage().length() > 20){
-				    				 shortMessage = notification.getMessage().substring(0, 20);
-				    			 }
-				    		
-				    		%>
-					    	<div class="accordion-panel notification-accordion-panel <%=cssClass %>" id="notification_<%=notification.getId()%>">
-	                            <div class="accordion-heading" role="tab" id="headingOne">
-	                                <h3 class="card-title accordion-title">
-	                                    <a class="accordion-msg collapsed" data-toggle="collapse" data-parent="#accordion" href="#collapse_<%=notification.getId()%>"
-	                                        aria-expanded="true" aria-controls="collapse_<%=notification.getId()%>">
-	                                        <div class="d-flex">
-	                                            <img src="<%=request.getContextPath()+"/assets/images/avatar-1.png" %>" alt="image" class="notification-image">
-	                                            <div>
-	                                                <%=notification.getNotificationType().name() %>
-	                                                <span class="short-info">(<%=shortMessage %>...)</span>
-	                                                <span class="icon collapsed-icon icon-arrow-down"></span>
-	                                            </div>
-	                                        </div>
-	                                        <span class="icon non-collapsed-icon icon-arrow-up"></span>
-	                                    </a>
-	                                </h3>
-	                            </div>
-	                            
-	                            <div id="collapse_<%=notification.getId()%>" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingOne">
-	                                <div class="accordion-content accordion-desc p-t-10">
-	                                    <div class="notification-content-container-main">
-	                                        <div class="m-r-10">
-	                                            <img src="<%=notification.getSender() == null ? request.getContextPath()+"/assets/images/avatar-1.png" : request.getContextPath()+"/assets/images/userimages/"+notification.getSender().getImage()%>" alt="image" class="notification-sender-image">
-	                                        </div>
-	                                        <div class="content">
-	                                            <h6><%= notification.getSender() == null ? "Owner" : notification.getSender().getFirstName() + " " + notification.getSender().getLastName() %></h6>
-	                                            <div>
-	                                               <%=notification.getMessage()%>
-	                                            </div>
-	                                        </div>
-	                                    </div>
-	                                </div>
-	                            </div>
-	                        </div>
-				    		<%
-				    		}
-				    	}
-				    %>				    
-				    
-				    
-				    </div>
-				</section>
-			
-			</div>
+		    <!-- Container-fluid starts -->
+		    <!-- Main content starts -->
+		    <div class="container-fluid">
+		        <div class="row">
+		            <div class="main-header">
+		                <h4>Environment <%= env != null ? "ENV_" + env.getId() : "<span class='text-danger'>ERROR!</span>" %> </h4>
+		            </div>
+		        </div>
+		
+		        <section class="min-h-80vh">
+		            <div class="bg-white p-20 bordered">
+		                <!-- Display Environment Data -->
+		                <% if (env != null) { %>
+		                    <div class="row">
+		                        <div class="col-md-6">
+		                            <h5>Plant Information</h5>
+		                            <p><strong>Plant Name:</strong> <%= env.getPlantName() %></p>
+		                            <p><strong>Planted Date:</strong> <%= formatDate(env.getPlantDate()) %></p>
+		                            <p><strong>Maturity Date:</strong> <%= formatDate(env.getMaturityDate()) %></p>
+		                            <p><strong>Total completed:</strong> <%=helperServices.calculateCompletionPercentage(env.getPlantDate(), env.getMaturityDate()) %>%</p>
+		                            <p><strong>Owner by: </strong><a href="/user/<%=env.getOwnedBy().getId()%>"><%=env.getOwnedBy().getFirstName() + " " + env.getOwnedBy().getLastName() %></a></p> 
+		                        </div>
+		                        <div class="col-md-6">
+		                            <h5>Environmental Conditions</h5>
+		                            <p><strong>Light Duration:</strong> <%= env.getLightDuration() %> hours</p>
+		                            <p><strong>Water pH:</strong> <%= env.getWaterPH() %></p>
+		                            <p><strong>Temperature:</strong> <%= env.getTemperatureC() %> °C</p>
+		                            <p><strong>Humidity:</strong> <%= env.getHumidity() %></p>
+		                        </div>
+		                    </div>
+		                    
+		                    <br>
+		
+		                    <h5>Location Information</h5>
+		                    <p><strong>Location:</strong> <%= env.getLocation().getLocationName() + ", " + env.getLocation().getFullAddress() %></p>
+		
+							<br>
+		                    <h5>Minerals</h5>
+		                    <% if (env.getMinerals() != null && !env.getMinerals().isEmpty()) { %>
+		                        <ul>
+		                            <% for (Mineral mineral : env.getMinerals()) { %>
+		                                <li><strong><%= mineral.getMineralName() %>:</strong> <%= mineral.getMineralAmount() %> <%= mineral.getMineralUnit() %></li>
+		                            <% } %>
+		                        </ul>
+		                    <% } else { %>
+		                        <p>No mineral data available.</p>
+		                    <% } %>
+		                    <br>
+		                    
+		                    <%
+		                    	if(loggedUser.getRole().equalsIgnoreCase("owner") || loggedUser.getRole().equalsIgnoreCase("admin")){
+		                    		%>
+		                    			<a href="/environment/update/<%=env.getId()%>" class="btn btn-primary">Update Environment</a>
+		                    		<%	
+		                    	}else{
+		                    		out.print("<div class='text-muted font-10'>Want to update this environment? <a href='contact-us'>Contact Us</a></div>");
+		                    	}
+		                    %>
+		                    
+		                    
+		                <% } else { %>
+		                    <h1 class="text-danger text-center">Nothing found or Unauthorized!!</h1>
+		                <% } %>
+		            </div>
+		            <br>
+		            
+		            <!-- Environment data analysis -->
+		            <div class="bg-white p-20 bordered">
+		            	
+           				<div class="card">
+                            <div class="card-header">
+                                <h5 class="card-header-text">Bar chart : ENV_<%=env.getId() %></h5>			                                
+                            </div>
+                            <div class="card-block">
+                                <div id="barchart_ENV_<%=env.getId()%>" style="min-width: 250px; height: 330px; margin: 0 auto"></div>
+                            </div>
+                        </div>   
+		            	
+		            	
+		            </div>
+		        </section>
+		    </div>
 		</div>
-	</div>
+		
 
 	<!-- Required Jqurey -->
 	<script src="${pageContext.request.contextPath}/assets/plugins/Jquery/dist/jquery.min.js"></script>
@@ -213,6 +215,10 @@
 	<!-- Echart js -->
 	<script src="${pageContext.request.contextPath}/assets/plugins/charts/echarts/js/echarts-all.js"></script>
 
+	<script src="${pageContext.request.contextPath}/assets/plugins/charts/highchart/highcharts.js"></script>
+    <script src="${pageContext.request.contextPath}/assets/plugins/charts/highchart/modules/exporting.js"></script>
+    <script src="${pageContext.request.contextPath}/assets/plugins/charts/highchart/highcharts-3d.js"></script>
+
 	<!-- custom js -->
 	<script type="text/javascript" src="${pageContext.request.contextPath}/assets/js/main.min.js"></script>
 	<script type="text/javascript" src="${pageContext.request.contextPath}/assets/pages/dashboard.js"></script>
@@ -222,8 +228,8 @@
 	
 
 	 <!-- Web Socket -->    
-    <script src="assets/plugins/websocket/sockjs.min.js"></script>
-    <script src="assets/plugins/websocket/stomp.min.js"></script>    
+    <script src="${pageContext.request.contextPath}/assets/plugins/websocket/sockjs.min.js"></script>
+    <script src="${pageContext.request.contextPath}/assets/plugins/websocket/stomp.min.js"></script>    
 
     <script type="text/javascript">
         // Include the base context path in a JavaScript variable
@@ -232,6 +238,131 @@
     </script>
 	<script type="text/javascript" src="${pageContext.request.contextPath}/assets/js/notification.js"></script>
 	
+	
+	<% 		
+	
+			EnvAndFieldData envFieldData = (EnvAndFieldData) request.getAttribute("envFieldData");
+       
+       		List<FieldData> fieldDatas = envFieldData.getFieldData();     	
+ 			        
+ 			        
+ 			List<String> mineralNames = new ArrayList<>();
+ 		    List<List<Double>> mineralValuesList = new ArrayList<>();
+ 		    
+ 		    
+ 			int count = 0;
+ 			for (FieldData fieldData : fieldDatas) {				
+ 			 	//getting the mineral names from first index only
+ 				if (count == 0) {
+ 					List<MineralData> mineralDataList = fieldData.getMineralDataList();
+     				for (MineralData mineralData : mineralDataList) {
+     					mineralNames.add("'" + mineralData.getMineral().getMineralName() + "'");
+     				}
+ 				}
+ 				
+ 				List<Double> mineralValues = new ArrayList<>();
+ 	            for (MineralData mineralData : fieldData.getMineralDataList()) {
+ 	                mineralValues.add(mineralData.getMineralValue());
+ 	            }
+ 	            mineralValuesList.add(mineralValues);			
+ 				
+     			count++;
+ 			}
+ 		%>
+	<script type="text/javascript">
+	    Highcharts.chart('barchart_ENV_<%=env.getId()%>', {
+	        title: {
+	            text: 'Data Analysis for ENV_<%=env.getId()%>'
+	        },
+	        xAxis: {
+	            categories: [<%
+	                for (FieldData fieldData : fieldDatas) {
+	                    // Format timestamp as "hh:mm a, dd MMM, yyyy"
+	                    String formattedTimestamp = new java.text.SimpleDateFormat("hh:mm a; dd MMM, yyyy")
+	                        .format(fieldData.getTimestamp());
+	                    out.print("'" + formattedTimestamp + "', ");
+	                }
+	            %>]
+	        },
+	        labels: {
+	            items: [{
+	                html: 'Field Data Analysis HTML',
+	                style: {
+	                    left: '130px',
+	                    top: '18px',
+	                    color: (Highcharts.theme && Highcharts.theme.textColor) || 'black'
+	                }
+	            }]
+	        },
+	        series: [{
+	            type: 'column',
+	            name: 'Light Duration',
+	            data: [<%
+	                for (FieldData fieldData : fieldDatas) {
+	                    out.print(fieldData.getLightDuration() + ", ");
+	                }
+	            %>],
+	            color: '#f57c00'
+	        }, {
+	            type: 'column',
+	            name: 'Water PH',
+	            data: [<%
+	                for (FieldData fieldData : fieldDatas) {
+	                    out.print(fieldData.getWaterPH() + ", ");
+	                }
+	            %>],
+	            color: '#2BBBAD'
+	        }, {
+	            type: 'column',
+	            name: 'Water Tempareture',
+	            data: [<%
+	                for (FieldData fieldData : fieldDatas) {
+	                    out.print(fieldData.getTemperatureC() + ", ");
+	                }
+	            %>],
+	            color: '#39444e'
+	        }, {
+	            type: 'column',
+	            name: 'Humidity',
+	            data: [<%
+	                for (FieldData fieldData : fieldDatas) {
+	                    out.print(fieldData.getHumidity() + ", ");
+	                }
+	            %>]
+	        	
+	        },
+	        
+	        <%for (int i = 0; i < mineralNames.size(); i++) {
+	        	
+	               	String valueSet = "";	       	             
+       	          for (FieldData fieldData : fieldDatas) {
+       	              for (MineralData mineralData : fieldData.getMineralDataList()) {
+       	                  if (mineralData.getMineral().getMineralName().equals(mineralNames.get(i).replace("'", ""))) {
+       	                      valueSet += mineralData.getMineralValue() + ",";
+       	                  }
+       	              }
+       	          }
+				%>
+        		{
+        	        type: 'column',
+        	        name: <%= mineralNames.get(i) %>,
+        	        data: [<%=valueSet%>]			        	        
+        	    },
+        		<%
+	        	}
+	        %>
+		        			        
+	        ]
+	    });
+	</script>
+	
 </body>
 
 </html>
+
+<%!
+    private String formatDate(Date date) {
+        SimpleDateFormat sdf = new SimpleDateFormat("dd MMMM, yyyy", new Locale("en"));
+        return sdf.format(date);
+    }
+%>

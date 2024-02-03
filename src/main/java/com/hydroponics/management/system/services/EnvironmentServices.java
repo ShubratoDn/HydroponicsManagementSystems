@@ -15,6 +15,8 @@ public interface EnvironmentServices {
 	
 	Environment getEnvironmentById(Long id);
 	
+	Environment getEnvironmentByIdAndOwnedBy(Long envId, User user);
+	
 	List<Environment> getAllEnvironments();
 	
 	List<Environment> getAllEnvironmentsByUser(int id);

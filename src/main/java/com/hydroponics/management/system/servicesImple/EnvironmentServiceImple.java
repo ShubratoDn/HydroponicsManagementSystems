@@ -186,5 +186,11 @@ public class EnvironmentServiceImple implements EnvironmentServices {
 		user.setId(id);		
 		return this.getAllEnvironmentsByUser(user, pageNumber, pageSize, sortBy, sortDirection);
 	}
+
+	@Override
+	public Environment getEnvironmentByIdAndOwnedBy(Long envId, User user) {
+		Environment findByIdAndOwnedBy = environmentRepo.findByIdAndOwnedBy(envId, user);
+		return findByIdAndOwnedBy;
+	}
 	
 }
