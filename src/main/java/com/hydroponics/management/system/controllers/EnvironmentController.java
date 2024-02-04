@@ -172,9 +172,10 @@ public class EnvironmentController {
 	
 	@PreAuthorized(roles = {"admin", "owner"})
 	@GetMapping("/environment/delete/{id}")
-	public String deleteEnvironment(@PathVariable Long id){
+	public String deleteEnvironment(@RequestParam(name = "url", required = false, defaultValue = "/") String url, @PathVariable Long id, RedirectAttributes redirectAttributes){
 		environmentServices.deleteEnvironment(id);
-		return "redirect:/?delete=success";
+		redirectAttributes.addFlashAttribute("serverMessage", new ServerMessage("Success! Environment deleted with ID : ENV_"+id, "success", "alert-success"));
+		return "redirect:"+url;
 	}
 	
 	
@@ -231,6 +232,10 @@ public class EnvironmentController {
 			env = environmentServices.getEnvironmentByIdAndOwnedBy(envId, loggedUser);
 		}
 		
+		if(env == null) {
+			return "404";
+		}
+		
 		EnvAndFieldData envFieldData = reportServices.getLastNFieldDataByEnvironmentAndFieldData(env, 10);
 		
 		model.addAttribute("environment", env);
@@ -238,5 +243,44 @@ public class EnvironmentController {
 		
 		return "environmentDirectory/environment";
 	}
+	
+	
+	
+	//all environments
+	@PreAuthorized(roles = { "Admin", "user"})
+	@GetMapping("/all-environments")
+	public String allEnvironmentPage(
+			@RequestParam(value = "page", defaultValue = "0", required = false) int page,
+			@RequestParam(value = "size", defaultValue = "10", required = false) int size,
+			@RequestParam(value = "sortBy", defaultValue = "id", required = false) String sortBy,
+			@RequestParam(value = "sortDirection", defaultValue = "desc", required = false) String sortDirection,
+			Model model) {
+		
+		PageableResponse allEnvironmentsPageable = environmentServices.getAllEnvironmentsPageable(page, size, sortBy, sortDirection);
+				
+		model.addAttribute("envPageList", allEnvironmentsPageable);
+		
+		return "environmentDirectory/all-environments";
+	}
+	
+	
+	
+	
+	
+	//update environment page
+	@GetMapping("/environment/update")
+	public String updatePage(Model model) {
+		
+		return "environmentDirectory/update-environment";
+	}
+	
+	@GetMapping("/environment/update/{environmentId}")
+	public String updatePageFirst(@PathVariable Long environmentId, RedirectAttributes redirectAttributes) {
+		
+		return "redirect:/environment/update";
+	}
+	
+	
+	
 	
 }

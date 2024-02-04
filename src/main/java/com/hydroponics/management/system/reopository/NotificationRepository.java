@@ -12,10 +12,15 @@ import com.hydroponics.management.system.entities.Notification;
 import com.hydroponics.management.system.entities.User;
 import com.hydroponics.management.system.entities.enums.NotificationType;
 
+import jakarta.transaction.Transactional;
+
 public interface NotificationRepository extends JpaRepository<Notification, Long > {
 
 	List<Notification> findByReceiverAndNotificationTypeAndEnvironmentAndTimestampAfter(User receiver, NotificationType notificationType, Environment environment, Timestamp timestamp);
 
 	Page<Notification> findByReceiver(User user, Pageable page);
+	
+	@Transactional
+	void deleteByEnvironment(Environment env);
 	
 }

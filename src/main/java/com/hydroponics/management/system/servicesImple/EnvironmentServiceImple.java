@@ -18,7 +18,9 @@ import com.hydroponics.management.system.entities.Mineral;
 import com.hydroponics.management.system.entities.User;
 import com.hydroponics.management.system.payloads.PageableResponse;
 import com.hydroponics.management.system.reopository.EnvironmentRepo;
+import com.hydroponics.management.system.reopository.FieldDataRepository;
 import com.hydroponics.management.system.reopository.MineralRepository;
+import com.hydroponics.management.system.reopository.NotificationRepository;
 import com.hydroponics.management.system.services.EnvironmentServices;
 import com.hydroponics.management.system.services.LocationService;
 import com.hydroponics.management.system.services.UserServices;
@@ -40,6 +42,12 @@ public class EnvironmentServiceImple implements EnvironmentServices {
 	
 	@Autowired
 	private LocationService locationService;
+	
+	@Autowired
+	private NotificationRepository notificationRepository;
+	
+	@Autowired
+	private FieldDataRepository fieldDataRepository;
 	
 	@Override
 	public Environment addEnvironment(EnvironmentDTO environmentDTO) {
@@ -121,7 +129,12 @@ public class EnvironmentServiceImple implements EnvironmentServices {
 
 	@Override
 	public void deleteEnvironment(Long id) {
-		environmentRepo.deleteById(id);		
+		Environment env = new Environment();
+		env.setId(id);
+		
+		fieldDataRepository.deleteByEnvironment(env);
+		notificationRepository.deleteByEnvironment(env);
+		environmentRepo.deleteById(id);
 	}
 
 	@Override
@@ -191,6 +204,49 @@ public class EnvironmentServiceImple implements EnvironmentServices {
 	public Environment getEnvironmentByIdAndOwnedBy(Long envId, User user) {
 		Environment findByIdAndOwnedBy = environmentRepo.findByIdAndOwnedBy(envId, user);
 		return findByIdAndOwnedBy;
+	}
+	
+	
+	
+	//find all environment pageable
+	@Override
+	public PageableResponse getAllEnvironmentsPageable( int pageNumber, int pageSize, String sortBy, String sortDirection) {
+		
+
+		Sort sort = null;
+		if(sortBy != null && sortDirection != null && sortDirection.equalsIgnoreCase("asc")) {
+			sort =  Sort.by(sortBy).ascending();
+		}else {
+			sort =  Sort.by(sortBy).descending();
+		}
+		
+		Page<Environment> pageInfo;
+		
+		try {
+			Pageable pageable = PageRequest.of(pageNumber, pageSize, sort);
+			pageInfo = environmentRepo.findAll(pageable);
+			
+		}catch (Exception e) {
+			Pageable pageable = PageRequest.of(pageNumber, pageSize, Sort.by("id").descending());
+			pageInfo = environmentRepo.findAll(pageable);
+		}
+		
+		
+		
+		PageableResponse pageData = new PageableResponse();
+		pageData.setContent(pageInfo.getContent());
+		pageData.setPageNumber(pageInfo.getNumber());
+		pageData.setPageSize(pageInfo.getSize());
+		pageData.setTotalElements(pageInfo.getTotalElements());
+		pageData.setTotalPages(pageInfo.getTotalPages());
+		pageData.setNumberOfElements(pageInfo.getNumberOfElements());
+
+		pageData.setEmpty(pageInfo.isEmpty());
+		pageData.setFirst(pageInfo.isFirst());
+		pageData.setLast(pageInfo.isLast());
+		
+		
+		return pageData;
 	}
 	
 }

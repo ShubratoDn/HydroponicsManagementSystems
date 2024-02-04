@@ -29,16 +29,26 @@
                             <i class="icon-map"></i><span>Add Location</span>
                         </a>
                     </li>
-                     <li class="nav-level">--- Environment</li>
+                    <li class="nav-level">---Manage Environment</li>
+                    <li class="treeview">
+                        <a class="waves-effect waves-dark" href="/my-environments">
+                            <i class="icon-map"></i><span> My Environments</span>
+                        </a>
+                        
+                    </li>
                     <li class="treeview">
                         <a class="waves-effect waves-dark" href="/add-environment">
                             <i class="icon-plus"></i><span>Add Environment</span>
                         </a>
-                    </li>
-                    
+                    </li>                    
                     <li class="treeview">
                         <a class="waves-effect waves-dark" href="/find-environments">
                             <i class="icon-magnifier"></i><span>Find Environments</span>
+                        </a>
+                    </li>
+                    <li class="treeview">
+                        <a class="waves-effect waves-dark" href="/all-environments">
+                            <i class="icon-map"></i><span>All Environments</span>
                         </a>
                     </li>
                     

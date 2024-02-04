@@ -10,6 +10,8 @@ import org.springframework.data.repository.query.Param;
 import com.hydroponics.management.system.entities.Environment;
 import com.hydroponics.management.system.entities.FieldData;
 
+import jakarta.transaction.Transactional;
+
 public interface FieldDataRepository extends JpaRepository<FieldData, Long> {
 
 	List<FieldData> findByEnvironment(Environment environment);
@@ -19,4 +21,9 @@ public interface FieldDataRepository extends JpaRepository<FieldData, Long> {
     @Query("SELECT fd FROM FieldData fd WHERE fd.environment = :environment ORDER BY fd.timestamp DESC LIMIT :count")
     List<FieldData> findLastNFieldDataByEnvironment(@Param("environment") Environment environment, @Param("count") int count);
 
+    @Transactional
+    void deleteAllByEnvironment(Environment env);
+    
+    @Transactional
+    void deleteByEnvironment(Environment env);
 }

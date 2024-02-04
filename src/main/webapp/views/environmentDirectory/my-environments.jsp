@@ -1,3 +1,4 @@
+<%@page import="com.hydroponics.management.system.servicesImple.HelperServices"%>
 <%@page import="java.util.Locale"%>
 <%@page import="java.util.Date"%>
 <%@page import="java.text.SimpleDateFormat"%>
@@ -105,6 +106,7 @@
 				    	<div class="bg-white p-20 m-t-20 bordered">
 						<b class="text-muted m-b-10 d-block">Environment List</b>
 						<%
+							HelperServices helperServices = new HelperServices();
 							PageableResponse envListPageable = (PageableResponse) request.getAttribute("environmentList");
 							Object myAttribute = request.getAttribute("environmentList");
 						  	if (myAttribute == null) {						  		
@@ -132,6 +134,7 @@
 						  		    			<div class="col-sm-6"><b>Added by : </b><a href="/user/<%=environment.getAddedEnvironmentBy().getId()%>"><%=environment.getAddedEnvironmentBy().getFirstName() +" "+ environment.getOwnedBy().getLastName() %></a></div>
 						  		    			<div class="col-sm-6"><b>Planted Field : </b><%=formatDate(environment.getPlantDate())%></div>
 						  		    			<div class="col-sm-6"><b>Expected maturity date: </b><%= formatDate(environment.getMaturityDate()) %></div>
+						  		    			<div class="col-sm-6"><b>Completed progress: </b><%=helperServices.calculateCompletionPercentage(environment.getPlantDate(), environment.getMaturityDate()) %>%</div>
 						  		    		</div>
 						  		    		<a href="/environment/<%=environment.getId()%>" style="width:fit-content; margin-left: auto;margin-right: 0;" class="btn btn-primary d-block m-t-10">View full details</a>
 						  		    	</div>					  		    

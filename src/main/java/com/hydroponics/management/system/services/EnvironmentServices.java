@@ -19,6 +19,8 @@ public interface EnvironmentServices {
 	
 	List<Environment> getAllEnvironments();
 	
+	PageableResponse getAllEnvironmentsPageable( int pageNumber, int pageSize, String sortBy, String sortDirection);
+	
 	List<Environment> getAllEnvironmentsByUser(int id);
 	
 	PageableResponse getAllEnvironmentsByUser(User user, int pageNumber, int pageSize, String sortBy, String sortDirection);
