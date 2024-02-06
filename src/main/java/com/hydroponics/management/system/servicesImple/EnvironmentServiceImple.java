@@ -14,6 +14,7 @@ import org.springframework.stereotype.Service;
 
 import com.hydroponics.management.system.DTO.EnvironmentDTO;
 import com.hydroponics.management.system.entities.Environment;
+import com.hydroponics.management.system.entities.Location;
 import com.hydroponics.management.system.entities.Mineral;
 import com.hydroponics.management.system.entities.User;
 import com.hydroponics.management.system.payloads.PageableResponse;
@@ -49,6 +50,7 @@ public class EnvironmentServiceImple implements EnvironmentServices {
 	@Autowired
 	private FieldDataRepository fieldDataRepository;
 	
+		
 	@Override
 	public Environment addEnvironment(EnvironmentDTO environmentDTO) {
 		Environment environment = modelMapper.map(environmentDTO, Environment.class);
@@ -67,6 +69,69 @@ public class EnvironmentServiceImple implements EnvironmentServices {
 		
 		return save;
 	}
+	
+	//update Environment
+	@Override
+	public Environment updateEnvironment(EnvironmentDTO environmentDTO) {
+						
+		Environment environment = modelMapper.map(environmentDTO, Environment.class);
+		environment.setAddedEnvironmentBy(modelMapper.map(userServices.getLoggedInUser(), User.class ));
+
+		
+		Environment oldEnv = null;
+		if(environmentDTO.getId() == null) {
+			return null;
+		}else {			
+			oldEnv = this.getEnvironmentById(environmentDTO.getId());
+			
+			//setting the OLD location is AVAILABLE
+			Location oldLocation = oldEnv.getLocation();
+			oldLocation.setAvailable(true);		
+			locationService.updateLocation(oldLocation);
+			
+			
+			//setting environment id
+			environment.setId(oldEnv.getId());
+		}
+		
+		environment.setMinerals(null);		
+		Environment save = environmentRepo.save(environment);
+		
+		
+		//adding or updating minerals
+		for(Mineral mineral: environmentDTO.getMinerals()) {			
+			if(mineral.getId() != null) {
+				Mineral oldMineral = mineralRepository.findById(mineral.getId()).get();
+				
+				oldMineral.setMineralAmount(mineral.getMineralAmount());
+				oldMineral.setMineralName(mineral.getMineralName());
+				oldMineral.setMineralUnit(mineral.getMineralUnit());		
+//				mineralRepository.save(oldMineral);
+				
+				System.out.println(oldMineral.getId() + " UPDATED MINERAL "+mineral.getId()+"\n");
+				
+			}else {
+				mineral.setEnvironment(save);
+//				mineralRepository.save(mineral);
+				System.out.println(mineral.getId() + " ADDED MINERAL \n");
+			}			
+		}
+		
+		
+		
+		
+		
+		//setting the NEW location is USED
+		save.getLocation().setAvailable(false);
+		locationService.updateLocation(save.getLocation());
+				
+		
+		
+		return save;
+	}
+	
+	
+	
 
 	@Override
 	public Environment getEnvironmentById(Long id) {

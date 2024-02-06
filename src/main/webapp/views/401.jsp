@@ -16,26 +16,26 @@
     <meta name="description" content="codedthemes">
 
     <!-- Favicon icon -->
-    <link rel="shortcut icon" href="assets/images/favicon.png" type="image/x-icon">
-    <link rel="icon" href="assets/images/favicon.ico" type="image/x-icon">
+    <link rel="shortcut icon" href="${pageContext.request.contextPath}/assets/images/favicon.png" type="image/x-icon">
+    <link rel="icon" href="${pageContext.request.contextPath}/assets/images/favicon.ico" type="image/x-icon">
 
     <!-- Google font-->
    <link href="https://fonts.googleapis.com/css?family=Ubuntu:400,500,700" rel="stylesheet">
 
     <!--ico Fonts-->
-    <link rel="stylesheet" type="text/css" href="assets/icon/icofont/css/icofont.css">
+    <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/assets/icon/icofont/css/icofont.css">
 
     <!-- Required Fremwork -->
-    <link rel="stylesheet" type="text/css" href="assets/plugins/bootstrap/css/bootstrap.min.css">
+    <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/assets/plugins/bootstrap/css/bootstrap.min.css">
 
     <!-- waves css -->
-    <link rel="stylesheet" type="text/css" href="assets/plugins/Waves/waves.min.css">
+    <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/assets/plugins/Waves/waves.min.css">
 
     <!-- Style.css -->
-    <link rel="stylesheet" type="text/css" href="assets/css/main.css">
+    <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/assets/css/main.css">
 
     <!-- Responsive.css-->
-    <link rel="stylesheet" type="text/css" href="assets/css/responsive.css">
+    <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/assets/css/responsive.css">
 
 
 
@@ -69,31 +69,31 @@
         <ul class="iew-download">
             <li>
                 <a href="http://www.google.com/chrome/">
-                    <img src="assets/images/browser/chrome.png" alt="Chrome">
+                    <img src="${pageContext.request.contextPath}/assets/images/browser/chrome.png" alt="Chrome">
                     <div>Chrome</div>
                 </a>
             </li>
             <li>
                 <a href="https://www.mozilla.org/en-US/firefox/new/">
-                    <img src="assets/images/browser/firefox.png" alt="Firefox">
+                    <img src="${pageContext.request.contextPath}/assets/images/browser/firefox.png" alt="Firefox">
                     <div>Firefox</div>
                 </a>
             </li>
             <li>
                 <a href="http://www.opera.com">
-                    <img src="assets/images/browser/opera.png" alt="Opera">
+                    <img src="${pageContext.request.contextPath}/assets/images/browser/opera.png" alt="Opera">
                     <div>Opera</div>
                 </a>
             </li>
             <li>
                 <a href="https://www.apple.com/safari/">
-                    <img src="assets/images/browser/safari.png" alt="Safari">
+                    <img src="${pageContext.request.contextPath}/assets/images/browser/safari.png" alt="Safari">
                     <div>Safari</div>
                 </a>
             </li>
             <li>
                 <a href="http://windows.microsoft.com/en-us/internet-explorer/download-ie">
-                    <img src="assets/images/browser/ie.png" alt="">
+                    <img src="${pageContext.request.contextPath}/assets/images/browser/ie.png" alt="">
                     <div>IE (9 & above)</div>
                 </a>
             </li>
@@ -105,16 +105,16 @@
 <!-- Warning Section Ends -->
 
 <!-- Required Jqurey -->
-<script src="assets/plugins/Jquery/dist/jquery.min.js"></script>
+<script src="${pageContext.request.contextPath}/assets/plugins/Jquery/dist/jquery.min.js"></script>
 
 <!-- tether.js -->
-<script src="assets/plugins/tether/dist/js/tether.min.js"></script>
+<script src="${pageContext.request.contextPath}/assets/plugins/tether/dist/js/tether.min.js"></script>
 
 <!-- Required Framework -->
-<script src="assets/plugins/bootstrap/js/bootstrap.min.js"></script>
+<script src="${pageContext.request.contextPath}/assets/plugins/bootstrap/js/bootstrap.min.js"></script>
 
 <!-- waves effects.js -->
-<script src="assets/plugins/Waves/waves.min.js"></script>
+<script src="${pageContext.request.contextPath}/assets/plugins/Waves/waves.min.js"></script>
 
 
 

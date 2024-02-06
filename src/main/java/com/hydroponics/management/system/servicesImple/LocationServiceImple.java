@@ -8,7 +8,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.hydroponics.management.system.DTO.LocationDTO;
+import com.hydroponics.management.system.entities.Environment;
 import com.hydroponics.management.system.entities.Location;
+import com.hydroponics.management.system.reopository.EnvironmentRepo;
 import com.hydroponics.management.system.reopository.LocationRepository;
 import com.hydroponics.management.system.services.LocationService;
 
@@ -20,6 +22,9 @@ public class LocationServiceImple implements LocationService {
 	
 	@Autowired
 	private ModelMapper modelMapper;
+	
+	@Autowired
+	private EnvironmentRepo environmentRepo;
 	
 	@Override
 	public Location addLocation(Location location) {
@@ -62,6 +67,22 @@ public class LocationServiceImple implements LocationService {
 		return locationDTOs;
 	}
 
+	@Override
+	public List<LocationDTO> getEnvironmentLocationAndAllUnusedLocation(Environment environment) {
+		
+		Location envLocation = environmentRepo.findById(environment.getId()).get().getLocation();
+		
+		List<Location> findAll = locationRepository.findByIsAvailable(true);
+		List<LocationDTO> locationDTOs = new ArrayList<>();
+		
+		for(Location location: findAll) {
+			locationDTOs.add(modelMapper.map(location, LocationDTO.class));
+		}
+		
+		locationDTOs.add(modelMapper.map(envLocation, LocationDTO.class));
+		
+		return locationDTOs;
+	}
 	
 	
 	@Override

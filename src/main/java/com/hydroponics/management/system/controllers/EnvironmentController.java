@@ -3,8 +3,10 @@ package com.hydroponics.management.system.controllers;
 import java.sql.Date;
 import java.util.List;
 
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.format.annotation.DateTimeFormat;
+import org.springframework.http.HttpRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -57,6 +59,9 @@ public class EnvironmentController {
 	
 	@Autowired
 	private ReportServices reportServices;
+	
+	@Autowired
+	private ModelMapper modelMapper;
 	
 	//get environment page
 	@PreAuthorized(role = "admin")
@@ -268,19 +273,87 @@ public class EnvironmentController {
 	
 	
 	//update environment page
+	@PreAuthorized(roles = {"admin", "owner"})
 	@GetMapping("/environment/update")
 	public String updatePage(Model model) {
+		Object attribute = model.getAttribute("environmentDTO");
+		if(attribute == null) {
+			return "404";
+		}
 		
 		return "environmentDirectory/update-environment";
 	}
 	
+	@PreAuthorized(roles = {"admin", "owner"})
 	@GetMapping("/environment/update/{environmentId}")
-	public String updatePageFirst(@PathVariable Long environmentId, RedirectAttributes redirectAttributes) {
+	public String updatePageFirst(@PathVariable(name = "environmentId") Long environmentId,Model model, RedirectAttributes redirectAttributes) {
+		Environment environment = environmentServices.getEnvironmentById(environmentId);		
+		if(environment == null) {
+			return "404";
+		}
+		
+		redirectAttributes.addFlashAttribute("userList", userServices.getAllUser());
+		redirectAttributes.addFlashAttribute("locationList", locationService.getEnvironmentLocationAndAllUnusedLocation(environment));
+		redirectAttributes.addFlashAttribute("environmentDTO", modelMapper.map(environment, EnvironmentDTO.class));
+		
+		ServerMessage serverMessage = (ServerMessage) model.getAttribute("serverMessage");
+		BindingResult bindingResult = (BindingResult) model.getAttribute("inputErrors");
+		if(serverMessage != null) {
+			redirectAttributes.addFlashAttribute("serverMessage", serverMessage);
+		}
+		
+		if(bindingResult != null) {
+			redirectAttributes.addFlashAttribute("inputErrors", bindingResult);	
+		}
 		
 		return "redirect:/environment/update";
+		
 	}
 	
 	
+	
+	@PostMapping("/update-environment/{envId}")
+	public String updateEnvironment(@PathVariable("envId") Long envId, @Valid @ModelAttribute EnvironmentDTO environment, BindingResult bindingResult, RedirectAttributes redirectAttributes) {
+		
+		Environment environmentById = environmentServices.getEnvironmentById(envId);
+		if(environmentById == null) {
+			redirectAttributes.addFlashAttribute("serverMessage", new ServerMessage("Failed to Update Environment! Environment Invalid", "error", "alert-danger"));
+		}else {
+			environment.setId(envId);
+		}
+		
+		//setting the environment ID
+		environment.setId(envId);
+		
+		if (environment.getOwnedBy() != null) {
+			UserDTO userById = userServices.getUserById(environment.getOwnedBy().getId());
+			if (userById == null) {
+				bindingResult.addError(new FieldError("environment", "ownedBy", "Select a valid user from the list."));
+			} 
+		}
+		
+		//removing minerals if they are empty
+		environment.getMinerals().removeIf(mineral -> mineral.getMineralAmount()==null || mineral.getMineralName()== null ||mineral.getMineralUnit()== null);
+		
+		if (bindingResult.hasErrors()) {
+			redirectAttributes.addFlashAttribute("inputErrors", bindingResult);			
+			return "redirect:/environment/update/"+envId;
+		}
+
+		
+		Environment addEnvironment = environmentServices.updateEnvironment(environment);
+		
+		if (addEnvironment == null) {
+	        redirectAttributes.addFlashAttribute("serverMessage", new ServerMessage("Failed to Update new Environment!", "error", "alert-danger"));	        
+	    } else {
+	        redirectAttributes.addFlashAttribute("serverMessage", new ServerMessage("Envrionment \"ENV_"+envId+"\" updated successfull!", "success", "alert-success"));	        
+	        //notificationServices.sendEnvWelcomeNotification(addEnvironment);
+	    }
+		
+		
+		return "redirect:/environment/update/"+envId;
+	}
+	//update Environment Ends
 	
 	
 }

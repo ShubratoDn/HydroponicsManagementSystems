@@ -11,9 +11,36 @@
 <%@page import="org.springframework.validation.FieldError"%>
 <%@page import="org.springframework.validation.BindingResult"%>
 <%@page import="com.hydroponics.management.system.DTO.UserDTO"%>
+
+
+
+<%
+         
+	EnvironmentDTO environment = null;
+         BindingResult inputErrors = null;
+
+         
+         if (request.getAttribute("environmentDTO") != null) {
+         	environment = (EnvironmentDTO) request.getAttribute("environmentDTO");
+         }
+
+
+         if (request.getAttribute("inputErrors") != null) {
+             inputErrors = (BindingResult) request.getAttribute("inputErrors");
+         }
+     %>
+
+<%!
+    // Add this scriptlet to format the Date object
+    private String formatDate(Date date) {
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+        return sdf.format(date);
+    }
+%>
+
 <html lang="en">
 <head>
-<title>Update ENV_</title>
+<title>Update ENV_<%=environment.getId() %></title>
 <meta charset="utf-8">
 <meta name="viewport"
 	content="width=device-width, initial-scale=1, maximum-scale=1.0, user-scalable=no">
@@ -93,7 +120,7 @@
 			<div class="container-fluid">
 				<div class="row">
 					<div class="main-header">
-						<h4>Update Environment</h4>
+						<h4>Update Environment ENV_<%=environment.getId() %></h4>
 					</div>
 				</div>
 
@@ -104,38 +131,14 @@
 							<div class="col-sm-12 col-lg-10 offset-lg-1">
 								<div class="form-container">
 								
-								      <%
-					                    
-								      	EnvironmentDTO environment = null;
-					                    BindingResult inputErrors = null;
-				
-					                    
-					                    if (request.getAttribute("environmentDTO") != null) {
-					                    	environment = (EnvironmentDTO) request.getAttribute("environmentDTO");
-					                    }
-					
-					
-					                    if (request.getAttribute("inputErrors") != null) {
-					                        inputErrors = (BindingResult) request.getAttribute("inputErrors");
-					                    }
-					                %>
-								
-									<%!
-									    // Add this scriptlet to format the Date object
-									    private String formatDate(Date date) {
-									        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-									        return sdf.format(date);
-									    }
-									%>
-								
 																	
-									<form class="md-float-material" action="add-environment" method="post">
+									<form class="md-float-material" action="/update-environment/<%=environment.getId() %>" method="post">										
 										<div class="text-center">
 											<a href="/"> <img class="full-logo-lg"
 												src="${pageContext.request.contextPath}/assets/images/logo-black.png" alt="logo">
 											</a>
 										</div>
-										<h3 class="text-center txt-primary m-y-2">Setup a new Environment</h3>
+										<h3 class="text-center txt-primary m-y-2">Updating Environment : ENV_<%=environment.getId() %></h3>
 										
 										   <%												
 						                    	ServerMessage  msg = (ServerMessage) request.getAttribute("serverMessage");

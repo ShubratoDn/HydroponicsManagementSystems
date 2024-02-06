@@ -13,6 +13,8 @@ public interface EnvironmentServices {
 
 	Environment addEnvironment(EnvironmentDTO environmentDTO);
 	
+	Environment updateEnvironment(EnvironmentDTO environmentDTO);	
+	
 	Environment getEnvironmentById(Long id);
 	
 	Environment getEnvironmentByIdAndOwnedBy(Long envId, User user);
