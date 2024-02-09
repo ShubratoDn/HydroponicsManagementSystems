@@ -287,6 +287,7 @@
 											                    Mineral mineral = minerals.get(i);
 											        %>
 											                    <div class="form-group m-b-0 d-flex">
+											                    	<input name="minerals[<%= i %>].id"  value="<%=mineral.getId() != null ? mineral.getId() : ""%>" hidden="hidden"/>
 											                        <input type="text" placeholder="Mineral Name" name="minerals[<%= i %>].mineralName" class="form-control m-5" value="<%= mineral.getMineralName() %>"/>
 											                        <input type="text" placeholder="Mineral Unit" name="minerals[<%= i %>].mineralUnit" class="form-control m-5" value="<%= mineral.getMineralUnit() %>"/>
 											                        <input type="number" placeholder="Mineral amount" name="minerals[<%= i %>].mineralAmount" step="0.1" class="form-control m-5" value="<%= mineral.getMineralAmount() %>"/>

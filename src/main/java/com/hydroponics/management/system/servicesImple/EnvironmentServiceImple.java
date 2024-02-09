@@ -101,18 +101,24 @@ public class EnvironmentServiceImple implements EnvironmentServices {
 		//adding or updating minerals
 		for(Mineral mineral: environmentDTO.getMinerals()) {			
 			if(mineral.getId() != null) {
-				Mineral oldMineral = mineralRepository.findById(mineral.getId()).get();
 				
-				oldMineral.setMineralAmount(mineral.getMineralAmount());
-				oldMineral.setMineralName(mineral.getMineralName());
-				oldMineral.setMineralUnit(mineral.getMineralUnit());		
-//				mineralRepository.save(oldMineral);
+				if((mineral.getMineralName() == null || mineral.getMineralName().isBlank()) && (mineral.getMineralUnit() == null || mineral.getMineralUnit().isBlank())) {
+					//deleting mineral if Mineral Name and Mineral Unit is null
+					mineralRepository.deleteById(mineral.getId());
+				}else {
+					//updating the mineral
+					Mineral oldMineral = mineralRepository.findById(mineral.getId()).get();
+					
+					oldMineral.setMineralAmount(mineral.getMineralAmount());
+					oldMineral.setMineralName(mineral.getMineralName());
+					oldMineral.setMineralUnit(mineral.getMineralUnit());		
+					mineralRepository.save(oldMineral);
+				}
 				
-				System.out.println(oldMineral.getId() + " UPDATED MINERAL "+mineral.getId()+"\n");
 				
 			}else {
 				mineral.setEnvironment(save);
-//				mineralRepository.save(mineral);
+				mineralRepository.save(mineral);
 				System.out.println(mineral.getId() + " ADDED MINERAL \n");
 			}			
 		}

@@ -3,8 +3,12 @@
             <section class="sidebar" id="sidebar-scroll">
             
             	<%            	
+            		String role = "user";
             	
-            		String role = loggedUser.getRole().toLowerCase();            		
+	            	if(loggedUser != null){
+	            		role = loggedUser.getRole().toLowerCase();
+	            	}
+            	
             		if(role.equals("admin") || role.equals("owner") || role.equals("staff")){            			
             		
             	%>

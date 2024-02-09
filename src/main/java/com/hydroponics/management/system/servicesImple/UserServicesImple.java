@@ -3,6 +3,7 @@ package com.hydroponics.management.system.servicesImple;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import org.mindrot.jbcrypt.BCrypt;
 import org.modelmapper.ModelMapper;
@@ -41,10 +42,16 @@ public class UserServicesImple implements UserServices {
 
 	@Override
 	public UserDTO getUserById(Integer id) {
-		User user = userRepository.findById(id).get();
-		if (user == null) {
+		User user = null;
+		
+		Optional<User> findById = userRepository.findById(id);		
+		
+		if (findById == null) {
 			return null;
+		}else {
+			user = findById.get();
 		}
+		
 		return modelMapper.map(user, UserDTO.class);
 	}
 
