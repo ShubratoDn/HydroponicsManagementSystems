@@ -27,6 +27,11 @@
                             <i class="icon-plus"></i><span> Add User</span>
                         </a>
                     </li>
+                    <li class="treeview">
+                        <a class="waves-effect waves-dark" href="/user/all">
+                            <i class="icon-user"></i><span> All user</span>
+                        </a>
+                    </li>
                     <li class="nav-level">--- Location Management</li>
                     <li class="treeview">
                         <a class="waves-effect waves-dark" href="/add-location">

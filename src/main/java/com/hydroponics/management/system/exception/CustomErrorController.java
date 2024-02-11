@@ -26,6 +26,10 @@ public class CustomErrorController implements ErrorController   {
             if (statusCode == 404) {
 //                return "redirect:/not-found";                
                 request.getRequestDispatcher("/views/404.jsp").forward(request, response );
+            }else if(statusCode == 500) {
+            	request.getRequestDispatcher("/views/500.jsp").forward(request, response );
+            }else if(statusCode == 400) {
+            	request.getRequestDispatcher("/views/400.jsp").forward(request, response );
             }
         }
 

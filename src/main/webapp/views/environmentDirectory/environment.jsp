@@ -15,11 +15,15 @@
 
 
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
-    
+
+<%	
+	HelperServices helperServices = new HelperServices();
+  		Environment env = (Environment) request.getAttribute("environment");						
+%>
 <!DOCTYPE html>
 <html>
 <head>
-<title>Environment</title>
+<title>Environment: ENV_<%=env.getId() %></title>
 <meta charset="utf-8">
 <meta name="viewport"
 	content="width=device-width, initial-scale=1, maximum-scale=1.0, user-scalable=no">
@@ -92,10 +96,6 @@
 		<%@include file="../partials/util/sidebar-chat.jsp"%>
 
 
-		<%	
-			HelperServices helperServices = new HelperServices();
-    		Environment env = (Environment) request.getAttribute("environment");						
-		%>
 		
 		<div class="content-wrapper">
 		    <!-- Container-fluid starts -->

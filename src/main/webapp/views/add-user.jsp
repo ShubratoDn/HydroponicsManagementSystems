@@ -93,7 +93,7 @@
                 <div class="col-sm-12">
                     <div class="register-card card-block m-b-3">
                     
-                    <%
+                 <%
                     UserDTO userDTO = null;
                     BindingResult inputErrors = null;
 

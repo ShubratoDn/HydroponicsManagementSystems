@@ -36,6 +36,9 @@ public class User {
 	@Column(length = 500)
 	private String image;
 
+	@Column(length = 250)
+	private String address;
+	
 	private String password;
 
 	@Column(length = 1000)

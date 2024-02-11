@@ -216,8 +216,8 @@
                                 <img class="media-object img-circle" src="assets/images/avatar-3.png"
                                     alt="Generic placeholder image">
                                 <div class="d-inlineblock  p-l-20">
-                                    <h6>Josephin Doe</h6>
-                                    <a href="#">contact@admin.com</a>
+                                    <h6>Shubrato Debnath</h6>
+                                    <a href="#">shubratodn44985@admin.com</a>
                                 </div>
                                 <h6 class="txt-warning rotate-txt">Designer</h6>
                             </div>
@@ -229,7 +229,7 @@
                                 <img class="media-object img-circle" src="assets/images/lockscreen.png"
                                     alt="Generic placeholder image">
                                 <div class="d-inlineblock  p-l-20">
-                                    <h6>Josephin Doe</h6>
+                                    <h6>Shubrato Debnath</h6>
                                     <a href="#">contact@admin.com</a>
                                 </div>
                                 <h6 class="txt-danger rotate-txt">Developer</h6>
@@ -270,7 +270,7 @@
 			                                                        alt="User">
 			                                                </th>
 			                                                <td>
-			                                                	<%=user.getFirstName() +" " + user.getLastName() %>			                                                	
+			                                                	<a href="/user/<%=user.getId()%>"><%=user.getFirstName() +" " + user.getLastName() %></a>			                                                	
 			                                                	<p class="text-muted"><i class="icofont icofont-user"></i><%=user.getRole() %></p>
 			                                                </td>
 			                                                <td>

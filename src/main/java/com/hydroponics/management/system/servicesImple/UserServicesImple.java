@@ -46,7 +46,7 @@ public class UserServicesImple implements UserServices {
 		
 		Optional<User> findById = userRepository.findById(id);		
 		
-		if (findById == null) {
+		if (!findById.isPresent()) {
 			return null;
 		}else {
 			user = findById.get();

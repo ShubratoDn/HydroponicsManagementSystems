@@ -1,3 +1,4 @@
+<%@page import="org.springframework.validation.BindingResult"%>
 <%@page import="com.hydroponics.management.system.entities.Environment"%>
 <%@page import="java.util.Date"%>
 <%@page import="java.util.Locale"%>
@@ -14,20 +15,27 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 
 
-<%
-	
-	User user = (User) request.getAttribute("user");
+<%	
 	boolean isMyAccount = (Boolean) request.getAttribute("isMyAccount");
-	boolean isAdmin = (Boolean) request.getAttribute("isAdmin");
-	List<Environment> envList = (List<Environment>) request.getAttribute("envList");
+	boolean isAdmin = (Boolean) request.getAttribute("isAdmin");	
 	
+	UserDTO userDTO = null;
+    BindingResult inputErrors = null;
+
+    if (request.getAttribute("userDTO") != null) {
+        userDTO = (UserDTO) request.getAttribute("userDTO");
+    }
+
+    if (request.getAttribute("inputErrors") != null) {
+        inputErrors = (BindingResult) request.getAttribute("inputErrors");
+    }
 %>
 
     
 <!DOCTYPE html>
 <html>
 <head>
-<title><%=user.getFirstName() + " " + user.getLastName() %></title>
+<title>Updating: <%=userDTO.getFirstName() + " " + userDTO.getLastName() %></title>
 <meta charset="utf-8">
 <meta name="viewport"
 	content="width=device-width, initial-scale=1, maximum-scale=1.0, user-scalable=no">
@@ -99,7 +107,7 @@
 		<!-- Side bar chat -->
 		<%@include file="../partials/util/sidebar-chat.jsp"%>
 
-
+		
 
 		<div class="content-wrapper">
 			<!-- Container-fluid starts -->
@@ -107,7 +115,7 @@
 			<div class="container-fluid">
 				<div class="row">
 					<div class="main-header">
-						<h4>Profile: <span class="text-muted"><%=user.getFirstName() + " " + user.getLastName() %></span> </h4>						
+						<h4>Update Profile: <span class="text-muted"><%=userDTO.getFirstName() + " " + userDTO.getLastName() %></span> </h4>						
 					</div>
 				</div>
 
@@ -117,44 +125,43 @@
 				    <div class="bg-white p-20 bordered">
 				    	<div class="row">
 				    		<div class="col-md-12 m-b-10">
-				    			<img alt="User" class="profile-user-image" src="${pageContext.request.contextPath}/assets/images/userImages/<%=user.getImage()%>">			    			
+				    			<img alt="User" class="profile-user-image" src="${pageContext.request.contextPath}/assets/images/userImages/<%=userDTO.getImage()%>">			    			
 				    		</div>
-				    		<br>
-				            <h2 class="text-center m-20"><%=user.getFirstName() + " " + user.getLastName() %></h2>
-				    		<div class="d-flex justify-content-center  align-items-center">
-					    		<div class="col-md-5">
+				    		
+				    		
+					    		<div class="col-md-5 offset-md-3">
 					                <table class="table user-details-box">				                    
 					                    <tbody>
 					                        <tr>
 					                            <td>User ID</td>
-					                            <td><%=user.getId()%></td>
+					                            <td><%=userDTO.getId()%></td>
+					                        </tr>
+					                        <tr>
+					                            <td>First Name</td>
+					                            <td><%=userDTO.getId()%></td>
 					                        </tr>
 					                        <tr>
 					                            <td>Phone</td>
-					                            <td><%=user.getPhone()%></td>
+					                            <td><%=userDTO.getPhone()%></td>
 					                        </tr>
 					                        <tr>
 					                            <td>Email</td>
-					                            <td><%=user.getEmail()%></td>
+					                            <td><%=userDTO.getEmail()%></td>
 					                        </tr>
 					                        <tr>
 					                            <td>Role</td>
-					                            <td><%=user.getRole()%></td>
-					                        </tr>
-					                        <tr>
-					                            <td>Address</td>
-					                            <td><%=user.getAddress()%></td>
+					                            <td><%=userDTO.getRole()%></td>
 					                        </tr>
 					                        <tr>
 					                        	<td>Date joined</td>
 					                        	<td>
-					                        		<%=user.getRegistrationDate() !=null ? formatDate(user.getRegistrationDate()) : "undefined" %>                                    			
+					                        		<%=userDTO.getRegistrationDate() !=null ? formatDate(userDTO.getRegistrationDate()) : "undefined" %>                                    			
 	                                    		</td>
 					                        </tr>
 					                        <tr>
 					                        	<td>Added By</td>
 					                        	<td>
-					                        		<a href="/user/<%=user.getAddedBy() != null ? user.getAddedBy().getId() : "1"%>"><%= user.getAddedBy() == null ? "Undefined": user.getAddedBy().getFirstName() + " " + user.getAddedBy().getLastName() %></a>                                    			
+					                        		<a href="/user/<%=userDTO.getAddedBy() != null ? userDTO.getAddedBy().getId() : "1"%>"><%= userDTO.getAddedBy() == null ? "Undefined": userDTO.getAddedBy().getFirstName() + " " + userDTO.getAddedBy().getLastName() %></a>                                    			
 	                                    		</td>
 					                        </tr>			                        
 					                    </tbody>
@@ -164,45 +171,16 @@
 					                	if(isAdmin || isMyAccount){
 					                		%>
 					                			<div class="m-10 d-flex justify-content-center align-items-center">
-								                	<a href="/user/update/<%=user.getId()%>" class="btn btn-info">Update profile</a>
+								                	<a href="/user/update/<%=userDTO.getId()%>" class="btn btn-info">Update profile</a>
 								                </div>
 					                		<%		
 					                	}
-					                %>
-					                
+					                %>					                
 					                
 					            </div>
 				            </div>			    		
-				    	</div>
-				    </div>
-				    
-				    <br>
-				    
-				    <div class="bg-white p-20 bordered">
-				    	<div class="row p-10">
-				    		<h4><%=user.getFirstName() %> owned <%=envList.size() %> environment<%=envList.size() > 1 ? "s": "" %></h4>
-				    		
-				    		<%
-				    		for(Environment environment: envList){
-					  			%>						  		    	
-					  		    	<div class="p-15 bordered m-b-20">
-					  		    		<div class="row">
-					  		    			<div class="col-sm-10"><b>Plant Name : </b><%=environment.getPlantName() %></div>
-					  		    			<div class="col-sm-2 text-muted"><b>ID - </b><%="ENV_"+environment.getId()%></div>
-					  		    			<div class="col-sm-12"><b>Location : </b><%=environment.getLocation().getLocationName()+", "+ environment.getLocation().getFullAddress()%></div>
-					  		    			<div class="col-sm-6"><b>Owned by : </b><a href="/user/<%=environment.getOwnedBy().getId()%>"><%=environment.getOwnedBy().getFirstName() +" "+ environment.getOwnedBy().getLastName() %></a></div>
-					  		    			<div class="col-sm-6"><b>Added by : </b><a href="/user/<%=environment.getAddedEnvironmentBy().getId()%>"><%=environment.getAddedEnvironmentBy().getFirstName() +" "+ environment.getOwnedBy().getLastName() %></a></div>
-					  		    			<div class="col-sm-6"><b>Planted Field : </b><%=formatDate(environment.getPlantDate())%></div>
-					  		    			<div class="col-sm-6"><b>Expected maturity date: </b><%= formatDate(environment.getMaturityDate()) %></div>
-					  		    		</div>
-					  		    		<a href="/environment/<%=environment.getId()%>" style="width:fit-content; margin-left: auto;margin-right: 0;" class="btn btn-primary d-block m-t-10">View full details</a>
-					  		    	</div>					  		    
-					  			<%
-					  		}
-				    		%>
-				    			    		
-				    	</div>
-				    </div>				    				    
+				    	
+				    </div>				   			    				    
 				</section>
 			
 			</div>

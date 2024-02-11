@@ -252,7 +252,7 @@ public class EnvironmentController {
 	
 	
 	//all environments
-	@PreAuthorized(roles = { "Admin", "user"})
+	@PreAuthorized(roles = { "Admin", "owner"})
 	@GetMapping("/all-environments")
 	public String allEnvironmentPage(
 			@RequestParam(value = "page", defaultValue = "0", required = false) int page,

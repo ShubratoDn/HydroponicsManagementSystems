@@ -53,6 +53,8 @@ public class UserDTO {
     private User addedBy;
     
     private Timestamp registrationDate;
+    
+    private String remark;
 
     @Override
     public String toString() {
