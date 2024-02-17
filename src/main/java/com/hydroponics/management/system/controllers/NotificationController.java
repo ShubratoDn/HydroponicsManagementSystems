@@ -163,10 +163,15 @@ public class NotificationController {
 	
 	@LoginRequired
 	@GetMapping("/my-notifications")
-	public String myNotifications(Model model) {
+	public String myNotifications(
+			@RequestParam(value = "page", defaultValue = "0", required = false) int page,
+			@RequestParam(value = "size", defaultValue = "10", required = false) int size,
+			@RequestParam(value = "sortBy", defaultValue = "id", required = false) String sortBy,
+			@RequestParam(value = "sortDirection", defaultValue = "desc", required = false) String sortDirection,
+			Model model) {
 		User loggedUser = helperServices.getLoggedUser();
 		
-		PageableResponse myNotifications = notificationServices.getMyNotifications(loggedUser, 0, 5, "id", "desc");
+		PageableResponse myNotifications = notificationServices.getMyNotifications(loggedUser, page, size, sortBy, sortDirection);
 		
 		model.addAttribute("pageableNotifications", myNotifications);
 		

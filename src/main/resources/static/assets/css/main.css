@@ -8891,3 +8891,7 @@ svg#sun {
 	margin: 15px;
 	
 }
+
+.accordion-panel.unread{
+	box-shadow: 0px 0px 3px 3px rgb(0 158 255 / 72%);	
+}

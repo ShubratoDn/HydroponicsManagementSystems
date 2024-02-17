@@ -19,6 +19,8 @@ public interface NotificationServices {
 	
 	void checkAndNotifyError(double actualValue, double expectedValue, String fieldName,NotificationType notificationType, Environment environment);
 
+	void checkMineralAndNotifyError(double actualValue, double expectedValue, String fieldName,NotificationType notificationType, Environment environment);
+	
 	Notification sendNotificationAndNotify(Notification notification);
 
 	Notification sendEnvWelcomeNotification(Environment addEnvironment);

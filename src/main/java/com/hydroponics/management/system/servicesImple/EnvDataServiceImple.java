@@ -109,7 +109,7 @@ public class EnvDataServiceImple implements EnvDataServices {
 			
 			for (MineralData mineralData : mineralDataList) {	
 
-				notificationServices.checkAndNotifyError(mineralData.getMineralValue(), mineralData.getMineral().getMineralAmount(), mineralData.getMineral().getMineralName(), NotificationType.INVALID_MINERAL_ERROR, environment);
+				notificationServices.checkMineralAndNotifyError(mineralData.getMineralValue(), mineralData.getMineral().getMineralAmount(), mineralData.getMineral().getMineralName(), NotificationType.INVALID_MINERAL_ERROR, environment);
 				
 		    }
 			// Skip the last MineralData
@@ -148,7 +148,7 @@ public class EnvDataServiceImple implements EnvDataServices {
 //		    System.out.println("Mineral Amount: " + mineralData.getMineral().getMineralAmount());
 //		    System.out.println("Mineral Name: " + mineralData.getMineral().getMineralName());
 
-			notificationServices.checkAndNotifyError(mineralData.getMineralValue(), mineralData.getMineral().getMineralAmount(), mineralData.getMineral().getMineralName(), NotificationType.INVALID_MINERAL_ERROR, environment);
+			notificationServices.checkMineralAndNotifyError(mineralData.getMineralValue(), mineralData.getMineral().getMineralAmount(), mineralData.getMineral().getMineralName(), NotificationType.INVALID_MINERAL_ERROR, environment);
 			
 	    }
 		

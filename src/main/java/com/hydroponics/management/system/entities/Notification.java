@@ -41,5 +41,7 @@ public class Notification {
 	@Enumerated(EnumType.STRING)
 	private NotificationStatus status;
 	
+	private String mineral;
+	
 	private Timestamp timestamp = new Timestamp(System.currentTimeMillis());
 }

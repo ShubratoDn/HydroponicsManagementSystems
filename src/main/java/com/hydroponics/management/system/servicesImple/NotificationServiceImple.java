@@ -176,6 +176,56 @@ public class NotificationServiceImple implements NotificationServices  {
         }
     }
 
+	
+
+	//check mineral and notify error
+	@Override
+	public void checkMineralAndNotifyError(double actualValue, double baseValue, String fieldName,
+			NotificationType notificationType, Environment environment) {
+		
+		if (!helperServices.isValidFieldData(actualValue, baseValue, Constants.MINERAL_ALLOWENCE_PERCENT)) {
+            String errorMsg = "Error in " + fieldName + ". Actual value is: " + actualValue +
+                    ". It should be within the range of " + helperServices.givenPercentDecrease(baseValue, Constants.MINERAL_ALLOWENCE_PERCENT) +
+                    " to " + helperServices.givenPercentIncrease(baseValue, Constants.MINERAL_ALLOWENCE_PERCENT) + ".";
+            log.error(errorMsg);
+
+            Notification notification = new Notification();
+            notification.setNotificationType(notificationType);
+            notification.setEnvironment(environment);
+            notification.setMessage(errorMsg);
+            notification.setReceiver(environment.getOwnedBy());
+            notification.setSender(null);
+            notification.setStatus(NotificationStatus.UNREAD);
+            notification.setMineral(fieldName);
+            
+            //sending notification
+            Notification sendNotification = null;
+            
+            
+            Timestamp now = new Timestamp(System.currentTimeMillis());
+    		Timestamp tenHoursAgo = new Timestamp(now.getTime() - ((long) Constants.NOTIFICATION_TIME_INTERVAL_HOUR * 60 * 60 * 1000));
+    		
+    		List<Notification> recentNotifications = notificationRepository.findByReceiverAndNotificationTypeAndEnvironmentAndMineralAndTimestampAfter(notification.getReceiver(), notification.getNotificationType(), notification.getEnvironment(), notification.getMineral(), tenHoursAgo);
+    		
+    		if(recentNotifications.size() > 0) {
+    			sendNotification = null;
+    		}else {    			
+    			sendNotification = notificationRepository.save(notification);            
+    		}
+    		
+            
+            if (sendNotification != null) {
+                log.info("Notification: {} saved in the database.", notificationType);
+                simpMessagingTemplate.convertAndSend("/specific/notification/" + sendNotification.getReceiver().getId(), sendNotification);
+            } else {
+                log.warn("Already saved Notification: {} in the database.", notificationType);
+            }
+        }
+		
+		
+	}
+	
+	
 
 	@Override
 	public Notification sendEnvWelcomeNotification(Environment addEnvironment) {
@@ -199,7 +249,7 @@ public class NotificationServiceImple implements NotificationServices  {
         
 		return sendNotificationAndNotify;
 	}
-	
+
 
 }
 

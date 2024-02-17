@@ -46,7 +46,7 @@
 								
 								
                                 <li class="not-footer">
-                                    <a href="#!">See all notifications.</a>
+                                    <a href="/my-notifications">See all notifications.</a>
                                 </li>
                             </ul>
                         </li>

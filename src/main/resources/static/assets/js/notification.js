@@ -72,6 +72,22 @@ function markAsReadAndRedirect(notificationId, redirectUrl) {
     });
 }
 
+function markAsRead(notificationId){
+	var notification = document.getElementById("notification_"+notificationId);
+	if (notification.classList.contains('unread')) {
+		$.ajax({
+        url: `/api/notification/${notificationId}/unread`,
+        type: "PUT",
+        success: function () {
+          notification.classList.remove('unread');
+        },
+        error: function (error) {
+            console.error("Error marking notification as read:", error);
+        }
+    });
+	}
+}
+
 
 // Function to calculate the time ago
 function calculateTimeAgo(timestamp) {

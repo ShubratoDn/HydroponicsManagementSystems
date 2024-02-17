@@ -18,6 +18,9 @@ public interface NotificationRepository extends JpaRepository<Notification, Long
 
 	List<Notification> findByReceiverAndNotificationTypeAndEnvironmentAndTimestampAfter(User receiver, NotificationType notificationType, Environment environment, Timestamp timestamp);
 
+	List<Notification> findByReceiverAndNotificationTypeAndEnvironmentAndMineralAndTimestampAfter(User receiver, NotificationType notificationType, Environment environment, String mineral, Timestamp timestamp);
+
+	
 	Page<Notification> findByReceiver(User user, Pageable page);
 	
 	@Transactional

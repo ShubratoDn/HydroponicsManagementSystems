@@ -1,3 +1,4 @@
+<%@page import="java.sql.Timestamp"%>
 <%@page import="java.util.ArrayList"%>
 <%@page import="com.hydroponics.management.system.entities.Notification"%>
 <%@page import="com.hydroponics.management.system.payloads.PageableResponse"%>
@@ -98,9 +99,42 @@
 
 				<section class="min-h-80vh">
 				    <div class="bg-white p-20 bordered">
-				    
 				    <%
 				    	PageableResponse pageableResponse = (PageableResponse) request.getAttribute("pageableNotifications");
+				    %>
+				    <% int currentPage = pageableResponse.getPageNumber(); %>
+				    <% int totalPages = pageableResponse.getTotalPages(); %>
+
+				    <nav aria-label="Page navigation example">
+				        <ul class="pagination">
+				            <li class="page-item <%= currentPage == 0 ? "disabled" : "" %>">
+				                <a class="page-link" href="/my-notifications?page=0" tabindex="-1" aria-disabled="true">First</a>
+				            </li>
+				            <% if (currentPage > 0) { %>
+				                <li class="page-item">
+				                    <a class="page-link" href="/my-notifications?page=<%= currentPage - 1 %>">Previous</a>
+				                </li>
+				            <% } %>
+				
+				            <% for (int i = 1; i <= totalPages; i++) { %>
+				                <li class="page-item <%= i == (currentPage + 1) ? "active" : "" %>">
+				                    <a class="page-link" href="/my-notifications?page=<%= i-1 %>"><%= i %></a>
+				                </li>
+				            <% } %>
+				
+				            <% if (currentPage < totalPages) { %>
+				                <li class="page-item <%= currentPage == (totalPages - 1) ? "disabled" : ""%>">
+				                    <a class="page-link" href="/my-notifications?page=<%= (currentPage + 1) %>">Next</a>
+				                </li>
+				            <% } %>
+				            <li class="page-item <%= currentPage == (totalPages - 1) ? "disabled" : "" %>">
+				                <a class="page-link" href="/my-notifications?page=<%= totalPages -1 %>">Last</a>
+				            </li>
+				        </ul>
+				    </nav>
+				    
+				    <%
+				    	
 						
 				    	List<Notification> notifications = new ArrayList<>();
 				    
@@ -134,7 +168,7 @@
 				    			 }
 				    		
 				    		%>
-					    	<div class="accordion-panel notification-accordion-panel <%=cssClass %>" id="notification_<%=notification.getId()%>">
+					    	<div class="accordion-panel notification-accordion-panel <%=notification.getStatus().toString().toLowerCase() %> <%=cssClass %> " id="notification_<%=notification.getId()%>" onclick="markAsRead(<%=notification.getId()%>)">
 	                            <div class="accordion-heading" role="tab" id="headingOne">
 	                                <h3 class="card-title accordion-title">
 	                                    <a class="accordion-msg collapsed" data-toggle="collapse" data-parent="#accordion" href="#collapse_<%=notification.getId()%>"
@@ -146,6 +180,7 @@
 	                                                <span class="short-info">(<%=shortMessage %>...)</span>
 	                                                <span class="icon collapsed-icon icon-arrow-down"></span>
 	                                            </div>
+	                                            <div style="margin-left: auto; margin-right: 20px; color: #ccc;"><%=formatTimeAgo(notification.getTimestamp()) %></div>
 	                                        </div>
 	                                        <span class="icon non-collapsed-icon icon-arrow-up"></span>
 	                                    </a>
@@ -171,7 +206,36 @@
 				    		<%
 				    		}
 				    	}
-				    %>				    
+				    %>	    
+				    
+				   
+				    <nav aria-label="Page navigation example">
+				        <ul class="pagination">
+				            <li class="page-item <%= currentPage == 0 ? "disabled" : "" %>">
+				                <a class="page-link" href="/my-notifications?page=0" tabindex="-1" aria-disabled="true">First</a>
+				            </li>
+				            <% if (currentPage > 0) { %>
+				                <li class="page-item">
+				                    <a class="page-link" href="/my-notifications?page=<%= currentPage - 1 %>">Previous</a>
+				                </li>
+				            <% } %>
+				
+				            <% for (int i = 1; i <= totalPages; i++) { %>
+				                <li class="page-item <%= i == (currentPage + 1) ? "active" : "" %>">
+				                    <a class="page-link" href="/my-notifications?page=<%= i-1 %>"><%= i %></a>
+				                </li>
+				            <% } %>
+				
+				            <% if (currentPage < totalPages) { %>
+				                <li class="page-item <%= currentPage == (totalPages - 1) ? "disabled" : ""%>">
+				                    <a class="page-link" href="/my-notifications?page=<%= (currentPage + 1) %>">Next</a>
+				                </li>
+				            <% } %>
+				            <li class="page-item <%= currentPage == (totalPages - 1) ? "disabled" : "" %>">
+				                <a class="page-link" href="/my-notifications?page=<%= totalPages -1 %>">Last</a>
+				            </li>
+				        </ul>
+				    </nav>
 				    
 				    
 				    </div>
@@ -235,3 +299,24 @@
 </body>
 
 </html>
+
+
+
+<%!
+	public String formatTimeAgo(Timestamp timestamp) {
+    long now = System.currentTimeMillis();
+    long notificationTime = timestamp.getTime();
+    long timeDiff = now - notificationTime;
+
+    // Calculate time ago in seconds, minutes, hours, or days
+    if (timeDiff < 60000) {
+        return Math.floorDiv(timeDiff, 1000) + " seconds ago";
+    } else if (timeDiff < 3600000) {
+        return Math.floorDiv(timeDiff, 60000) + " minutes ago";
+    } else if (timeDiff < 86400000) {
+        return Math.floorDiv(timeDiff, 3600000) + " hours ago";
+    } else {
+        return Math.floorDiv(timeDiff, 86400000) + " days ago";
+    }
+}
+%>
