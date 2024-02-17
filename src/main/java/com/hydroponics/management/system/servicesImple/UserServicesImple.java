@@ -123,6 +123,52 @@ public class UserServicesImple implements UserServices {
 	    return null;
 	}
 
+	@Override
+	public UserDTO updateUser(UserDTO userDTO) {
+		User user = userRepository.findById(userDTO.getId()).get();
+		
+		 // Check and update each attribute individually
+	    if (userDTO.getAddress() != null) {
+	        user.setAddress(userDTO.getAddress());
+	    }
+
+	    if (userDTO.getFirstName() != null) {
+	        user.setFirstName(userDTO.getFirstName());
+	    }
+
+	    if (userDTO.getLastName() != null) {
+	        user.setLastName(userDTO.getLastName());
+	    }
+	    
+	    if (userDTO.getEmail() != null) {
+	        user.setEmail(userDTO.getEmail());
+	    }
+
+	    if (userDTO.getPhone() != null) {
+	        user.setPhone(userDTO.getPhone());
+	    }
+		
+	    if (userDTO.getRemark() != null) {
+	        user.setRemark(userDTO.getRemark());
+	    }
+	    
+	    if (userDTO.getRole() != null || !userDTO.getRole().isBlank()) {
+	    	user.setRole(userDTO.getRole());
+	    }
+	    
+	    if (userDTO.getPassword() != null && !userDTO.getPassword().isBlank()) {
+	        user.setPassword(hashPassword(userDTO.getPassword()));
+	    }
+		
+	    if (userDTO.getImage() != null) {
+	        user.setImage(userDTO.getImage());
+	    }
+	    
+		User save = userRepository.save(user);
+		
+		return modelMapper.map(save, UserDTO.class);
+	}
+
 
 
 }

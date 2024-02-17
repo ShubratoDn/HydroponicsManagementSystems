@@ -6,18 +6,34 @@ import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.hydroponics.management.system.DTO.UserDTO;
 import com.hydroponics.management.system.annotation.LoginRequired;
 import com.hydroponics.management.system.annotation.PreAuthorized;
+import com.hydroponics.management.system.configs.Constants;
 import com.hydroponics.management.system.entities.Environment;
 import com.hydroponics.management.system.entities.User;
+import com.hydroponics.management.system.enums.UserRole;
+import com.hydroponics.management.system.payloads.ServerMessage;
+import com.hydroponics.management.system.payloads.UpdateUserForm;
 import com.hydroponics.management.system.services.EnvironmentServices;
+import com.hydroponics.management.system.services.FileServices;
 import com.hydroponics.management.system.services.UserServices;
 import com.hydroponics.management.system.servicesImple.HelperServices;
+
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpSession;
+import jakarta.validation.Valid;
 
 @Controller
 public class UserController {
@@ -33,6 +49,12 @@ public class UserController {
 
 	@Autowired
 	private EnvironmentServices environmentServices;
+	
+	@Autowired
+	private FileServices fileServices;
+	
+	@Autowired
+	private ModelMapper mapper;
 
 	// profile page
 	@LoginRequired
@@ -81,6 +103,7 @@ public class UserController {
 		if (userById == null) {		
 			return "404";
 		}
+		userById.setPassword(null);
 		model.addAttribute("userDTO", userById);
 
 
@@ -115,6 +138,94 @@ public class UserController {
 
 		
 		return "userDirectory/update-profile";
+	}
+	
+	
+	
+	@PostMapping("/user/update/{id}")
+	public String updateUser(@PathVariable int id, @Valid @ModelAttribute UpdateUserForm userDTO,  BindingResult bindingResult, Model model, HttpServletRequest request, RedirectAttributes redirectAttributes) {
+
+			
+			// Validate role
+	        String roleInput = userDTO.getRole(); // Get the role string from the user
+	        @SuppressWarnings("unused")
+			UserRole userRole = null;
+	        try {
+	            userRole = UserRole.valueOf(roleInput.toUpperCase()); // Convert string to enum safely
+	        } catch (IllegalArgumentException e) {
+	            // Invalid role
+	            bindingResult.addError(new FieldError("userDTO", "role", "Invalid role"));
+	        }
+	        
+	        
+			
+			MultipartFile file =  userDTO.getFile();
+			
+			// Check if the file is present
+		    if (file != null && !file.isEmpty()) {
+		        // Check if the file is an image
+		        if (!file.getContentType().startsWith("image")) {
+		            bindingResult.addError(new FieldError("userDTO", "file", "File must be an image"));
+		        }
+
+		        // Check file size (10MB limit)
+		        if (file.getSize() > 10 * 1024 * 1024) {
+		            bindingResult.addError(new FieldError("userDTO", "file", "File size must be under 10MB"));
+		        }
+		    }
+		    
+			
+		   if(userDTO.getPassword() != null || !userDTO.getPassword().isBlank()) {
+			   // Validate password match
+		        if (!userDTO.getPassword().equals(userDTO.getConfirmPassword())) {
+		            bindingResult.addError(new FieldError("userDTO", "password", "Passwords do not match"));
+		            bindingResult.addError(new FieldError("userDTO", "confirmPassword", "Passwords do not match"));
+		        }
+		   }
+		    
+		    
+		    //ERROR CHECK
+			if (bindingResult.hasErrors()) {
+	            // Pass the bindingResult to the model to display errors in the JSP
+	            redirectAttributes.addFlashAttribute("inputErrors", bindingResult);
+	            redirectAttributes.addFlashAttribute("userDto", userDTO);
+	            
+	        	return "redirect:/user/update/"+id; // Redirect to the form page with errors
+	        }
+			
+			
+			if (file != null && !file.isEmpty()) {				
+				//uploading user image
+				String uploadFile = fileServices.uploadFile(file, Constants.UPLOAD_USER_IMAGE_DIRECTORY);	    	    
+				userDTO.setImage(uploadFile);
+			}
+		    
+			
+		    //ADDED BY USER...
+		    HttpSession session = request.getSession();
+		    UserDTO loggedUser = (UserDTO) session.getAttribute("loggedUser");
+		    if(loggedUser == null) {
+		    	model.addAttribute("serverMessage", new ServerMessage("User register failed! You must be logged in as an Admin.", "error", "alert-danger"));
+		    	return "login";
+		    }
+		    userDTO.setAddedBy(mapper.map(loggedUser, User.class));
+			
+		    
+		    
+		    userDTO.setId(id);
+		    
+		    //Updating user
+			UserDTO addUser = userServices.updateUser(modelMapper.map(userDTO, UserDTO.class));
+			if(addUser == null) {
+				redirectAttributes.addFlashAttribute("serverMessage", new ServerMessage("Error! User Update failed.", "error", "alert-danger"));
+			}else {
+				redirectAttributes.addFlashAttribute("serverMessage", new ServerMessage("Successfully update the profile.", "success", "alert-success"));			
+				redirectAttributes.addFlashAttribute("userDTO", null);
+			}		
+		
+		
+		
+		return "redirect:/user/update/"+id;
 	}
 	
 	

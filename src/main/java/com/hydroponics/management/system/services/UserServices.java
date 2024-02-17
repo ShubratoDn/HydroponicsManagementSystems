@@ -8,6 +8,7 @@ import com.hydroponics.management.system.DTO.UserDTO;
 public interface UserServices {
 
 	public UserDTO addUser(UserDTO userDto);
+	public UserDTO updateUser(UserDTO userDTO);
 	public UserDTO getUserById(Integer id);
 	public UserDTO getUserByEmail(String email);
 	public UserDTO getUserByPhone(String phone);

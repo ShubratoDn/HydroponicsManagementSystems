@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import com.hydroponics.management.system.annotation.LoginRequired;
 import com.hydroponics.management.system.configs.Constants;
 import com.hydroponics.management.system.entities.Environment;
 import com.hydroponics.management.system.entities.FieldData;
@@ -46,6 +47,7 @@ public class DataGeneratorController {
 	@Autowired
 	private NotificationServices notificationServices;
 
+	@LoginRequired
 	@GetMapping(value = { "/generate-data/", "/generate-data" })
 	public String generateDataPage(Model model) {
 		List<Environment> allEnvironments = environmentServices.getAllEnvironments();

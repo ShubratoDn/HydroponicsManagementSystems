@@ -1,3 +1,4 @@
+<%@page import="org.springframework.validation.FieldError"%>
 <%@page import="org.springframework.validation.BindingResult"%>
 <%@page import="com.hydroponics.management.system.entities.Environment"%>
 <%@page import="java.util.Date"%>
@@ -119,17 +120,37 @@
 					</div>
 				</div>
 
-
+    			
 
 				<section class="min-h-80vh">
 				    <div class="bg-white p-20 bordered">
 				    	<div class="row">
-				    		<div class="col-md-12 m-b-10">
-				    			<img alt="User" class="profile-user-image" src="${pageContext.request.contextPath}/assets/images/userImages/<%=userDTO.getImage()%>">			    			
-				    		</div>
+				    		
+			    			<%
+		                    	ServerMessage  msg = (ServerMessage) request.getAttribute("serverMessage");
+		                    	if(msg != null){
+		                    		%>
+		                    			<div class="alert <%=msg.getClassName()%>" style="width: 50%; display: block; margin: 0 auto">									
+											<%=msg.getMessage() %>
+										</div>
+		                    		<%
+		                    	}
+		                    %>				    		
+				    		<form action="/user/update/<%=userDTO.getId() %>" method="post" enctype="multipart/form-data">
+				    			<div class="col-md-12 m-b-10">
+				    					    			
+				    			</div>
+				    			
+			    				<div class="d-flex justify-content-center align-items-center" style="width: 100%">
+				    				<img alt="User" id="user-image-show" class="profile-user-image m-0" src="${pageContext.request.contextPath}/assets/images/userImages/<%=userDTO.getImage()%>">
+				    				<div class="select-image-div">
+				    					<label for="user-image-select">Select Image</label>
+				    					<input type="file" id="user-image-select" name="file" accept=".png, .jpg, .jpeg">
+				    				</div>	
+			    				</div>	
 				    		
 				    		
-					    		<div class="col-md-5 offset-md-3">
+					    		<div class="col-md-8 offset-md-2">
 					                <table class="table user-details-box">				                    
 					                    <tbody>
 					                        <tr>
@@ -138,26 +159,145 @@
 					                        </tr>
 					                        <tr>
 					                            <td>First Name</td>
-					                            <td><%=userDTO.getId()%></td>
+					                            <td><input type="text" class="form-control" name="firstName" placeholder="First Name" value="<%= userDTO != null ? userDTO.getFirstName() : "" %>"></td>
+					                            <%
+			                                        if (inputErrors != null && inputErrors.getFieldErrors("firstName").size() > 0) {
+			                                            for (FieldError error : inputErrors.getFieldErrors("firstName")) {
+			                                    %>
+			                                    <td class="td-error"><%= error.getDefaultMessage() %></td>
+			                                    <%
+			                                            }
+			                                        }
+			                                    %>			                                    
 					                        </tr>
+					                        
+					                        <tr>
+					                        	<td>Last Name</td>
+					                        	<td><input type="text" class="form-control" name="lastName" placeholder="Last name" value="<%= userDTO != null ? userDTO.getLastName() : "" %>"></td>
+					                        	<%
+			                                        if (inputErrors != null && inputErrors.getFieldErrors("lastName").size() > 0) {
+			                                            for (FieldError error : inputErrors.getFieldErrors("lastName")) {
+			                                    %>
+			                                    <td class="td-error"><%= error.getDefaultMessage() %></td>
+			                                    <%
+			                                            }
+			                                        }
+			                                    %>
+					                        </tr>
+					                        
+					                        
+					                       <!-- Phone -->
 					                        <tr>
 					                            <td>Phone</td>
-					                            <td><%=userDTO.getPhone()%></td>
+					                            <td><input type="text" class="form-control" name="phone" value="<%= userDTO != null ? userDTO.getPhone() : "" %>"></td>
+					                            <%
+					                                 if (inputErrors != null && inputErrors.getFieldErrors("phone").size() > 0) {
+					                                     for (FieldError error : inputErrors.getFieldErrors("phone")) {
+					                             %>
+					                             <td class="td-error"><%= error.getDefaultMessage() %></td>
+					                             <%
+					                                     }
+					                                 }
+					                             %>
 					                        </tr>
+					                        
+					                        <!-- Email Address -->
 					                        <tr>
 					                            <td>Email</td>
-					                            <td><%=userDTO.getEmail()%></td>
+					                            <td><input type="email" class="form-control" placeholder="Email" name="email" value="<%= userDTO != null ? userDTO.getEmail() : "" %>"></td>
+					                            <%
+					                                 if (inputErrors != null && inputErrors.getFieldErrors("email").size() > 0) {
+					                                     for (FieldError error : inputErrors.getFieldErrors("email")) {
+					                             %>
+					                             <td class="td-error"><%= error.getDefaultMessage() %></td>
+					                             <%
+					                                     }
+					                                 }
+					                             %>
 					                        </tr>
+					                        
+					                        <!--User Address-->
+					                        <tr>
+					                            <td>Address</td>
+					                            <td><input type="text" placeholder="Address" class="form-control" name="address" value="<%= userDTO != null ? (userDTO.getAddress() != null ? userDTO.getAddress() : "") : "" %>"></td>
+					                            <%
+					                                 if (inputErrors != null && inputErrors.getFieldErrors("address").size() > 0) {
+					                                     for (FieldError error : inputErrors.getFieldErrors("address")) {
+					                             %>
+					                             <td class="td-error"><%= error.getDefaultMessage() %></td>
+					                             <%
+					                                     }
+					                                 }
+					                             %>
+					                        </tr>
+					                        
+					                        <!-- Password -->
+					                        <tr>
+					                            <td>Password</td>
+					                            <td><input type="password" placeholder="Password" class="form-control" name="password" value="<%= userDTO != null ? (userDTO.getPassword() != null ? userDTO.getPassword() : "") : "" %>"></td>
+					                             <%
+					                                if (inputErrors != null && inputErrors.getFieldErrors("password").size() > 0) {
+					                                    for (FieldError error : inputErrors.getFieldErrors("password")) {
+					                            %>
+					                            <td class="td-error"><%= error.getDefaultMessage() %></td>
+					                            <%
+					                                    }
+					                                }
+					                            %>
+					                        </tr>
+					                        
+					                        
+					                        <!-- Confirm Password -->
+					                         <tr>
+					                            <td>Confirm password</td>
+					                            <td><input type="password" placeholder="Confirm Password" class="form-control" name="confirmPassword" value="<%= userDTO != null ? (userDTO.getConfirmPassword() != null? userDTO.getConfirmPassword() : "") : "" %>"></td>
+					                            <%
+					                                if (inputErrors != null && inputErrors.getFieldErrors("confirmPassword").size() > 0) {
+					                                    for (FieldError error : inputErrors.getFieldErrors("confirmPassword")) {
+					                            %>
+					                            <td class="td-error"><%= error.getDefaultMessage() %></td>
+					                            <%
+					                                    }
+					                                }
+					                            %>
+					                        </tr>
+					                        
+					                        <!-- Select User Role -->
 					                        <tr>
 					                            <td>Role</td>
-					                            <td><%=userDTO.getRole()%></td>
+					                            <td>
+					                            	<select name="role" class="form-control">
+							                            <option value="">-- Select User Role --</option>
+							                            <option value="User"
+							                                <%= userDTO != null && "User".equals(userDTO.getRole()) ? "selected" : "" %>>User
+							                            </option>
+							                            <option value="Admin"
+							                                <%= userDTO != null && "Admin".equals(userDTO.getRole()) ? "selected" : "" %>>Admin
+							                            </option>
+							                            <option value="Staff"
+							                                <%= userDTO != null && "Staff".equals(userDTO.getRole()) ? "selected" : "" %>>Staff
+							                            </option>
+							                        </select>
+                        						</td>
+                        						<%
+					                                if (inputErrors != null && inputErrors.getFieldErrors("role").size() > 0) {
+					                                    for (FieldError error : inputErrors.getFieldErrors("role")) {
+					                            %>
+					                            <td class="td-error"><%= error.getDefaultMessage() %></td>
+					                            <%
+					                                    }
+					                                }
+					                            %>
 					                        </tr>
+					                        
+					                        
 					                        <tr>
 					                        	<td>Date joined</td>
 					                        	<td>
 					                        		<%=userDTO.getRegistrationDate() !=null ? formatDate(userDTO.getRegistrationDate()) : "undefined" %>                                    			
 	                                    		</td>
 					                        </tr>
+					                        
 					                        <tr>
 					                        	<td>Added By</td>
 					                        	<td>
@@ -165,20 +305,16 @@
 	                                    		</td>
 					                        </tr>			                        
 					                    </tbody>
-					                </table>
+					                </table>					                
+					               
+					                <div class="m-10 d-flex justify-content-center align-items-center">
+					                	<input type="submit" class="btn btn-success" value="Update Now">					                
+					                </div>
 					                
-					                <%
-					                	if(isAdmin || isMyAccount){
-					                		%>
-					                			<div class="m-10 d-flex justify-content-center align-items-center">
-								                	<a href="/user/update/<%=userDTO.getId()%>" class="btn btn-info">Update profile</a>
-								                </div>
-					                		<%		
-					                	}
-					                %>					                
-					                
-					            </div>
-				            </div>			    		
+					            </div>		
+				    		</form>
+				    		
+				        </div>			    		
 				    	
 				    </div>				   			    				    
 				</section>
@@ -228,8 +364,8 @@
 	
 
 	 <!-- Web Socket -->    
-    <script src="assets/plugins/websocket/sockjs.min.js"></script>
-    <script src="assets/plugins/websocket/stomp.min.js"></script>    
+    <script src="${pageContext.request.contextPath}/assets/plugins/websocket/sockjs.min.js"></script>
+    <script src="${pageContext.request.contextPath}/assets/plugins/websocket/stomp.min.js"></script>    
 
     <script type="text/javascript">
         // Include the base context path in a JavaScript variable
@@ -237,6 +373,19 @@
         var userId = '<%=loggedUser != null ? loggedUser.getId() : null %>';
     </script>
 	<script type="text/javascript" src="${pageContext.request.contextPath}/assets/js/notification.js"></script>
+	
+	
+	<script type="text/javascript">
+		
+		let profilePic = document.getElementById("user-image-show");
+		let selectPic = document.getElementById("user-image-select");
+		
+		selectPic.onchange = function(){
+			profilePic.src = URL.createObjectURL(selectPic.files[0]);
+		}
+		
+	
+	</script>
 	
 </body>
 

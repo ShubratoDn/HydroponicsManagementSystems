@@ -8879,3 +8879,15 @@ svg#sun {
 	width: 50px;
 	object-fit: cover;	
 }
+
+.td-error{
+	color: orangered;
+	font-size: 12px;
+}
+
+.select-image-div{
+	display: flex;
+	flex-direction: column;
+	margin: 15px;
+	
+}

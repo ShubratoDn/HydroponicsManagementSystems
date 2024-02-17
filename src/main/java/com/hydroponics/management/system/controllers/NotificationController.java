@@ -231,7 +231,7 @@ public class NotificationController {
     }
 	
 	//automatically notification upload to the database
-	@Scheduled(fixedRate = 1000 * 60 * Constants.NOTIFICATION_SCHEDULE_INTERVAL_MIN)
+//	@Scheduled(fixedRate = 1000 * 60 * Constants.NOTIFICATION_SCHEDULE_INTERVAL_MIN)
 	public void notificationProgress() {		
 		List<Environment> allEnvironments = environmentServices.getAllEnvironments();
 		

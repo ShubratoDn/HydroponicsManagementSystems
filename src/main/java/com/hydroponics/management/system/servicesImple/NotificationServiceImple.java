@@ -148,13 +148,13 @@ public class NotificationServiceImple implements NotificationServices  {
 	
 	
 	@Override
-	public void checkAndNotifyError(double actualValue, double expectedValue, String fieldName,
+	public void checkAndNotifyError(double actualValue, double baseValue, String fieldName,
             NotificationType notificationType, Environment environment) {
 		
-        if (!helperServices.isValidFieldData(actualValue, expectedValue, Constants.MINERAL_ALLOWENCE_PERCENT)) {
+        if (!helperServices.isValidFieldData(actualValue, baseValue, Constants.MINERAL_ALLOWENCE_PERCENT)) {
             String errorMsg = "Error in " + fieldName + ". Actual value is: " + actualValue +
-                    ". It should be within the range of " + helperServices.givenPercentDecrease(actualValue, Constants.MINERAL_ALLOWENCE_PERCENT) +
-                    " to " + helperServices.givenPercentIncrease(actualValue, Constants.MINERAL_ALLOWENCE_PERCENT) + ".";
+                    ". It should be within the range of " + helperServices.givenPercentDecrease(baseValue, Constants.MINERAL_ALLOWENCE_PERCENT) +
+                    " to " + helperServices.givenPercentIncrease(baseValue, Constants.MINERAL_ALLOWENCE_PERCENT) + ".";
             log.error(errorMsg);
 
             Notification notification = new Notification();

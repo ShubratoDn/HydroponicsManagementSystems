@@ -121,7 +121,7 @@
                                 <th>Email</th>
                                 <th>Address</th>
                                 <th>Date Join</th>
-                                <th>Remark</th>
+                                
                                 <th>Added By</th>
                                 <th>Actions</th>
                             </tr>
@@ -138,8 +138,8 @@
                         				<td><%=user.getPhone() %></td>
                         				<td><%=user.getEmail() %></td>
                         				<td><%=user.getAddress() %></td>
-                        				<td><%=user.getRegistrationDate() %></td>
-                        				<td><%=user.getRemark() %></td>
+                        				<td><%=formatDate(user.getRegistrationDate()) %></td>
+                        				
                         				<td>
                         					<%
                         						if(user.getAddedBy() != null){
@@ -210,8 +210,8 @@
 	
 
 	 <!-- Web Socket -->    
-    <script src="assets/plugins/websocket/sockjs.min.js"></script>
-    <script src="assets/plugins/websocket/stomp.min.js"></script>    
+    <script src="${pageContext.request.contextPath}/assets/plugins/websocket/sockjs.min.js"></script>
+    <script src="${pageContext.request.contextPath}/assets/plugins/websocket/stomp.min.js"></script>    
 
     <script type="text/javascript">
         // Include the base context path in a JavaScript variable
@@ -226,7 +226,10 @@
 
 <%!
     private String formatDate(Date date) {
-        SimpleDateFormat sdf = new SimpleDateFormat("dd MMMM, yyyy", new Locale("en"));
-        return sdf.format(date);
+		if(date != null){
+			SimpleDateFormat sdf = new SimpleDateFormat("dd MMMM, yyyy", new Locale("en"));
+	        return sdf.format(date);	
+		}
+        return "undefined";
     }
 %>
