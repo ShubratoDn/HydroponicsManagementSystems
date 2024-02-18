@@ -8895,3 +8895,9 @@ svg#sun {
 .accordion-panel.unread{
 	box-shadow: 0px 0px 3px 3px rgb(0 158 255 / 72%);	
 }
+
+thead tr{
+	position: sticky;
+	background-color: white;
+	top: 50px;
+}

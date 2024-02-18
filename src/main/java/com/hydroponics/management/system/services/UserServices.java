@@ -19,4 +19,6 @@ public interface UserServices {
 	public boolean verifyPassword(String inputPassword, String hashedPassword);
 	
 	public UserDTO getLoggedInUser();
+	
+	List<UserDTO> getUsersBySearchQuery(String query);
 }

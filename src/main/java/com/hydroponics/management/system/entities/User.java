@@ -2,6 +2,8 @@ package com.hydroponics.management.system.entities;
 
 import java.sql.Timestamp;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -46,6 +48,7 @@ public class User {
 
 	private String role;
 
+	@JsonManagedReference
 	@ManyToOne
 	@JoinColumn(name = "added_by_user_id")
 	private User addedBy;

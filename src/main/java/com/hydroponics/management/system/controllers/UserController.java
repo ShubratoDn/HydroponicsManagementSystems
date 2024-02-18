@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -12,7 +13,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
@@ -244,4 +244,18 @@ public class UserController {
 		return "userDirectory/all-users";
 	}
 
+	
+	@PreAuthorized(roles = {"admin", "owner", "staff"})
+	@GetMapping("/user/search")
+	public String findUsersPage() {
+		return "userDirectory/search-user";
+	}
+	
+	
+	@PostMapping("/api/user/search/result")
+	public ResponseEntity<?> findUserByQuery(@RequestParam(name = "search_query", required = false, defaultValue = "x") String search_query) {
+		//List<UserDTO> usersBySearchQuery = userServices.getUsersBySearchQuery(search_query);
+		return ResponseEntity.ok(userServices.getUsersBySearchQuery(search_query));
+	}
+	
 }

@@ -170,5 +170,23 @@ public class UserServicesImple implements UserServices {
 	}
 
 
+	
+	@Override
+	public List<UserDTO> getUsersBySearchQuery(String query){
+		List<User> findUsersBySearchQuery = userRepository.findUsersBySearchQuery(query);
+		
+		List<UserDTO> userDTOs = new ArrayList<>();
+		
+		for(User user: findUsersBySearchQuery) {
+			if(user.getAddedBy() != null) {
+				user.getAddedBy().setAddedBy(null);
+			}
+			UserDTO userDTO = modelMapper.map(user, UserDTO.class);			
+			userDTOs.add(userDTO);
+		}
+		
+		return userDTOs;
+	}
+	
 
 }

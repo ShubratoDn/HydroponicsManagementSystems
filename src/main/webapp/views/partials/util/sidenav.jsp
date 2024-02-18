@@ -32,6 +32,11 @@
                             <i class="icon-user"></i><span> All user</span>
                         </a>
                     </li>
+                       <li class="treeview">
+                        <a class="waves-effect waves-dark" href="/user/search">
+                            <i class="icon-magnifier"></i><span> Find User</span>
+                        </a>
+                    </li>
                     <li class="nav-level">--- Location Management</li>
                     <li class="treeview">
                         <a class="waves-effect waves-dark" href="/add-location">

@@ -5,6 +5,7 @@ import java.util.List;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 
 import com.hydroponics.management.system.entities.User;
 
@@ -27,5 +28,15 @@ public interface UserRepository extends JpaRepository<User, Integer> {
 
 	@Query("SELECT u, COUNT(e) AS environment_count FROM User u LEFT JOIN Environment e ON u = e.ownedBy GROUP BY u ORDER BY environment_count DESC")
 	List<Object[]> findUsersWithEnvironmentCount();
+	
+	 @Query("SELECT u FROM User u " +
+	           "WHERE LOWER(u.firstName) LIKE LOWER(CONCAT('%', :searchQuery, '%')) " +
+	           "   OR LOWER(u.lastName) LIKE LOWER(CONCAT('%', :searchQuery, '%')) " +
+	           "   OR LOWER(u.phone) LIKE LOWER(CONCAT('%', :searchQuery, '%')) " +
+	           "   OR LOWER(u.email) LIKE LOWER(CONCAT('%', :searchQuery, '%')) " +
+	           "   OR LOWER(u.address) LIKE LOWER(CONCAT('%', :searchQuery, '%')) " +
+	           "   OR LOWER(u.role) LIKE LOWER(CONCAT('%', :searchQuery, '%')) " +
+	           "   OR CAST(u.id AS string) LIKE CONCAT('%', :searchQuery, '%')")
+	    List<User> findUsersBySearchQuery(@Param("searchQuery") String searchQuery);
 
 }
