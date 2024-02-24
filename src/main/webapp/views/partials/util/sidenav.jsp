@@ -43,6 +43,11 @@
                             <i class="icon-map"></i><span>Add Location</span>
                         </a>
                     </li>
+                    <li class="treeview">
+                        <a class="waves-effect waves-dark" href="/location/search">
+                            <i class="icon-magnifier"></i><span>Find Locations</span>
+                        </a>
+                    </li>
                     <li class="nav-level">---Manage Environment</li>
                     <li class="treeview">
                         <a class="waves-effect waves-dark" href="/my-environments">

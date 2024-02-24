@@ -174,7 +174,7 @@
 	                                    <a class="accordion-msg collapsed" data-toggle="collapse" data-parent="#accordion" href="#collapse_<%=notification.getId()%>"
 	                                        aria-expanded="true" aria-controls="collapse_<%=notification.getId()%>">
 	                                        <div class="d-flex">
-	                                            <img src="<%=request.getContextPath()+"/assets/images/avatar-1.png" %>" alt="image" class="notification-image">
+	                                            <img src="<%=request.getContextPath()+"/assets/images/util/"+notification.getNotificationType()+".png" %>" alt="image" class="notification-image">
 	                                            <div>
 	                                                <%=notification.getNotificationType().name() %>
 	                                                <span class="short-info">(<%=shortMessage %>...)</span>

@@ -41,7 +41,7 @@
                                 <li class="not-head">You have <b class="text-primary unread-notification-count" id="unread-notification-count">--</b> new notifications.</li>
                                 
                                 <ul id="nav-notification-container">
-								  
+								 
 								</ul>
 								
 								

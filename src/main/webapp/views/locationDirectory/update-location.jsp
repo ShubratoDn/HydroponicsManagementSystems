@@ -5,9 +5,24 @@
 <%@page import="org.springframework.validation.FieldError"%>
 <%@page import="org.springframework.validation.BindingResult"%>
 <%@page import="com.hydroponics.management.system.DTO.UserDTO"%>
+
+<%
+    LocationDTO locationDTO = null;
+    BindingResult inputErrors = null;
+
+    if (request.getAttribute("locationDTO") != null) {
+    	locationDTO = (LocationDTO) request.getAttribute("locationDTO");
+    }
+
+    if (request.getAttribute("inputErrors") != null) {
+        inputErrors = (BindingResult) request.getAttribute("inputErrors");
+    }
+%>
+								
+
 <html lang="en">
 <head>
-<title>Add Location - Leaflab</title>
+<title>Update Location - <%=locationDTO.getLocationName() %></title>
 <meta charset="utf-8">
 <meta name="viewport"
 	content="width=device-width, initial-scale=1, maximum-scale=1.0, user-scalable=no">
@@ -73,14 +88,14 @@
 	<div class="wrapper">
 
 		<!-- Nav top included -->
-		<%@include file="partials/util/nav-top.jsp"%>
+		<%@include file="../partials/util/nav-top.jsp"%>
 
 		<!-- side nav bar -->
-		<%@include file="partials/util/sidenav.jsp"%>
+		<%@include file="../partials/util/sidenav.jsp"%>
 
 
 		<!-- Side bar chat -->
-		<%@include file="partials/util/sidebar-chat.jsp"%>
+		<%@include file="../partials/util/sidebar-chat.jsp"%>
 
 
 
@@ -90,10 +105,10 @@
 			<div class="container-fluid">
 				<div class="row">
 					<div class="main-header">
-						<h4>Add Location</h4>
+						<h4>Update Location</h4>
 					</div>
 				</div>
-
+				
 				<section class="register">
 					<!-- Container-fluid starts -->
 					<div class="container-fluid">
@@ -101,28 +116,17 @@
 							<div class="col-sm-12">
 								<div class="register-card card-block m-b-3 rounded">
 								
-								      <%
-					                    LocationDTO locationDTO = null;
-					                    BindingResult inputErrors = null;
-					
-					                    if (request.getAttribute("locationDTO") != null) {
-					                    	locationDTO = (LocationDTO) request.getAttribute("locationDTO");
-					                    }
-					
-					                    if (request.getAttribute("inputErrors") != null) {
-					                        inputErrors = (BindingResult) request.getAttribute("inputErrors");
-					                    }
-					                %>
-								
+								      
 								
 																	
-									<form class="md-float-material" action="/add-location" method="post">
+									<form class="md-float-material" action="/location/update/<%=locationDTO.getId() %>" method="post">
 										<div class="text-center">
 											<a href="/"> <img class="full-logo-lg"
 												src="${pageContext.request.contextPath}/assets/images/logo-black.png" alt="logo">
 											</a>
 										</div>
-										<h3 class="text-center txt-primary m-y-2">Add Land Location</h3>
+										<h3 class="text-center txt-primary m-t-2">Update Land Location</h3>
+										<h5 class="text-center txt-muted">Location: <%=locationDTO.getLocationName() %></h5>
 										
 										<div class="m-t-2">											
 											<%												
@@ -186,9 +190,10 @@
 									            </small>
 									        </div>
 										
+											
 											<!-- isAvailable -->
 											<div class="form-group form-check border">											    
-											    <input type="checkbox" id="isAvailable" name="isAvailable" <%=locationDTO == null? "checked" : (locationDTO != null && locationDTO.getIsAvailable()) ? "checked" : ""%>>
+											    <input type="checkbox" id="isAvailable" name="isAvailable" <%=locationDTO == null? "checked" : (locationDTO != null && locationDTO.getIsAvailable() != null && locationDTO.getIsAvailable()) ? "checked" : ""%>>
 											    <label class="form-check-label" for="isAvailable">Land is available?</label>
 											</div>
 

@@ -352,9 +352,9 @@
     <!-- Echart js -->
     <script src="assets/plugins/charts/echarts/js/echarts-all.js"></script>
 
-    <script src="https://code.highcharts.com/highcharts.js"></script>
-    <script src="https://code.highcharts.com/modules/exporting.js"></script>
-    <script src="https://code.highcharts.com/highcharts-3d.js"></script>
+    <script src="assets/plugins/charts/highchart/highcharts.js"></script>
+    <script src="assets/plugins/charts/highchart/modules/exporting.js"></script>
+    <script src="assets/plugins/charts/highchart/highcharts-3d.js"></script>
 
     <!-- custom js -->
     <script type="text/javascript" src="assets/js/main.min.js"></script>

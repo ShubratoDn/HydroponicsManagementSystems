@@ -2,6 +2,7 @@ package com.hydroponics.management.system.servicesImple;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -95,6 +96,23 @@ public class LocationServiceImple implements LocationService {
 		}
 		
 		return locationDTOs;
+	}
+
+	@Override
+	public Location getLocationById(Long id) {
+		Optional<Location> findById = locationRepository.findById(id);
+		if(findById == null) {
+			return null;
+		}
+		
+		Location location = findById.get();
+		return location;
+	}
+	
+	@Override
+	public List<Location> searchLocations(String searchQuery, Boolean isAvailable) {
+		return locationRepository.searchLocations(searchQuery, isAvailable);
+//		return locationRepository.searchLocationsX(isAvailable);
 	}
 
 }

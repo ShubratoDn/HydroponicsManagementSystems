@@ -30,7 +30,7 @@ function updateNotificationMenu(data) {
 		    <li class="bell-notification ${notificationClass}">
 		        <a href="javascript:;" class="media" onclick="markAsReadAndRedirect(${notification.id}, '/my-notifications#notification_${notification.id}')">
 		            <span class="media-left media-icon">
-		                <img class="img-circle" src="${contextPath}/assets/images/avatar-2.png" alt="${notification.notificationType}">
+		                <img class="img-circle" src="${contextPath}/assets/images/util/${notification.notificationType}.png" " alt="${notification.notificationType}">
 		            </span>
 		            <div class="media-body">
 		                <span class="block">${notification.notificationType}</span>
@@ -51,7 +51,7 @@ function updateNotificationMenu(data) {
 	// Check if there are more than 10 notifications and add a button
 	if (totalMessages >= 10) {
 	    // Add a button with an onclick event
-	    $("#nav-notification-container").append('<a href="/notifications" class="text-info d-block text-center">You have more notifications</button>');
+	    $("#nav-notification-container").append('<a href="/my-notifications" class="text-info d-block text-center">You have more notifications</button>');
 	}
 
 }
