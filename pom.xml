@@ -66,6 +66,24 @@
 			<artifactId>modelmapper</artifactId>
 			<version>3.1.1</version>
 		</dependency>
+		
+<!-- https://mvnrepository.com/artifact/org.apache.pdfbox/pdfbox -->
+<dependency>
+    <groupId>org.apache.pdfbox</groupId>
+    <artifactId>pdfbox</artifactId>
+    <version>3.0.1</version>
+</dependency>
+<dependency>
+    <groupId>com.itextpdf</groupId>
+    <artifactId>kernel</artifactId>
+    <version>7.1.14</version>
+</dependency>
+<dependency>
+    <groupId>com.itextpdf</groupId>
+    <artifactId>html2pdf</artifactId>
+    <version>3.0.3</version>
+</dependency>
+
 
 
 		<dependency>

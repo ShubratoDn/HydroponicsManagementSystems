@@ -266,11 +266,11 @@
             	 // Iterate through the search results and append rows to the table
                 $.each(data, function (index, location) {
                     var row = '<tr>' +
-                        '<td>' + location.id + '</td>' +
+                        '<td>LOC_' + location.id + '</td>' +
                         '<td>' + location.locationName + '</td>' +
                         '<td>' + location.fullAddress + '</td>' +
-                        '<td>' + location.length + '</td>' +
-                        '<td>' + location.width + '</td>'+
+                        '<td>' + location.length + ' m</td>' +
+                        '<td>' + location.width + ' m</td>'+
                         '<td>' + location.note + '</td>'+
                         '<td>' + location.available + '</td>'+                        
                         '<td class="d-flex"><a href="/location/update/'+location.id+'" class="btn btn-primary m-r-5"><i class="icon icofont-expand"></i></a><a href="/location/update/'+location.id+'" class="btn btn-success m-r-5"><i class="icon icon-pencil"></i></a><button class="btn btn-danger delete-btn" data-toggle="modal" data-target="#deleteConfirmationModal" data-env-id="" data-env-short-id=""><i class="icon icofont-bin"></i></button></td>'
