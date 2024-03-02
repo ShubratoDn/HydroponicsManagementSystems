@@ -1,3 +1,7 @@
+<%@page import="com.hydroponics.management.system.entities.InvoiceItem"%>
+<%@page import="java.util.Locale"%>
+<%@page import="java.text.SimpleDateFormat"%>
+<%@page import="com.hydroponics.management.system.entities.Invoice"%>
 <%@page import="java.sql.Timestamp"%>
 <%@page import="java.util.ArrayList"%>
 <%@page import="com.hydroponics.management.system.entities.Notification"%>
@@ -92,119 +96,139 @@
 				<div class="row">
 					<div class="main-header" style="display: flex; justify-content: space-between; padding-right: 30px;">
 						<h4>Invoices</h4>
-						<a class="btn btn-primary" style="color:white;"><i class="icon-plus"></i> Create Invoice</a>
+						<div class="col-sm-7 col-8 text-right m-b-30">
+	                        <div class="btn-group btn-group-sm">
+	                            <button class="btn btn-primary">CSV</button>
+	                            <button class="btn btn-light">PDF</button>
+	                            <button class="btn btn-primary"><i class="fa fa-print fa-lg"></i> Print</button>
+	                        </div>
+	                    </div>
 					</div>
 				</div>
+					
+				<%
+					 Invoice invoice = (Invoice) request.getAttribute("invoice");					
+				%>
+					
 
-
-
-				<section class="min-h-80vh bg-white">
-				
-					<!-- Searching Crietaria -->
-				    <div class="d-flex p-20">
-				    	<div class="form-group w-100 m-r-20">
-				    		<label class="form-label">From</label>
-				    		<input type="date" class="form-control"> 
-				    	</div>
-				    	<div class="form-group w-100 m-r-20">
-				    		<label class="form-label">To</label>
-				    		<input type="date" class="form-control"> 
-				    	</div>
-				    	<div class="form-group w-100 m-r-20">
-				    		<label class="form-label">Status</label>
-				    		<select class="form-control">
-				    			<option>--Select Status--</option>
-				    			<option>Pending</option>
-				    		</select> 
-				    	</div>
-				    	<div class="w-100 m-r-20">
-				    		<button class="btn btn-success"> <i class="icon-magnifier m-r-5"></i> Search</button>
-				    	</div>					    
-				    </div>
-				    
-				    
-				    
-				    <div class="bordered p-10 m-10">
-				    	<div class="table-responsive">
-                            <table class="table table-striped custom-table mb-0">
-                                <thead>
-                                    <tr>
-                                        <th>#</th>
-                                        <th>Invoice Number</th>
-                                        <th>User Name</th>
-                                        <th>Created Date</th>
-                                        <th>Due Date</th>
-                                        <th>Amount</th>
-                                        <th>Status</th>
-                                        <th class="text-right">Action</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <tr>
-                                        <td>1</td>
-                                        <td><a href="invoice-view.html">#INV-0001</a></td>
-                                        <td>Charles Ortega</td>
-                                        <td>1 Aug 2018</td>
-                                        <td>7 Aug 2018</td>
-                                        <td>$20</td>
-                                        <td><span class="custom-badge status-green">Paid</span></td>
-                                        <td class="text-right">
-                                            <div class="dropdown dropdown-action">
-                                                <a href="#" class="action-icon dropdown-toggle" data-toggle="dropdown" aria-expanded="false"><i class="fa fa-ellipsis-v"></i></a>
-                                                <div class="dropdown-menu dropdown-menu-right">
-                                                    <a class="dropdown-item" href="edit-invoice.html"><i class="fa fa-pencil m-r-5"></i> Edit</a>
-                                                    <a class="dropdown-item" href="invoice-view.html"><i class="fa fa-eye m-r-5"></i> View</a>
-                                                    <a class="dropdown-item" href="#"><i class="fa fa-file-pdf-o m-r-5"></i> Download</a>
-													<a class="dropdown-item" href="#" data-toggle="modal" data-target="#delete_invoice"><i class="fa fa-trash-o m-r-5"></i> Delete</a>
-                                                </div>
-                                            </div>
-                                        </td>
-                                    </tr>
-									<tr>
-                                        <td>2</td>
-                                        <td><a href="invoice-view.html">#INV-0002</a></td>
-                                        <td>Denise Stevens</td>
-                                        <td>24 Aug 2018</td>
-                                        <td>24 Aug 2018</td>
-                                        <td>$6</td>
-                                        <td><span class="custom-badge status-blue">Sent</span></td>
-                                        <td class="text-right">
-                                            <div class="dropdown dropdown-action">
-                                                <a href="#" class="action-icon dropdown-toggle" data-toggle="dropdown" aria-expanded="false"><i class="fa fa-ellipsis-v"></i></a>
-                                                <div class="dropdown-menu dropdown-menu-right">
-                                                    <a class="dropdown-item" href="edit-invoice.html"><i class="fa fa-pencil m-r-5"></i> Edit</a>
-                                                    <a class="dropdown-item" href="invoice-view.html"><i class="fa fa-eye m-r-5"></i> View</a>
-                                                    <a class="dropdown-item" href="#"><i class="fa fa-file-pdf-o m-r-5"></i> Download</a>
-													<a class="dropdown-item" href="#" data-toggle="modal" data-target="#delete_invoice"><i class="fa fa-trash-o m-r-5"></i> Delete</a>
-                                                </div>
-                                            </div>
-                                        </td>
-                                    </tr>
-									<tr>
-                                        <td>3</td>
-                                        <td><a href="invoice-view.html">#INV-0003</a></td>
-                                        <td>Dennis Salazar</td>
-                                        <td>1 Sep 2018</td>
-                                        <td>7 Sep 2018</td>
-                                        <td>$20</td>
-                                        <td><span class="custom-badge status-orange">Partially Paid</span></td>
-                                        <td class="text-right">
-                                            <div class="dropdown dropdown-action">
-                                                <a href="#" class="action-icon dropdown-toggle" data-toggle="dropdown" aria-expanded="false"><i class="fa fa-ellipsis-v"></i></a>
-                                                <div class="dropdown-menu dropdown-menu-right">
-                                                    <a class="dropdown-item" href="edit-invoice.html"><i class="fa fa-pencil m-r-5"></i> Edit</a>
-                                                    <a class="dropdown-item" href="invoice-view.html"><i class="fa fa-eye m-r-5"></i> View</a>
-                                                    <a class="dropdown-item" href="#"><i class="fa fa-file-pdf-o m-r-5"></i> Download</a>
-                                                    <a class="dropdown-item" href="#"><i class="fa fa-trash-o m-r-5"></i> Delete</a>
-													<a class="dropdown-item" href="#" data-toggle="modal" data-target="#delete_invoice"><i class="fa fa-trash-o m-r-5"></i> Delete</a>
-                                                </div>
-                                            </div>
-                                        </td>
-                                    </tr>
-                                </tbody>
-                            </table>
-                        </div>
-				    </div>
+				<section class="min-h-80vh bg-white">				
+					<div class="content">		                
+		                <div class="row">
+		                    <div class="col-md-12">
+		                        <div class="card">
+		                            <div class="card-body">
+		                                <div class="row custom-invoice p-l-20 p-r-20 p-t-20 ">
+		                                    <div class="col-6 col-sm-6 m-b-20">
+		                                        <img src="${pageContext.request.contextPath}/assets/images/favicon.png" class="inv-logo" alt="" style="width: 60px">
+		                                        <ul class="list-unstyled">
+		                                            <li class="font-bold"><b>LeafLab</b></li>
+		                                            <li>Hydroponics Management System </li>
+		                                            <li>Enayetpur, Sirajganj, Bangladesh</li>		                                            
+		                                        </ul>
+		                                    </div>
+		                                    <div class="col-6 col-sm-6 m-b-20">
+		                                        <div class="invoice-details">
+		                                            <h3 class="text-uppercase">Invoice #INV-<%= String.format("%04d", invoice.getId()) %></h3>
+		                                             <ul class="list-unstyled">
+				                                        <li>Date: <span><%= new SimpleDateFormat("MMMM dd, yyyy", Locale.ENGLISH).format(invoice.getInvoiceDate()) %></span></li>
+				                                        <li>Due date: <span><%= new SimpleDateFormat("MMMM dd, yyyy", Locale.ENGLISH).format(invoice.getDueDate()) %></span></li>
+				                                    </ul>
+		                                        </div>
+		                                    </div>
+		                                </div>
+		                                <div class="row p-20">
+		                                    <div class="col-sm-6 col-lg-6 m-b-20">
+												
+													<h5>Invoice to:</h5>
+													 <ul class="list-unstyled">
+					                                    <li>
+					                                        <h5><strong><%= invoice.getUser().getFirstName() + " " + invoice.getUser().getLastName() %></strong></h5>
+					                                    </li>
+					                                    <li><span><%= invoice.getUser().getAddress() != null ? invoice.getUser().getAddress() :"" %></span></li>
+					                                    <li><%= invoice.getUser().getPhone() != null? invoice.getUser().getPhone() : ""%></li>
+					                                    <li><a href="#"><%= invoice.getUser().getEmail() != null ? invoice.getUser().getEmail() : "" %></a></li>
+					                                </ul>
+												
+		                                    </div>
+		                                    <div class="col-sm-6 col-lg-6 m-b-20">
+												<div class="invoices-view">
+													<span class="text-muted">Payment Details:</span>
+													 <ul class="list-unstyled invoice-payment-details">
+				                                        <li>
+				                                            <h5>Total Due: TK. <span class="text-right"><%= calculateTotalAmount(invoice.getItems()) %></span></h5>
+				                                        </li>
+				                                        <li>Status: <%= invoice.getStatus() %></li>
+				                                    </ul>
+												</div>
+		                                    </div>
+		                                </div>
+		                                <div class="table-responsive">
+		                                    <table class="table table-striped table-hover">
+		                                        <thead>
+		                                            <tr>
+		                                                <th>#</th>
+		                                                <th>ID</th>
+		                                                <th>ITEM</th>
+		                                                <th>DESCRIPTION</th>
+		                                                <th>UNIT COST</th>
+		                                                <th>QUANTITY</th>
+		                                                <th>TOTAL</th>
+		                                            </tr>
+		                                        </thead>
+		                                        <tbody>		                                        
+		                                        	<%
+		                                        	 	int count = 1;
+		                                        		for(InvoiceItem invoiceItem : invoice.getItems()){
+		                                        			%>
+		                                        			<tr>
+				                                                <td><%=count %></td>
+				                                                <td>#ITEM-<%=invoiceItem.getId() %></td>
+				                                                <td><%=invoiceItem.getItemName() %></td>
+				                                                <td><%=invoiceItem.getDescription() != null ? invoiceItem.getDescription() : "" %></td>
+				                                                <td><%=invoiceItem.getItemPrice() +" Tk / " + invoiceItem.getUnitName() %></td>
+				                                                <td><%=invoiceItem.getQuantity() %></td>
+				                                                <td><%=invoiceItem.getItemPrice() != null && invoiceItem.getQuantity() != null ? (new java.math.BigDecimal(invoiceItem.getItemPrice().toString()).multiply(new java.math.BigDecimal(invoiceItem.getQuantity().toString()))) + " Tk" : "---" %></td>
+				                                            </tr>
+		                                        			<%
+		                                        			count++;
+		                                        		}
+		                                        	%>		                                            
+		                                        </tbody>
+		                                    </table>
+		                                </div>
+		                                <div>
+		                                    <div class="row invoice-payment">
+		                                        <div class="col-sm-7">
+		                                        </div>
+		                                        <div class="col-sm-5">
+		                                            <div class="m-b-20">
+		                                                <h6>Total due</h6>
+		                                                <div class="table-responsive no-border">
+		                                                    <table class="table mb-0">
+		                                                        <tbody>		                                                           
+		                                                            <tr>
+		                                                                <th>Total:</th>
+		                                                                <td class="text-right text-primary">
+		                                                                    <h5>Tk. <%= calculateTotalAmount(invoice.getItems()) %></h5>
+																		</td>
+																		<td></td>																		
+		                                                            </tr>
+		                                                        </tbody>
+		                                                    </table>
+		                                                </div>
+		                                            </div>
+		                                        </div>
+		                                    </div>
+		                                    <div class="invoice-info p-l-20 p-r-20">
+		                                        <h5>Other information</h5>
+		                                        <p class="text-muted"><%=invoice.getOtherInformation() != null ? invoice.getOtherInformation() : "" %></p>
+		                                    </div>
+		                                </div>
+		                            </div>
+		                        </div>
+		                    </div>
+		                </div>
+		            </div>
 				    
 				</section>
 			
@@ -266,3 +290,19 @@
 </body>
 
 </html>
+
+
+
+<%!
+    double calculateTotalAmount(List<InvoiceItem> items) {
+        double totalAmount = 0;
+        if (items != null) {
+            for (InvoiceItem item : items) {
+                if (item.getItemPrice() != null && item.getQuantity() != null) {
+                    totalAmount += item.getItemPrice().doubleValue() * item.getQuantity();
+                }
+            }
+        }
+        return totalAmount;
+    }
+%>

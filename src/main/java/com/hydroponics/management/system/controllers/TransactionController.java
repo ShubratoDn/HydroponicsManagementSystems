@@ -40,7 +40,13 @@ public class TransactionController {
 	}
 	
 	@GetMapping("/transaction/invoices/{id}")
-	public String invoiceViewPage(@PathVariable("id")Long id) {
+	public String invoiceViewPage(@PathVariable("id")Long id, Model model) {
+		Invoice invoiceById = transactionServices.getInvoiceById(id);
+		if(invoiceById == null) {
+			return "404";
+		}
+		
+		model.addAttribute("invoice",invoiceById);
 		return "transactionDirectory/invoice-view";
 	}
 	

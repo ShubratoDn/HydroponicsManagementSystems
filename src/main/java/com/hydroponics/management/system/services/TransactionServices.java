@@ -9,4 +9,5 @@ public interface TransactionServices {
 
 	public Invoice createInvoice(InvoiceRequest invoiceRequest);
 	public List<Invoice> getAllInvoices();
+	public Invoice getInvoiceById(Long id);
 }
