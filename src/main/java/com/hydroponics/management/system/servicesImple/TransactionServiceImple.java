@@ -1,5 +1,7 @@
 package com.hydroponics.management.system.servicesImple;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -42,5 +44,12 @@ public class TransactionServiceImple implements TransactionServices {
 		return save;
 	}
 
+	
+	
+	@Override
+	public List<Invoice> getAllInvoices() {
+		List<Invoice> findAll = invoiceRepository.findAll();
+		return findAll;
+	}
 	
 }

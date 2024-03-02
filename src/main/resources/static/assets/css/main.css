@@ -8907,3 +8907,10 @@ thead tr{
 	visibility: hidden;
 	user-select: none;
 }
+
+.status-unpaid{
+	color: rgb(236, 83, 83);
+	border: 1px solid rgb(240, 15, 15);
+	padding: 4px 20px;
+	border-radius: 4px;
+}

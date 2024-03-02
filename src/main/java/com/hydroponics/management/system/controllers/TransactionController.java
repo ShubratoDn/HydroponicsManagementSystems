@@ -33,7 +33,9 @@ public class TransactionController {
 	
 	
 	@GetMapping("/transaction/invoices")
-	public String invoicesPage() {
+	public String invoicesPage(Model model) {
+		List<Invoice> allInvoices = transactionServices.getAllInvoices();
+		model.addAttribute("invoiceList", allInvoices);
 		return "transactionDirectory/invoices";
 	}
 	
@@ -100,12 +102,18 @@ public class TransactionController {
 		Invoice createInvoice = transactionServices.createInvoice(invoiceRequest);
 		if(createInvoice != null) {
 			redirectAttributes.addFlashAttribute("serverMessage", new ServerMessage("Successfully created invoice (ID: #INV_00"+createInvoice.getId()+")", "success", "alert-success" ));
+			redirectAttributes.addFlashAttribute("invoiceRequest", null);
 		}else {
 			redirectAttributes.addFlashAttribute("serverMessage", new ServerMessage("Failed to create invoice!!", "erroe", "alert-danger" ));
 		}
 		
 		return "redirect:/transaction/create-invoice";
 	}
+	
+	
+	
+	
+	
 	
 	
 	
