@@ -95,6 +95,19 @@
                         </a>
                     </li>
                     
+                    <li class="nav-level">--- Payments</li>
+                    <li class="treeview">
+                        <a class="waves-effect waves-dark" href="/transaction/invoices">
+                            <i class="icon-docs"></i><span>Invoice</span>
+                        </a>
+                    </li>
+                    <li class="treeview">
+                        <a class="waves-effect waves-dark" href="/transaction/payments">
+                            <i class="icofont-pay"></i><span>Payments</span>
+                        </a>
+                    </li>
+                    
+                    
                                        
                     <li class="nav-level">--- Menu Level</li>
 

@@ -12,6 +12,7 @@ import org.springframework.web.context.request.ServletRequestAttributes;
 
 import com.hydroponics.management.system.DTO.UserDTO;
 import com.hydroponics.management.system.entities.User;
+import com.hydroponics.management.system.services.UserServices;
 
 import jakarta.servlet.http.HttpSession;
 
@@ -20,6 +21,7 @@ public class HelperServices {
 	
 	@Autowired
 	private ModelMapper modelMapper;
+	
 
 	//generated random value
     public double generateRandomValue(double actualValue, int decreasePercent, int increasePercent) {
@@ -114,5 +116,5 @@ public class HelperServices {
         DecimalFormat decimalFormat = new DecimalFormat("#.##");
         return Double.parseDouble(decimalFormat.format(completionPercentage));
     }
-	
+	    
 }

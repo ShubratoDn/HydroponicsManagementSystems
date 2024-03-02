@@ -52,7 +52,12 @@ public class UserServicesImple implements UserServices {
 			user = findById.get();
 		}
 		
-		return modelMapper.map(user, UserDTO.class);
+		UserDTO map = modelMapper.map(user, UserDTO.class);
+		if(map.getAddedBy() != null) {
+			map.getAddedBy().setAddedBy(null);
+		}
+		
+		return map;
 	}
 
 	@Override
