@@ -62,4 +62,25 @@ public class TransactionServiceImple implements TransactionServices {
 		return invoice;
 	}
 	
+	@Override
+	public List<Invoice> getInvoicesByUser(User user) {
+		if(user != null) {
+			List<Invoice> findByUser = invoiceRepository.findByUser(user);
+			return findByUser;
+		}
+		return null;
+	}
+	
+	@Override
+	public List<Invoice> getInvoicesByUserId(Integer user) {
+		if(user != null && user > 0) {
+			User userx = new User();
+			userx.setId((int) user);
+			List<Invoice> findByUser = invoiceRepository.findByUser(userx);
+			return findByUser;
+		}
+		return null;
+	}
+
+	
 }

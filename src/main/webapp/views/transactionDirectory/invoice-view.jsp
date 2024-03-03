@@ -118,7 +118,7 @@
 		                        <div class="card">
 		                            <div class="card-body">
 		                                <div class="row custom-invoice p-l-20 p-r-20 p-t-20 ">
-		                                    <div class="col-6 col-sm-6 m-b-20">
+		                                    <div class="col-8 col-sm-8 m-b-20">
 		                                        <img src="${pageContext.request.contextPath}/assets/images/favicon.png" class="inv-logo" alt="" style="width: 60px">
 		                                        <ul class="list-unstyled">
 		                                            <li class="font-bold"><b>LeafLab</b></li>
@@ -126,7 +126,7 @@
 		                                            <li>Enayetpur, Sirajganj, Bangladesh</li>		                                            
 		                                        </ul>
 		                                    </div>
-		                                    <div class="col-6 col-sm-6 m-b-20">
+		                                    <div class="col-4 col-sm-4 m-b-20">
 		                                        <div class="invoice-details">
 		                                            <h3 class="text-uppercase">Invoice #INV-<%= String.format("%04d", invoice.getId()) %></h3>
 		                                             <ul class="list-unstyled">
@@ -137,7 +137,7 @@
 		                                    </div>
 		                                </div>
 		                                <div class="row p-20">
-		                                    <div class="col-sm-6 col-lg-6 m-b-20">
+		                                    <div class="col-sm-8 col-lg-8 m-b-20">
 												
 													<h5>Invoice to:</h5>
 													 <ul class="list-unstyled">
@@ -150,7 +150,7 @@
 					                                </ul>
 												
 		                                    </div>
-		                                    <div class="col-sm-6 col-lg-6 m-b-20">
+		                                    <div class="col-sm-4 col-lg-4 m-b-20">
 												<div class="invoices-view">
 													<span class="text-muted">Payment Details:</span>
 													 <ul class="list-unstyled invoice-payment-details">
@@ -186,7 +186,7 @@
 				                                                <td><%=invoiceItem.getItemName() %></td>
 				                                                <td><%=invoiceItem.getDescription() != null ? invoiceItem.getDescription() : "" %></td>
 				                                                <td><%=invoiceItem.getItemPrice() +" Tk / " + invoiceItem.getUnitName() %></td>
-				                                                <td><%=invoiceItem.getQuantity() %></td>
+				                                                <td><%=invoiceItem.getQuantity() + " "+ invoiceItem.getUnitName()%></td>
 				                                                <td><%=invoiceItem.getItemPrice() != null && invoiceItem.getQuantity() != null ? (new java.math.BigDecimal(invoiceItem.getItemPrice().toString()).multiply(new java.math.BigDecimal(invoiceItem.getQuantity().toString()))) + " Tk" : "---" %></td>
 				                                            </tr>
 		                                        			<%

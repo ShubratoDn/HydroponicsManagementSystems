@@ -15,10 +15,13 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.hydroponics.management.system.DTO.InvoiceRequest;
 import com.hydroponics.management.system.DTO.UserDTO;
+import com.hydroponics.management.system.annotation.LoginRequired;
 import com.hydroponics.management.system.entities.Invoice;
+import com.hydroponics.management.system.entities.User;
 import com.hydroponics.management.system.payloads.ServerMessage;
 import com.hydroponics.management.system.services.TransactionServices;
 import com.hydroponics.management.system.services.UserServices;
+import com.hydroponics.management.system.servicesImple.HelperServices;
 
 import jakarta.validation.Valid;
 
@@ -30,7 +33,9 @@ public class TransactionController {
 	
 	@Autowired
 	private TransactionServices transactionServices;
-	
+
+	@Autowired
+	private HelperServices helperServices;
 	
 	@GetMapping("/transaction/invoices")
 	public String invoicesPage(Model model) {
@@ -119,8 +124,13 @@ public class TransactionController {
 	
 	
 	
-	
-	
-	
+	@LoginRequired
+	@GetMapping("/transaction/my-invoices")
+	public String myInvoicesList(Model model) {
+		User loggedUser = helperServices.getLoggedUser();
+		List<Invoice> allInvoices = transactionServices.getInvoicesByUser(loggedUser);
+		model.addAttribute("invoiceList", allInvoices);
+		return "transactionDirectory/invoices";
+	}
 	
 }

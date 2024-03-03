@@ -216,58 +216,19 @@
                         </a>
                     </li>
                     
-                    
-                                       
-                    <li class="nav-level">--- Menu Level</li>
-
-                    <li class="treeview"><a class="waves-effect waves-dark" href="#!"><i
-                                class="icofont icofont-company"></i><span>Menu Level 1</span><i
-                                class="icon-arrow-down"></i></a>
-                        <ul class="treeview-menu">
-                            <li>
-                                <a class="waves-effect waves-dark" href="#!">
-                                    <i class="icon-arrow-right"></i>
-                                    Level Two
-                                </a>
-                            </li>
-                            <li class="treeview">
-                                <a class="waves-effect waves-dark" href="#!">
-                                    <i class="icon-arrow-right"></i>
-                                    <span>Level Two</span>
-                                    <i class="icon-arrow-down"></i>
-                                </a>
-                                <ul class="treeview-menu">
-                                    <li>
-                                        <a class="waves-effect waves-dark" href="#!">
-                                            <i class="icon-arrow-right"></i>
-                                            Level Three
-                                        </a>
-                                    </li>
-                                    <li>
-                                        <a class="waves-effect waves-dark" href="#!">
-                                            <i class="icon-arrow-right"></i>
-                                            <span>Level Three</span>
-                                            <i class="icon-arrow-down"></i>
-                                        </a>
-                                        <ul class="treeview-menu">
-                                            <li>
-                                                <a class="waves-effect waves-dark" href="#!">
-                                                    <i class="icon-arrow-right"></i>
-                                                    Level Four
-                                                </a>
-                                            </li>
-                                            <li>
-                                                <a class="waves-effect waves-dark" href="#!">
-                                                    <i class="icon-arrow-right"></i>
-                                                    Level Four
-                                                </a>
-                                            </li>
-                                        </ul>
-                                    </li>
-                                </ul>
-                            </li>
-                        </ul>
+                   <li class="nav-level">--- Payments</li>
+                    <li class="treeview">
+                        <a class="waves-effect waves-dark" href="/transaction/my-invoices">
+                            <i class="icon-docs"></i><span>My Invoices</span>
+                        </a>
                     </li>
+                    <li class="treeview">
+                        <a class="waves-effect waves-dark" href="/transaction/payments">
+                            <i class="icofont-pay"></i><span>My Payments</span>
+                        </a>
+                    </li>
+                     
+                   
                 </ul>                
                 <%
             		}
