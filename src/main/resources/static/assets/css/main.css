@@ -8914,3 +8914,25 @@ thead tr{
 	padding: 4px 20px;
 	border-radius: 4px;
 }
+
+/*.custom-invoice{*/
+/*	padding: 15px;*/
+/*	background-color: darkgoldenrod;*/
+/*	display: flex;*/
+/*	justify-content: space-between;*/
+/*	align-items: center;*/
+/*}*/
+
+
+.invoice-info-table{
+	border: 1px solid transparent;
+	margin-bottom: 10px;
+	width: 100%;
+    max-width: 100%;
+    margin-bottom: 1rem
+}
+
+.invoice-info-table  td{
+	padding: 10px;
+	padding-top: 20px;
+}

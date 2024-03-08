@@ -25,7 +25,7 @@ public class TestController {
 
     @GetMapping("/generate/pdfbox")
     public String generatePdfController(HttpServletResponse response) throws IOException {
-        this.generatePdf2(response);
+        this.generatePdf(response);
         return "PDF generated successfully!";
     }
 
