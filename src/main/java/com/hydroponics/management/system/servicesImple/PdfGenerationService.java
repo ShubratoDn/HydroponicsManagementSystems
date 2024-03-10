@@ -1,29 +1,32 @@
 package com.hydroponics.management.system.servicesImple;
 
-import com.itextpdf.forms.PdfAcroForm;
-
-import com.itextpdf.forms.fields.PdfFormField;
-import com.itextpdf.html2pdf.ConverterProperties;
-import com.itextpdf.html2pdf.HtmlConverter;
-import com.itextpdf.kernel.geom.PageSize;
-import com.itextpdf.kernel.pdf.PdfDocument;
-import com.itextpdf.kernel.pdf.PdfReader;
-import com.itextpdf.kernel.pdf.PdfWriter;
-import com.itextpdf.kernel.pdf.canvas.parser.PdfCanvasProcessor;
-import com.itextpdf.layout.Document;
-import com.itextpdf.layout.element.Paragraph;
-import org.springframework.stereotype.Service;
-
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.util.List;
+import java.text.SimpleDateFormat;
+import java.util.Locale;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import com.hydroponics.management.system.entities.Invoice;
+import com.hydroponics.management.system.services.TransactionServices;
+import com.itextpdf.html2pdf.ConverterProperties;
+import com.itextpdf.html2pdf.HtmlConverter;
+import com.itextpdf.kernel.geom.PageSize;
+import com.itextpdf.kernel.pdf.PdfDocument;
+import com.itextpdf.kernel.pdf.PdfWriter;
+import com.itextpdf.layout.Document;
+import com.itextpdf.layout.element.Paragraph;
 
 @Service
 public class PdfGenerationService {
+	
+	@Autowired
+	private TransactionServices transactionServices;
 
     public byte[] generatePdf() {
         ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
@@ -124,6 +127,12 @@ public class PdfGenerationService {
     //generate Invoice view
     public byte[] generateInvoiceView(Long id) {
     	ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+    	
+    	Invoice invoice = transactionServices.getInvoiceById(id);
+    	if(invoice == null) {
+    		return null;
+    	}
+    	
     	String HTML =  "\r\n"
     			+ "<!DOCTYPE html>\r\n"
     			+ "<html>\r\n"
@@ -174,10 +183,10 @@ public class PdfGenerationService {
     			+ "					<td>\r\n"
     			+ "						<div class=\"invoice-info\">\r\n"
     			+ "							<div class=\"invoice-details\">\r\n"
-    			+ "								<h3 class=\"text-uppercase\">Invoice #INV-001</h3>\r\n"
+    			+ "								<h3 class=\"text-uppercase\">Invoice #INV-00"+String.format("%04d", invoice.getId())+"</h3>\r\n"
     			+ "								<ul class=\"list-unstyled\">\r\n"
-    			+ "									<li>Date: <span>2014-01-3</span></li>\r\n"
-    			+ "									<li>Due date: <span>2012-2-1</span></li>\r\n"
+    			+ "									<li>Date: <span>"+new SimpleDateFormat("MMMM dd, yyyy", Locale.ENGLISH).format(invoice.getInvoiceDate())+"</span></li>\r\n"
+    			+ "									<li>Due date: <span>"+new SimpleDateFormat("MMMM dd, yyyy", Locale.ENGLISH).format(invoice.getDueDate())+"</span></li>\r\n"
     			+ "								</ul>\r\n"
     			+ "							</div>\r\n"
     			+ "						</div>\r\n"
@@ -194,12 +203,12 @@ public class PdfGenerationService {
     			+ "							<ul class=\"list-unstyled\">\r\n"
     			+ "								<li>\r\n"
     			+ "									<h5>\r\n"
-    			+ "										<strong>Shurato Debnath</strong>\r\n"
+    			+ "										<strong>"+invoice.getUser().getFirstName() + " " + invoice.getUser().getLastName()+"</strong>\r\n"
     			+ "									</h5>\r\n"
     			+ "								</li>\r\n"
-    			+ "								<li><span>Gopinathpur, Enayetpur, Sirajganj</span></li>\r\n"
-    			+ "								<li>01759458961</li>\r\n"
-    			+ "								<li><a href=\"#\">Shubratodn44985@gmail.com</a></li>\r\n"
+    			+ "								<li><span>"+invoice.getUser().getAddress()+"</span></li>\r\n"
+    			+ "								<li>"+invoice.getUser().getPhone()+"</li>\r\n"
+    			+ "								<li><a href=\"#\">"+invoice.getUser().getEmail()+"</a></li>\r\n"
     			+ "							</ul>\r\n"
     			+ "\r\n"
     			+ "						</div>\r\n"

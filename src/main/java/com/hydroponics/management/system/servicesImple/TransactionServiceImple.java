@@ -55,7 +55,7 @@ public class TransactionServiceImple implements TransactionServices {
 	
 	@Override
 	public Invoice getInvoiceById(Long id) {
-		Invoice invoice = invoiceRepository.findById(id).get();
+		Invoice invoice = invoiceRepository.findById(id).orElse(null);
 		if(invoice == null) {
 			return null;
 		}		

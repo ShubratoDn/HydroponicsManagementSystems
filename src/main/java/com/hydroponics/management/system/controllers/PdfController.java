@@ -90,9 +90,13 @@ public class PdfController {
     
     
     @GetMapping("/pdf/invoice-view/{id}")
-    public ResponseEntity<byte[]> generateInvoiceView(@PathVariable("id") Long id, HttpServletResponse response) {
+    public ResponseEntity<?> generateInvoiceView(@PathVariable("id") Long id, HttpServletResponse response) {
         byte[] pdfBytes = pdfGenerationService.generateInvoiceView(id);
 
+        if(pdfBytes == null) {
+        	return new ResponseEntity<>("INVOICE NOT FOUND", HttpStatus.NOT_FOUND);
+        }
+        
         // Set response headers
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_PDF);
