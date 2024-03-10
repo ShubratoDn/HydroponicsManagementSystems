@@ -100,7 +100,7 @@ public class PdfController {
         // Set response headers
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_PDF);
-        headers.setContentDisposition(ContentDisposition.builder("inline").filename("generated.pdf").build());
+        headers.setContentDisposition(ContentDisposition.builder("inline").filename("INVOICE_"+id+".pdf").build());
 
         return ResponseEntity.ok()
                 .headers(headers)

@@ -6,13 +6,17 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.math.BigDecimal;
+import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
+import java.util.List;
 import java.util.Locale;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.hydroponics.management.system.entities.Invoice;
+import com.hydroponics.management.system.entities.InvoiceItem;
 import com.hydroponics.management.system.services.TransactionServices;
 import com.itextpdf.html2pdf.ConverterProperties;
 import com.itextpdf.html2pdf.HtmlConverter;
@@ -133,6 +137,40 @@ public class PdfGenerationService {
     		return null;
     	}
     	
+    	
+    	String invoiceItemsData = "";    	
+    	
+	 	int count = 1;
+		for(InvoiceItem invoiceItem : invoice.getItems()){
+			String invoiceDescription = invoiceItem.getDescription() != null ? invoiceItem.getDescription() :""; 
+//			String price = invoiceItem.getItemPrice() != null && invoiceItem.getQuantity() != null ? (new java.math.BigDecimal(invoiceItem.getItemPrice().toString()).multiply(new java.math.BigDecimal(invoiceItem.getQuantity().toString()))) +" Tk" : "---";
+			
+			BigDecimal itemPrice = invoiceItem.getItemPrice();
+			Double quantity = invoiceItem.getQuantity();
+
+			String price = "---"; // Default value if either itemPrice or quantity is null
+
+			if (itemPrice != null && quantity != null) {
+			    BigDecimal totalPrice = itemPrice.multiply(BigDecimal.valueOf(quantity));
+			    DecimalFormat decimalFormat = new DecimalFormat("#0.00");
+			    price = decimalFormat.format(totalPrice) + " Tk";
+			}
+			
+			invoiceItemsData = invoiceItemsData + "<tr>\r\n"
+					+ "                <td>"+count+"</td>\r\n"
+					+ "                <td>#ITEM-"+invoiceItem.getId()+"</td>\r\n"
+					+ "                <td>"+invoiceItem.getItemName()+"</td>\r\n"
+					+ "                <td>"+invoiceDescription+"</td>\r\n"
+					+ "                <td>"+invoiceItem.getItemPrice()+" Tk " + invoiceItem.getUnitName()+"</td>\r\n"
+					+ "                <td>"+invoiceItem.getQuantity()+" "+ invoiceItem.getUnitName()+"</td>\r\n"
+					+ "                <td>"+price+"</td>\r\n"
+					+ "            </tr>";
+			
+			count++;
+		}
+	
+		String otherInformation = invoice.getOtherInformation() != null ? invoice.getOtherInformation() : "";
+    	
     	String HTML =  "\r\n"
     			+ "<!DOCTYPE html>\r\n"
     			+ "<html>\r\n"
@@ -174,7 +212,7 @@ public class PdfGenerationService {
     			+ "								src=\"src/main/resources/static/assets/images/favicon.png\"\r\n"
     			+ "								class=\"inv-logo\" alt=\"\" style=\"width: 60px\">\r\n"
     			+ "							<ul class=\"list-unstyled\">\r\n"
-    			+ "								<li class=\"font-bold\"><b>LeafLab</b></li>\r\n"
+    			+ "								<li class=\"font-bold\"><h4>LeafLab</h4></li>\r\n"
     			+ "								<li>Hydroponics Management System</li>\r\n"
     			+ "								<li>Enayetpur, Sirajganj, Bangladesh</li>\r\n"
     			+ "							</ul>\r\n"
@@ -183,9 +221,9 @@ public class PdfGenerationService {
     			+ "					<td>\r\n"
     			+ "						<div class=\"invoice-info\">\r\n"
     			+ "							<div class=\"invoice-details\">\r\n"
-    			+ "								<h3 class=\"text-uppercase\">Invoice #INV-00"+String.format("%04d", invoice.getId())+"</h3>\r\n"
+    			+ "								<h3 class=\"text-uppercase\">Invoice #INV-00"+String.format("%03d", invoice.getId())+"</h3>\r\n"
     			+ "								<ul class=\"list-unstyled\">\r\n"
-    			+ "									<li>Date: <span>"+new SimpleDateFormat("MMMM dd, yyyy", Locale.ENGLISH).format(invoice.getInvoiceDate())+"</span></li>\r\n"
+    			+ "									<li><strong>Date:</strong> <span>"+new SimpleDateFormat("MMMM dd, yyyy", Locale.ENGLISH).format(invoice.getInvoiceDate())+"</span></li>\r\n"
     			+ "									<li>Due date: <span>"+new SimpleDateFormat("MMMM dd, yyyy", Locale.ENGLISH).format(invoice.getDueDate())+"</span></li>\r\n"
     			+ "								</ul>\r\n"
     			+ "							</div>\r\n"
@@ -219,10 +257,10 @@ public class PdfGenerationService {
     			+ "							<ul class=\"list-unstyled invoice-payment-details\">\r\n"
     			+ "								<li>\r\n"
     			+ "									<h5>\r\n"
-    			+ "										Total Due: TK. <span class=\"text-right\">1000</span>\r\n"
+    			+ "										Total Due: TK. <span class=\"text-right\">"+calculateTotalAmount(invoice.getItems())+"</span>\r\n"
     			+ "									</h5>\r\n"
     			+ "								</li>\r\n"
-    			+ "								<li>Status: Unpaid</li>\r\n"
+    			+ "								<li>Status: "+invoice.getStatus()+"</li>\r\n"
     			+ "							</ul>\r\n"
     			+ "						</div>\r\n"
     			+ "					</td>\r\n"
@@ -246,35 +284,24 @@ public class PdfGenerationService {
     			+ "						</tr>\r\n"
     			+ "					</thead>\r\n"
     			+ "					<tbody>\r\n"
-    			+ "\r\n"
+    			+ "\r\n"+invoiceItemsData
     			+ "					</tbody>\r\n"
     			+ "				</table>\r\n"
     			+ "			</div>\r\n"
     			+ "			<div>\r\n"
-    			+ "				<div class=\"row invoice-payment\">\r\n"
-    			+ "					<div class=\"col-sm-7\"></div>\r\n"
-    			+ "					<div class=\"col-sm-5\">\r\n"
-    			+ "						<div class=\"m-b-20\">\r\n"
-    			+ "							<h6>Total due</h6>\r\n"
-    			+ "							<div class=\"table-responsive no-border\">\r\n"
-    			+ "								<table class=\"table mb-0\">\r\n"
-    			+ "									<tbody>\r\n"
-    			+ "										<tr>\r\n"
-    			+ "											<th>Total:</th>\r\n"
-    			+ "											<td class=\"text-right text-primary\">\r\n"
-    			+ "												<h5>Tk.</h5>\r\n"
-    			+ "											</td>\r\n"
-    			+ "											<td></td>\r\n"
-    			+ "										</tr>\r\n"
-    			+ "									</tbody>\r\n"
-    			+ "								</table>\r\n"
-    			+ "							</div>\r\n"
-    			+ "						</div>\r\n"
-    			+ "					</div>\r\n"
-    			+ "				</div>\r\n"
+    			+ "				<table class=\"table\"\r\n"
+    			+ "							style=\"width: 50%; margin-right: 0; margin-left: auto;\">\r\n"
+    			+ "							<tr>\r\n"
+    			+ "								<th colspan=\"\">Total Due</th>\r\n"
+    			+ "							</tr>\r\n"
+    			+ "							<tr>\r\n"
+    			+ "								<td>Total</td>\r\n"
+    			+ "								<td>"+calculateTotalAmount(invoice.getItems())+" Tk</td>\r\n"
+    			+ "							</tr>\r\n"
+    			+ "						</table>"
     			+ "				<div class=\"invoice-info p-l-20 p-r-20\">\r\n"
     			+ "					<h5>Other information</h5>\r\n"
-    			+"<p class=\"text-muted\" style=\"background-color: white;\">This is other information</p>"
+    			+"<p class=\"text-muted\" style=\"background-color: white;\">"+otherInformation+"</p>"
     			+ "				</div>\r\n"
     			+ "			</div>\r\n"
     			+ "		</div>\r\n"
@@ -300,6 +327,18 @@ public class PdfGenerationService {
         }
 
         return outputStream.toByteArray();  	
+    }
+
+    double calculateTotalAmount(List<InvoiceItem> items) {
+        double totalAmount = 0;
+        if (items != null) {
+            for (InvoiceItem item : items) {
+                if (item.getItemPrice() != null && item.getQuantity() != null) {
+                    totalAmount += item.getItemPrice().doubleValue() * item.getQuantity();
+                }
+            }
+        }
+        return totalAmount;
     }
     
 }

@@ -12,10 +12,13 @@
 
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
     
+<%
+	 Invoice invoice = (Invoice) request.getAttribute("invoice");					
+%>
 <!DOCTYPE html>
 <html>
 <head>
-<title>Invoices</title>
+<title>Invoice - #INV-<%= String.format("%04d", invoice.getId())%> </title>
 <meta charset="utf-8">
 <meta name="viewport"
 	content="width=device-width, initial-scale=1, maximum-scale=1.0, user-scalable=no">
@@ -87,7 +90,7 @@
 		<!-- Side bar chat -->
 		<%@include file="../partials/util/sidebar-chat.jsp"%>
 
-
+						
 
 		<div class="content-wrapper">
 			<!-- Container-fluid starts -->
@@ -97,19 +100,15 @@
 					<div class="main-header" style="display: flex; justify-content: space-between; padding-right: 30px;">
 						<h4>Invoices</h4>
 						<div class="col-sm-7 col-8 text-right m-b-30">
-	                        <div class="btn-group btn-group-sm">
-	                            <button class="btn btn-primary">CSV</button>
-	                            <button class="btn btn-light">PDF</button>
-	                            <button class="btn btn-primary"><i class="fa fa-print fa-lg"></i> Print</button>
+	                        <div class="btn-group btn-group-sm">	                            
+	                            <a href="/pdf/invoice-view/<%=invoice.getId() %>" target="blank"  class="btn btn-info">PDF</a>
+	                            <a href="/pdf/invoice-view/<%=invoice.getId() %>" target="blank" class="btn btn-primary"><i class="fa fa-print fa-lg"></i> Print</a>
 	                        </div>
 	                    </div>
 					</div>
 				</div>
 					
-				<%
-					 Invoice invoice = (Invoice) request.getAttribute("invoice");					
-				%>
-					
+			
 
 				<section class="min-h-80vh bg-white">				
 					<div class="content">		                
