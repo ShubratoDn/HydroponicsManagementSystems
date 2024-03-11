@@ -2,7 +2,9 @@ package com.hydroponics.management.system.controllers;
 
 import java.util.List;
 
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -17,7 +19,10 @@ import com.hydroponics.management.system.DTO.InvoiceRequest;
 import com.hydroponics.management.system.DTO.UserDTO;
 import com.hydroponics.management.system.annotation.LoginRequired;
 import com.hydroponics.management.system.entities.Invoice;
+import com.hydroponics.management.system.entities.InvoiceItem;
+import com.hydroponics.management.system.entities.Payment;
 import com.hydroponics.management.system.entities.User;
+import com.hydroponics.management.system.payloads.PaymentRequest;
 import com.hydroponics.management.system.payloads.ServerMessage;
 import com.hydroponics.management.system.services.TransactionServices;
 import com.hydroponics.management.system.services.UserServices;
@@ -36,6 +41,9 @@ public class TransactionController {
 
 	@Autowired
 	private HelperServices helperServices;
+	
+	@Autowired
+	private ModelMapper modelMapper;
 	
 	@GetMapping("/transaction/invoices")
 	public String invoicesPage(Model model) {
@@ -133,4 +141,49 @@ public class TransactionController {
 		return "transactionDirectory/invoices";
 	}
 	
+	
+	
+	
+//	======================
+//	PAYMENTS
+//	======================
+	@GetMapping("/transaction/payments")
+	public String paymentsPage() {
+
+		return "transactionDirectory/payments";
+	}
+	
+	
+	@GetMapping("/transaction/create-payment")
+	public String createPaymentPage(Model model) {
+		List<Invoice> allInvoices = transactionServices.getAllInvoices();
+		model.addAttribute("invoiceList", allInvoices);
+		return "transactionDirectory/create-payment";
+	}
+	
+	
+	@PostMapping("/transaction/create-payment")
+	public String createPayment(@ModelAttribute PaymentRequest paymentRequest, Model model, RedirectAttributes redirectAttributes) {
+		
+		Invoice invoice = transactionServices.getInvoiceById(paymentRequest.getInvoiceId());
+		
+		Payment payment = modelMapper.map(paymentRequest, Payment.class);
+		
+		System.out.println(payment);
+		
+		
+		
+		return "redirect:/transaction/create-payment";
+	}
+	
+	
+	@GetMapping("/api/invoice/{id}")
+	public ResponseEntity<?> getInvoiceById(@PathVariable("id") Long id) {
+		Invoice invoiceById = transactionServices.getInvoiceById(id);
+		invoiceById.getUser().setAddedBy(null);
+		for(InvoiceItem invoiceItem : invoiceById.getItems()) {
+			invoiceItem.setInvoice(null);
+		}
+		return ResponseEntity.ok(invoiceById);
+	}
 }
