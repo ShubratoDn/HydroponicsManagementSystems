@@ -123,7 +123,7 @@ public class TransactionController {
 			redirectAttributes.addFlashAttribute("serverMessage", new ServerMessage("Successfully created invoice (ID: #INV_00"+createInvoice.getId()+")", "success", "alert-success" ));
 			redirectAttributes.addFlashAttribute("invoiceRequest", null);
 		}else {
-			redirectAttributes.addFlashAttribute("serverMessage", new ServerMessage("Failed to create invoice!!", "erroe", "alert-danger" ));
+			redirectAttributes.addFlashAttribute("serverMessage", new ServerMessage("Failed to create invoice!!", "error", "alert-danger" ));
 		}
 		
 		return "redirect:/transaction/create-invoice";
@@ -158,6 +158,10 @@ public class TransactionController {
 	public String createPaymentPage(Model model) {
 		List<Invoice> allInvoices = transactionServices.getAllInvoices();
 		model.addAttribute("invoiceList", allInvoices);
+		
+		ServerMessage msg =  (ServerMessage) model.getAttribute("serverMessage");
+		model.addAttribute("serverMessage", msg);
+		
 		return "transactionDirectory/create-payment";
 	}
 	
@@ -168,10 +172,15 @@ public class TransactionController {
 		Invoice invoice = transactionServices.getInvoiceById(paymentRequest.getInvoiceId());
 		
 		Payment payment = modelMapper.map(paymentRequest, Payment.class);
+		payment.setInvoice(invoice);
 		
-		System.out.println(payment);
+		Payment addPayment = transactionServices.addPayment(payment);
 		
-		
+		if(addPayment == null) {
+			redirectAttributes.addFlashAttribute("serverMessage", new ServerMessage("Payment failed to create", "error", "alert-danger" ));
+		}else {
+			redirectAttributes.addFlashAttribute("serverMessage", new ServerMessage("Payment created successfull!", "success", "alert-success" ));
+		}
 		
 		return "redirect:/transaction/create-payment";
 	}

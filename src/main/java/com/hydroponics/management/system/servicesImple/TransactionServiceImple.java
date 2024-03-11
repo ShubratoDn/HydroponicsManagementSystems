@@ -8,8 +8,10 @@ import org.springframework.stereotype.Service;
 import com.hydroponics.management.system.DTO.InvoiceRequest;
 import com.hydroponics.management.system.entities.Invoice;
 import com.hydroponics.management.system.entities.InvoiceItem;
+import com.hydroponics.management.system.entities.Payment;
 import com.hydroponics.management.system.entities.User;
 import com.hydroponics.management.system.reopository.InvoiceRepository;
+import com.hydroponics.management.system.reopository.PaymentRepository;
 import com.hydroponics.management.system.services.TransactionServices;
 
 import jakarta.transaction.Transactional;
@@ -19,6 +21,9 @@ public class TransactionServiceImple implements TransactionServices {
 
 	@Autowired
 	private InvoiceRepository invoiceRepository;
+	
+	@Autowired
+	private PaymentRepository paymentRepository;
 	
 	@Override
 	@Transactional
@@ -82,5 +87,24 @@ public class TransactionServiceImple implements TransactionServices {
 		return null;
 	}
 
+	
+	@Override
+	public Payment addPayment(Payment payment) {
+		Payment save = paymentRepository.save(payment);
+		
+		Invoice invoiceById = this.getInvoiceById(save.getInvoice().getId());
+		invoiceById.setStatus(save.getStatus().toString());
+		
+		Invoice savedInvoice = this.invoiceRepository.save(invoiceById);		
+		save.setInvoice(savedInvoice);
+		
+		return save;
+	}
+	
+	@Override
+	public List<Payment> getAllPayments() {
+		List<Payment> findAll = paymentRepository.findAll();
+		return findAll;
+	}
 	
 }
