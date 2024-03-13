@@ -104,6 +104,7 @@ public class TransactionServiceImple implements TransactionServices {
 	@Override
 	public List<Payment> getAllPayments() {
 		List<Payment> findAll = paymentRepository.findAll();
+		System.out.println("FOUND SERVICE " + findAll.size());
 		return findAll;
 	}
 	

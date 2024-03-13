@@ -172,7 +172,7 @@
 			                                    	if(invoiceList != null && invoiceList.size() > 0){
 			                                    		for(Invoice invoice: invoiceList){
 			                                    			%>
-			                                    				<option  value="<%=invoice.getId()%>">#INV- <%=String.format("%03d", invoice.getId())%> || Name : <%=invoice.getUser().getFirstName() +" " + invoice.getUser().getLastName() %> || Address : <%=invoice.getUser().getAddress()%></option>
+			                                    				<option  value="<%=invoice.getId()%>">#INV- <%=String.format("%03d", invoice.getId())%> || Name : <%=invoice.getUser().getFirstName() +" " + invoice.getUser().getLastName() %> || Address : <%=invoice.getUser().getAddress()%> || Status: <%=invoice.getStatus() %></option>
 			                                    			<%
 			                                    		}
 			                                    	}

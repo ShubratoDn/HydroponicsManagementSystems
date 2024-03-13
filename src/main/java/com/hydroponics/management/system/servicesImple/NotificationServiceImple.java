@@ -14,7 +14,10 @@ import org.springframework.stereotype.Service;
 
 import com.hydroponics.management.system.configs.Constants;
 import com.hydroponics.management.system.entities.Environment;
+import com.hydroponics.management.system.entities.Invoice;
+import com.hydroponics.management.system.entities.InvoiceItem;
 import com.hydroponics.management.system.entities.Notification;
+import com.hydroponics.management.system.entities.Payment;
 import com.hydroponics.management.system.entities.User;
 import com.hydroponics.management.system.entities.enums.NotificationStatus;
 import com.hydroponics.management.system.entities.enums.NotificationType;
@@ -251,5 +254,61 @@ public class NotificationServiceImple implements NotificationServices  {
 	}
 
 
+	
+	
+	// send add payment notification
+	@Override
+	public Notification sendPaymentNotification(Payment payment) {
+
+	    Notification notification = new Notification();
+	    notification.setReceiver(payment.getInvoice().getUser());
+
+	    switch (payment.getStatus()) {
+	        case PAID:
+	            notification.setNotificationType(NotificationType.SUCCESS_FULL_PAYMENT);
+	            notification.setMessage("Thank you! Your payment of " +
+	                                    payment.getAmount() + " taka for Invoice #INV-000" +
+	                                    payment.getInvoice().getId()+
+	                                    " has been received successfully.");
+	            break;
+	        case PARTIAL_PAID:
+	            notification.setNotificationType(NotificationType.SUCCESS_PARTIAL_PAYMENT);
+	            notification.setMessage("Thank you! Your partial payment of " +
+	                                    payment.getAmount() + " taka for Invoice #INV-000" +
+	                                    payment.getInvoice().getId() +
+	                                    " has been received successfully. Remaining amount: " +
+	                                    getRemainingAmount(payment.getAmount(),payment.getInvoice()) + " taka.");
+	            break;
+	        default:
+	            notification.setNotificationType(NotificationType.UNPAID_PAYMENT);
+	            notification.setMessage("Reminder: Your payment of " +
+	                                    payment.getAmount() + " taka for Invoice #INV-00" +
+	                                    payment.getInvoice().getId() +
+	                                    " is still pending. Please make the payment at your earliest convenience.");
+	            break;
+	    }
+	    
+	    notification.setStatus(NotificationStatus.UNREAD);
+	    
+	    Notification save = notificationRepository.save(notification);
+
+	    return save;
+	}
+
+
+	private double getRemainingAmount(Double paidAmount,Invoice invoice) {
+		List<InvoiceItem> items = invoice.getItems();
+	      double totalAmount = 0;
+	        if (items != null) {
+	            for (InvoiceItem item : items) {
+	                if (item.getItemPrice() != null && item.getQuantity() != null) {
+	                    totalAmount += item.getItemPrice().doubleValue() * item.getQuantity();
+	                }
+	            }
+	        }
+	    return (totalAmount-paidAmount);		
+	}
+
+	
 }
 

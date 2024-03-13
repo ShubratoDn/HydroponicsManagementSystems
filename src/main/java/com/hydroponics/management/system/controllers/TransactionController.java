@@ -20,17 +20,21 @@ import com.hydroponics.management.system.DTO.UserDTO;
 import com.hydroponics.management.system.annotation.LoginRequired;
 import com.hydroponics.management.system.entities.Invoice;
 import com.hydroponics.management.system.entities.InvoiceItem;
+import com.hydroponics.management.system.entities.Notification;
 import com.hydroponics.management.system.entities.Payment;
 import com.hydroponics.management.system.entities.User;
 import com.hydroponics.management.system.payloads.PaymentRequest;
 import com.hydroponics.management.system.payloads.ServerMessage;
+import com.hydroponics.management.system.services.NotificationServices;
 import com.hydroponics.management.system.services.TransactionServices;
 import com.hydroponics.management.system.services.UserServices;
 import com.hydroponics.management.system.servicesImple.HelperServices;
 
 import jakarta.validation.Valid;
+import lombok.extern.slf4j.Slf4j;
 
 @Controller
+@Slf4j
 public class TransactionController {
 
 	@Autowired
@@ -45,12 +49,16 @@ public class TransactionController {
 	@Autowired
 	private ModelMapper modelMapper;
 	
+	@Autowired
+	private NotificationServices notificationServices;
+	
 	@GetMapping("/transaction/invoices")
 	public String invoicesPage(Model model) {
 		List<Invoice> allInvoices = transactionServices.getAllInvoices();
 		model.addAttribute("invoiceList", allInvoices);
 		return "transactionDirectory/invoices";
 	}
+	
 	
 	@GetMapping("/transaction/invoices/{id}")
 	public String invoiceViewPage(@PathVariable("id")Long id, Model model) {
@@ -62,6 +70,8 @@ public class TransactionController {
 		model.addAttribute("invoice",invoiceById);
 		return "transactionDirectory/invoice-view";
 	}
+	
+	
 	
 	//show the create invoice page
 	@GetMapping("/transaction/create-invoice")
@@ -148,8 +158,9 @@ public class TransactionController {
 //	PAYMENTS
 //	======================
 	@GetMapping("/transaction/payments")
-	public String paymentsPage() {
-
+	public String paymentsPage(Model model) {
+		List<Payment> allPayments = transactionServices.getAllPayments();
+		model.addAttribute("paymentList", allPayments);
 		return "transactionDirectory/payments";
 	}
 	
@@ -180,6 +191,12 @@ public class TransactionController {
 			redirectAttributes.addFlashAttribute("serverMessage", new ServerMessage("Payment failed to create", "error", "alert-danger" ));
 		}else {
 			redirectAttributes.addFlashAttribute("serverMessage", new ServerMessage("Payment created successfull!", "success", "alert-success" ));
+			Notification sendPaymentNotification = notificationServices.sendPaymentNotification(addPayment);
+			if(sendPaymentNotification != null) {
+				log.info("Payment notification send successfully");
+			}else {
+				log.error("Failed to send notification info");
+			}
 		}
 		
 		return "redirect:/transaction/create-payment";

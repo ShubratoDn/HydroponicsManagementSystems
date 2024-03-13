@@ -1,3 +1,4 @@
+<%@page import="com.hydroponics.management.system.entities.Payment"%>
 <%@page import="java.util.Locale"%>
 <%@page import="java.text.SimpleDateFormat"%>
 <%@page import="com.hydroponics.management.system.entities.InvoiceItem"%>
@@ -146,20 +147,14 @@
 					            </thead>
 					            <tbody>
 					                <%
-					                    List<Invoice> invoiceList = (List<Invoice>) request.getAttribute("invoiceList");
-					                    if (invoiceList != null && invoiceList.size() > 0) {
+					                    List<Payment> paymentList = (List<Payment>) request.getAttribute("paymentList");
+					                    if (paymentList != null && paymentList.size() > 0) {
 					                        int count = 1;
-					                        for (Invoice invoice : invoiceList) {
+					                        for (Payment invoice : paymentList) {
 					                            %>
 					                            <tr>
 					                                <td><%= count %></td>
-					                                <td><a href="/transaction/invoices/<%=invoice.getId()%>">#INV-<%= String.format("%04d", invoice.getId()) %></a></td>
-					                                <td><%= invoice.getUser().getFirstName() + " " + invoice.getUser().getLastName() %></td>
-					                                <td><%= new SimpleDateFormat("dd MMMM, yyyy", Locale.ENGLISH).format(invoice.getInvoiceDate()) %></td>
-													<td><%= new SimpleDateFormat("dd MMMM, yyyy", Locale.ENGLISH).format(invoice.getDueDate()) %></td>
-
-					                                <td>TK. ""</td>
-					                                <td><span class="custom-badge status-<%= invoice.getStatus() %>"><%= invoice.getStatus() %></span></td>
+					                                
 					                                <td class="text-right">
 					                                    <div class="dropdown dropdown-action">
 					                                        <a href="#" class="action-icon dropdown-toggle" data-toggle="dropdown" aria-expanded="false"><i class="fa fa-ellipsis-v"></i></a>

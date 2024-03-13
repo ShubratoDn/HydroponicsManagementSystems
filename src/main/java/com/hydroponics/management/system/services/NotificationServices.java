@@ -2,6 +2,7 @@ package com.hydroponics.management.system.services;
 
 import com.hydroponics.management.system.entities.Environment;
 import com.hydroponics.management.system.entities.Notification;
+import com.hydroponics.management.system.entities.Payment;
 import com.hydroponics.management.system.entities.User;
 import com.hydroponics.management.system.entities.enums.NotificationType;
 import com.hydroponics.management.system.payloads.PageableResponse;
@@ -24,5 +25,7 @@ public interface NotificationServices {
 	Notification sendNotificationAndNotify(Notification notification);
 
 	Notification sendEnvWelcomeNotification(Environment addEnvironment);
+	
+	Notification sendPaymentNotification(Payment payment);
 	
 }
