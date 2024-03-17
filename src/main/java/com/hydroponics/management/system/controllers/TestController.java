@@ -9,10 +9,17 @@ import org.apache.pdfbox.pdmodel.font.PDType1Font;
 import org.apache.pdfbox.pdmodel.font.Standard14Fonts;
 import org.apache.pdfbox.pdmodel.font.Standard14Fonts.FontName;
 import org.apache.pdfbox.text.PDFTextStripper;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.Resource;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.client.RestTemplate;
+
+import com.hydroponics.management.system.payloads.SmsResponse;
+import com.hydroponics.management.system.services.SmsServices;
 
 import jakarta.servlet.http.HttpServletResponse;
 
@@ -22,6 +29,36 @@ import java.io.InputStream;
 
 @RestController
 public class TestController {
+	
+	@Autowired
+	private SmsServices smsServices;
+	
+	@GetMapping("/send-sms")
+	public ResponseEntity<?> sendSms(){
+		smsServices.sendTestSms();
+		return ResponseEntity.ok("Sent SMS");
+	}
+	
+	@GetMapping("/sendSms")
+    public ResponseEntity<String> sendSms(@RequestParam String phoneNumber, @RequestParam String message) {
+        String apiKey = "9MokG3y48bInAK9nbwkq";
+        String senderId = "8809617615491";
+
+        try {
+            String encodedMessage = java.net.URLEncoder.encode(message, "UTF-8");
+            String url = "http://bulksmsbd.net/api/smsapi?api_key=" + apiKey + "&senderid=" + senderId + "&number=" + phoneNumber + "&message=" + encodedMessage;
+            RestTemplate restTemplate = new RestTemplate();
+            SmsResponse response = restTemplate.getForObject(url, SmsResponse.class);
+            if (response != null && response.getResponseCode() == 202) {
+                return ResponseEntity.ok(response.getSuccessMessage());
+            } else {
+                return ResponseEntity.badRequest().body(response != null ? response.getErrorMessage() : "Unknown error occurred");
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseEntity.status(500).body("Error: " + e.getMessage());
+        }
+    }
 
     @GetMapping("/generate/pdfbox")
     public String generatePdfController(HttpServletResponse response) throws IOException {

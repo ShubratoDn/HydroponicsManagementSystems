@@ -13,4 +13,10 @@ public class Constants {
 	public static final double MINERAL_ALLOWENCE_PERCENT = 4;
 	
 	public static final int RANDOM_GENERATE_DIFFERENCE_PERCENT = 10;
+	
+	public static final boolean IS_PERMITTED_SENDING_SMS = true;
+	
+	public static final String SMS_API_KEY= "9MokG3y48bInAK9nbwkq";
+	
+	public static final String SMS_SENDER_ID = "8809617615491"; 
 }
