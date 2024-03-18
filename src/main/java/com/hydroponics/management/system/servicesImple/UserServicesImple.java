@@ -13,7 +13,15 @@ import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 
 import com.hydroponics.management.system.DTO.UserDTO;
+import com.hydroponics.management.system.entities.Environment;
+import com.hydroponics.management.system.entities.Invoice;
+import com.hydroponics.management.system.entities.Payment;
 import com.hydroponics.management.system.entities.User;
+import com.hydroponics.management.system.reopository.EnvironmentRepo;
+import com.hydroponics.management.system.reopository.FieldDataRepository;
+import com.hydroponics.management.system.reopository.InvoiceRepository;
+import com.hydroponics.management.system.reopository.NotificationRepository;
+import com.hydroponics.management.system.reopository.PaymentRepository;
 import com.hydroponics.management.system.reopository.UserRepository;
 import com.hydroponics.management.system.services.UserServices;
 
@@ -28,7 +36,24 @@ public class UserServicesImple implements UserServices {
 
 	@Autowired
 	private UserRepository userRepository;
+		
+	@Autowired
+	private NotificationRepository notificationRepository;
+	
+	@Autowired
+	private InvoiceRepository invoiceRepository;
+	
+	@Autowired
+	private EnvironmentRepo environmentRepo;
+	
 
+	@Autowired
+	private FieldDataRepository fieldDataRepository;
+	
+	
+	@Autowired
+	private PaymentRepository paymentRepository;
+		
 	// Adding User
 	@Override
 	public UserDTO addUser(UserDTO userDto) {
@@ -192,6 +217,46 @@ public class UserServicesImple implements UserServices {
 		
 		return userDTOs;
 	}
+
 	
+	@Override
+	public void deleteUser(int id) {		
+		userRepository.deleteById(id);
+	}
+	
+	@Override
+	public void deleteUser(UserDTO userDTO) {		
+		User user = modelMapper.map(userDTO, User.class);		
+		
+		this.deleteEnvironmentByUser(user);
+		notificationRepository.deleteByReceiver(user);
+		
+		List<Invoice> findByUser = invoiceRepository.findByUser(user);
+		for(Invoice invoice: findByUser) {
+			
+			List<Payment> findByInvoice = paymentRepository.findByInvoice(invoice);
+			for(Payment payment: findByInvoice) {
+				paymentRepository.delete(payment);
+			}
+			
+			
+			invoiceRepository.delete(invoice);
+		}
+		
+		userRepository.delete(user);
+		
+	}
+	
+	
+	
+	public void deleteEnvironmentByUser(User user) {		
+		List<Environment> allEnvironmentsByUser = environmentRepo.findByOwnedBy(user);
+		
+		for(Environment env: allEnvironmentsByUser) {		
+			fieldDataRepository.deleteByEnvironment(env);
+			notificationRepository.deleteByEnvironment(env);
+			environmentRepo.deleteById(env.getId());	
+		}		
+	}
 
 }

@@ -207,6 +207,19 @@ public class EnvironmentServiceImple implements EnvironmentServices {
 		notificationRepository.deleteByEnvironment(env);
 		environmentRepo.deleteById(id);
 	}
+	
+	@Override
+	public void deleteEnvironmentByUser(User user) {		
+		List<Environment> allEnvironmentsByUser = this.getAllEnvironmentsByUser(user.getId());		
+		
+		for(Environment env: allEnvironmentsByUser) {		
+			fieldDataRepository.deleteByEnvironment(env);
+			notificationRepository.deleteByEnvironment(env);
+			environmentRepo.deleteById(env.getId());	
+		}
+		
+		
+	}
 
 	@Override
 	public List<Environment> getAllEnvironmentsByUser(int id) {

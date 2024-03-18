@@ -56,4 +56,49 @@ public class SmsServiceImple implements SmsServices {
 		}
 	}
 
+	
+	
+	//send SMS
+	@Override
+	public boolean sendSms(String receiver, String message) {
+		if(receiver == null) {
+			return false;
+		}
+		
+		if(Constants.IS_PERMITTED_SENDING_SMS) {			
+			if(!receiver.isBlank() || !receiver.isEmpty()) {				
+				String apiKey = Constants.SMS_API_KEY;
+				String senderId = Constants.SMS_SENDER_ID;
+
+				try {
+					String url = UriComponentsBuilder.fromUriString("http://bulksmsbd.net/api/smsapi")
+							.queryParam("api_key", apiKey).queryParam("senderid", senderId).queryParam("number", receiver)
+							.queryParam("message", message).build().toUriString();
+
+					RestTemplate restTemplate = new RestTemplate();
+//					String responseString = restTemplate.getForObject(url, String.class);
+					
+					
+					String responseString = "{\"response_code\":202,\"message_id\":14904493,\"success_message\":\"SMS Submitted Successfully 1\",\"error_message\":\"\"}";
+					System.out.println(responseString);			
+					
+					SmsResponse response = objectMapper.readValue(responseString, SmsResponse.class);
+					if (response != null && response.getResponseCode() == 202) {
+						log.info("SMS sent successfully to: " + receiver);
+						return true;
+					} else {
+						log.error("Failed to send sms: " + response.getErrorMessage());
+					}
+				} catch (Exception e) {
+					e.printStackTrace();
+					log.error("ERROR while sending sms: " + e.getMessage());
+				}
+				return false;
+			}else {
+				return false;
+			}
+		}
+		return false;
+	}
+	
 }

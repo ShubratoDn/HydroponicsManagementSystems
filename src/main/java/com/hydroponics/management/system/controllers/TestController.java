@@ -35,8 +35,11 @@ public class TestController {
 	
 	@GetMapping("/send-sms")
 	public ResponseEntity<?> sendSms(){
-		smsServices.sendTestSms();
-		return ResponseEntity.ok("Sent SMS");
+//		smsServices.sendTestSms();
+		if(smsServices.sendSms("01887546286", "This is a test message")) {
+			return ResponseEntity.ok("Sent SMS"); 
+		}
+		return ResponseEntity.ok("Failed to send SMS");
 	}
 	
 	@GetMapping("/sendSms")

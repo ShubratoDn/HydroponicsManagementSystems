@@ -85,4 +85,6 @@ public interface EnvironmentRepo extends JpaRepository<Environment, Long>, JpaSp
 	Page<Environment> findByOwnedBy(User user, org.springframework.data.domain.Pageable pageable);
 	
 	Environment findByIdAndOwnedBy(Long id, User user);
+	
+	void deleteByOwnedBy(User user);
 }

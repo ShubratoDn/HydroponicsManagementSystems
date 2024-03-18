@@ -26,4 +26,7 @@ public interface NotificationRepository extends JpaRepository<Notification, Long
 	@Transactional
 	void deleteByEnvironment(Environment env);
 	
+	void deleteByReceiverOrSender(User user, User sender);
+	
+	void deleteByReceiver(User user);
 }

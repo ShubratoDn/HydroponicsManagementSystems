@@ -265,4 +265,14 @@ public class UserController {
 		UserDTO userById = userServices.getUserById(id);
 		return new ResponseEntity<>(userById, HttpStatus.OK);
 	}
+	
+	@GetMapping("/api/user/delete/{id}")
+	public ResponseEntity<?> deleteUser(@PathVariable("id") int id){
+		UserDTO userById = userServices.getUserById(id);
+		if(userById == null) {
+			return ResponseEntity.ok("User NOT found!");	
+		}
+		userServices.deleteUser(userById);
+		return ResponseEntity.ok("User deleted");
+	}
 }

@@ -47,5 +47,6 @@ public interface EnvironmentServices {
 	 
 	 void deleteEnvironment (Long id);
 	 
+	 void deleteEnvironmentByUser (User user);
 }
 

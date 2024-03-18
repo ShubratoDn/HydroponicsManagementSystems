@@ -21,4 +21,8 @@ public interface UserServices {
 	public UserDTO getLoggedInUser();
 	
 	List<UserDTO> getUsersBySearchQuery(String query);
+	
+	public void deleteUser(int id);
+
+	public void deleteUser(UserDTO userDTO);
 }
