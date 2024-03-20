@@ -16,11 +16,15 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import com.hydroponics.management.system.DTO.UserDTO;
 import com.hydroponics.management.system.annotation.PreAuthorized;
 import com.hydroponics.management.system.configs.Constants;
+import com.hydroponics.management.system.entities.Notification;
 import com.hydroponics.management.system.entities.User;
+import com.hydroponics.management.system.entities.enums.NotificationType;
 import com.hydroponics.management.system.enums.UserRole;
 import com.hydroponics.management.system.payloads.LoginRequest;
 import com.hydroponics.management.system.payloads.ServerMessage;
 import com.hydroponics.management.system.services.FileServices;
+import com.hydroponics.management.system.services.NotificationServices;
+import com.hydroponics.management.system.services.SmsServices;
 import com.hydroponics.management.system.services.UserServices;
 
 import jakarta.servlet.http.HttpServletRequest;
@@ -39,6 +43,8 @@ public class AuthController {
 	
 	@Autowired
 	private ModelMapper mapper;
+	
+
 	
 	@PreAuthorized(role = "ADMIN")
 	@GetMapping("/add-user")

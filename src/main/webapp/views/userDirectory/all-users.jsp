@@ -109,7 +109,17 @@
 				</div>
 
 				<section class="min-h-80vh">
-		            <div class="bg-white p-20 bordered">	
+		            <div class="bg-white p-20 bordered">
+		            <%												
+	                  	ServerMessage  msg = (ServerMessage) request.getAttribute("serverMessage");
+	                  	if(msg != null){
+	                  		%>
+	                  			<div class="alert <%=msg.getClassName()%>">									
+								<%=msg.getMessage() %>
+							</div>
+	                  		<%
+	                  	}
+	                  %>	
 		            <table class="table table-bordered">
                         <thead>
                             <tr>
@@ -152,7 +162,9 @@
 	                                    <td class="d-flex">
 		                                    <a href="/user/<%=user.getId() %>" class="btn btn-primary m-r-5"><i class="icon icofont-expand"></i></a>
 		                                    <a href="/user/update/<%=user.getId() %>" class="btn btn-success m-r-5"><i class="icon icon-pencil"></i></a>
-		                                    <button class="btn btn-danger delete-btn" data-toggle="modal" data-target="#deleteConfirmationModal" data-env-id="" data-env-short-id=""><i class="icon icofont-bin"></i></button>
+		                                    <button class="btn btn-danger delete-btn" data-toggle="modal" data-target="#deleteConfirmationModal" data-user-id="<%=user.getId()%>" data-user-full-name="<%=user.getFirstName() + ' ' + user.getLastName()%>">
+									            <i class="icon icofont-bin"></i>
+									        </button>
 	                                	</td>
 	                                </tr>
                         			<%
@@ -168,6 +180,31 @@
 			</div>
 		</div>
 	</div>
+	
+	
+	
+	
+	<!-- Add Bootstrap Modal for Delete Confirmation -->
+<div class="modal fade" id="deleteConfirmationModal" tabindex="-1" role="dialog" aria-labelledby="deleteConfirmationModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="deleteConfirmationModalLabel">Confirm Deletion</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                Are you sure you want to delete this user?
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                <button type="button" class="btn btn-danger" id="confirmDeleteBtn">Confirm Delete</button>
+            </div>
+        </div>
+    </div>
+</div>
+	
 
 	<!-- Required Jqurey -->
 	<script src="${pageContext.request.contextPath}/assets/plugins/Jquery/dist/jquery.min.js"></script>
@@ -219,6 +256,31 @@
         var userId = '<%=loggedUser != null ? loggedUser.getId() : null %>';
     </script>
 	<script type="text/javascript" src="${pageContext.request.contextPath}/assets/js/notification.js"></script>
+	
+	
+	<script type="text/javascript">
+		$(document).ready(function () {
+		    var userIdToDelete;
+		    var userFullNameToDelete;
+	
+		    // Handle click on delete button to store user ID and full name
+		    $('.delete-btn').click(function () {
+		        userIdToDelete = $(this).data('user-id');
+		        userFullNameToDelete = $(this).data('user-full-name');
+		        // Update modal content with user full name
+		        $('#deleteConfirmationModal .modal-body').text('Are you sure you want to delete ' + userFullNameToDelete + '?');
+		    });
+	
+		    // Handle click on confirm delete button
+		    $('#confirmDeleteBtn').click(function () {
+		        if (userIdToDelete) {
+		            // Redirect to the delete URL with the user ID
+		            window.location.href = '<%= request.getContextPath() %>/user/delete/' + userIdToDelete;
+		        }
+		    });
+		});
+
+	</script>
 	
 </body>
 

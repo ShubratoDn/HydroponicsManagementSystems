@@ -135,8 +135,8 @@
 		                                <th>Full Address</th>
 		                                <th>Length</th>
 		                                <th>Width</th>
-		                                <th>Availability</th>
-		                                <th>Note</th>		                                
+		                                <th>Note</th>
+		                                <th>Availability</th>		                                
 		                                <th>Actions</th>
 		                            </tr>
 		                        </thead>

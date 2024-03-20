@@ -267,7 +267,7 @@ public class UserController {
 	}
 	
 	@GetMapping("/api/user/delete/{id}")
-	public ResponseEntity<?> deleteUser(@PathVariable("id") int id){
+	public ResponseEntity<?> deleteUserApi(@PathVariable("id") int id){
 		UserDTO userById = userServices.getUserById(id);
 		if(userById == null) {
 			return ResponseEntity.ok("User NOT found!");	
@@ -275,4 +275,20 @@ public class UserController {
 		userServices.deleteUser(userById);
 		return ResponseEntity.ok("User deleted");
 	}
+	
+	
+	@PreAuthorized(roles = {"admin", "owner", "staff"})
+	@GetMapping("/user/delete/{id}")
+	public String deleteUser(@PathVariable("id") int id, RedirectAttributes model){
+		UserDTO userById = userServices.getUserById(id);
+		if(userById == null) {
+			model.addFlashAttribute("serverMessage", new ServerMessage("User not found!", "error", "alert-danger"));
+			return "redirect:/user/all";
+		}
+		userServices.deleteUser(userById);
+		model.addFlashAttribute("serverMessage", new ServerMessage("User ("+userById.getFirstName() + " " +userById.getLastName()+") deleted successfully!", "success", "alert-success"));
+		return "redirect:/user/all";
+	}
+	
+	
 }

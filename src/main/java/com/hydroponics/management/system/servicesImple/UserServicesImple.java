@@ -8,6 +8,7 @@ import java.util.Optional;
 import org.mindrot.jbcrypt.BCrypt;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
@@ -15,14 +16,18 @@ import org.springframework.web.context.request.ServletRequestAttributes;
 import com.hydroponics.management.system.DTO.UserDTO;
 import com.hydroponics.management.system.entities.Environment;
 import com.hydroponics.management.system.entities.Invoice;
+import com.hydroponics.management.system.entities.Notification;
 import com.hydroponics.management.system.entities.Payment;
 import com.hydroponics.management.system.entities.User;
+import com.hydroponics.management.system.entities.enums.NotificationType;
 import com.hydroponics.management.system.reopository.EnvironmentRepo;
 import com.hydroponics.management.system.reopository.FieldDataRepository;
 import com.hydroponics.management.system.reopository.InvoiceRepository;
 import com.hydroponics.management.system.reopository.NotificationRepository;
 import com.hydroponics.management.system.reopository.PaymentRepository;
 import com.hydroponics.management.system.reopository.UserRepository;
+import com.hydroponics.management.system.services.NotificationServices;
+import com.hydroponics.management.system.services.SmsServices;
 import com.hydroponics.management.system.services.UserServices;
 
 import jakarta.servlet.http.HttpSession;
@@ -50,6 +55,11 @@ public class UserServicesImple implements UserServices {
 	@Autowired
 	private FieldDataRepository fieldDataRepository;
 	
+	@Autowired
+	private NotificationServices notificationServices;
+	
+	@Autowired
+	private SmsServices smsServices;
 	
 	@Autowired
 	private PaymentRepository paymentRepository;
@@ -62,6 +72,30 @@ public class UserServicesImple implements UserServices {
 		User user = modelMapper.map(userDto, User.class);
 		user.setRegistrationDate(new Timestamp(System.currentTimeMillis()));
 		User save = userRepository.save(user);
+		
+		//send Notification
+		if(save != null) {
+			
+			String message = "Hello "+save.getFirstName()+",\r\n"
+					+ "\r\n"
+					+ "Congratulations on successfully registering to LeafLab - A Hydroponics management system!\r\n"
+					+ "\r\n"
+					+ "You are now part of our community dedicated to efficient and sustainable hydroponics management. Explore the features and functionalities tailored to enhance your hydroponics experience.\r\n"
+					+ "\r\n"
+					+ "Feel free to reach out to us if you have any questions or need assistance. Happy farming!\r\n"
+					+ "\r\n"
+					+ "Best regards,\r\n"
+					+ "LeafLab Team";
+			
+			//sending the notification
+			Notification notification = new Notification();
+			notification.setNotificationType(NotificationType.SUCCESS_USER_REGISTRATION);
+			notification.setReceiver(save);
+			notification.setMessage(message);
+			notificationServices.sendNotificationAndNotify(notification);
+			smsServices.sendSms(save.getPhone(), "Hello "+save.getFirstName()+" "+ save.getLastName() +", Congratulations on joining LeafLab! Explore our hydroponics management system for efficient farming. Happy farming! - LeafLab Team");
+		}
+		
 		return modelMapper.map(save, UserDTO.class);
 	}
 
@@ -229,17 +263,26 @@ public class UserServicesImple implements UserServices {
 		User user = modelMapper.map(userDTO, User.class);		
 		
 		this.deleteEnvironmentByUser(user);
-		notificationRepository.deleteByReceiver(user);
 		
+		//deleting notification
+		Page<Notification> findByReceiver = notificationRepository.findByReceiver(user, null);
+		
+		for(Notification notification: findByReceiver.getContent()) {
+			notificationRepository.delete(notification);
+		}
+		
+//		notificationRepository.deleteByReceiver(user);
+		
+
+		
+		
+		//Deleting the invoice and payments
 		List<Invoice> findByUser = invoiceRepository.findByUser(user);
-		for(Invoice invoice: findByUser) {
-			
+		for(Invoice invoice: findByUser) {			
 			List<Payment> findByInvoice = paymentRepository.findByInvoice(invoice);
 			for(Payment payment: findByInvoice) {
 				paymentRepository.delete(payment);
-			}
-			
-			
+			}			
 			invoiceRepository.delete(invoice);
 		}
 		

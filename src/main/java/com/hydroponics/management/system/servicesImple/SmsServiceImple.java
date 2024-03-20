@@ -76,11 +76,11 @@ public class SmsServiceImple implements SmsServices {
 							.queryParam("message", message).build().toUriString();
 
 					RestTemplate restTemplate = new RestTemplate();
-//					String responseString = restTemplate.getForObject(url, String.class);
+					String responseString = restTemplate.getForObject(url, String.class);
 					
 					
-					String responseString = "{\"response_code\":202,\"message_id\":14904493,\"success_message\":\"SMS Submitted Successfully 1\",\"error_message\":\"\"}";
-					System.out.println(responseString);			
+//					String responseString = "{\"response_code\":202,\"message_id\":14904493,\"success_message\":\"SMS Submitted Successfully 1\",\"error_message\":\"\"}";
+//					System.out.println(responseString);			
 					
 					SmsResponse response = objectMapper.readValue(responseString, SmsResponse.class);
 					if (response != null && response.getResponseCode() == 202) {
