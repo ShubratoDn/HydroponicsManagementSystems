@@ -33,6 +33,7 @@ import com.hydroponics.management.system.payloads.ServerMessage;
 import com.hydroponics.management.system.services.EnvironmentServices;
 import com.hydroponics.management.system.services.LocationService;
 import com.hydroponics.management.system.services.NotificationServices;
+import com.hydroponics.management.system.services.SmsServices;
 import com.hydroponics.management.system.services.UserServices;
 import com.hydroponics.management.system.servicesImple.HelperServices;
 import com.hydroponics.management.system.servicesImple.ReportServices;
@@ -62,6 +63,9 @@ public class EnvironmentController {
 	
 	@Autowired
 	private ModelMapper modelMapper;
+	
+	@Autowired
+	private SmsServices smsServices;
 	
 	//get environment page
 	@PreAuthorized(role = "admin")
@@ -104,6 +108,8 @@ public class EnvironmentController {
 	        redirectAttributes.addFlashAttribute("serverMessage", new ServerMessage("Successfully added new Environment", "success", "alert-success"));
 	        redirectAttributes.addFlashAttribute("environmentDTO", null);
 	        notificationServices.sendEnvWelcomeNotification(addEnvironment);
+	        //sending sms
+	        smsServices.sendSms(addEnvironment.getOwnedBy().getPhone(), "Welcome "+addEnvironment.getOwnedBy().getFirstName()+"! Planting "+addEnvironment.getPlantName()+" at "+addEnvironment.getLocation().getFullAddress()+". Get ready for growth and green goodness! Happy Growing!");	        
 	    }
 		
 		return "redirect:/add-environment";

@@ -30,7 +30,7 @@ function updateNotificationMenu(data) {
 		    <li class="bell-notification ${notificationClass}">
 		        <a href="javascript:;" class="media" onclick="markAsReadAndRedirect(${notification.id}, '/my-notifications#notification_${notification.id}')">
 		            <span class="media-left media-icon">
-		                <img class="img-circle" src="${contextPath}/assets/images/util/${notification.notificationType}.png" " alt="${notification.notificationType}">
+		                <img class="img-circle" src="${contextPath}/assets/images/util/${notification.notificationType}.png" " alt="image">
 		            </span>
 		            <div class="media-body">
 		                <span class="block">${notification.notificationType}</span>
@@ -194,7 +194,7 @@ function addNewNotification(result){
 	    <li class="bell-notification ${notificationClass}">
 	        <a href="javascript:;" class="media" onclick="markAsReadAndRedirect(${notification.id}, '/my-notifications#notificaition_${notification.id}')">
 	            <span class="media-left media-icon">
-	                <img class="img-circle" src="${contextPath}/assets/images/avatar-2.png" alt="${notification.notificationType}">
+	                <img class="img-circle" src="${contextPath}/assets/images/util/${notification.notificationType}.png" alt="${notification.notificationType}">
 	            </span>
 	            <div class="media-body">
 	                <span class="block">${notification.notificationType}</span>

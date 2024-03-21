@@ -150,11 +150,18 @@
 					                    List<Payment> paymentList = (List<Payment>) request.getAttribute("paymentList");
 					                    if (paymentList != null && paymentList.size() > 0) {
 					                        int count = 1;
-					                        for (Payment invoice : paymentList) {
+					                        for (Payment payment : paymentList) {
+					                        	Invoice invoice = payment.getInvoice();
 					                            %>
 					                            <tr>
 					                                <td><%= count %></td>
-					                                
+					                                <td>#PAY-00<%=payment.getId() %></td>
+					                                <td><a href="/transaction/invoices/<%=invoice.getId()%>">#INV-<%= String.format("%04d", invoice.getId()) %></a></td>
+					                                <td><%= invoice.getUser().getFirstName() + " " + invoice.getUser().getLastName() %></td>
+					                                <td><%=payment.getAmount() %> Tk</td>
+					                                <td><%= calculateTotalAmount(invoice.getItems()) %> Tk.</td>
+					                                <td><%=payment.getStatus() %></td>
+					                                <td><%= new SimpleDateFormat("dd MMMM, yyyy", Locale.ENGLISH).format(payment.getTimestamp()) %></td>
 					                                <td class="text-right">
 					                                    <div class="dropdown dropdown-action">
 					                                        <a href="#" class="action-icon dropdown-toggle" data-toggle="dropdown" aria-expanded="false"><i class="fa fa-ellipsis-v"></i></a>
@@ -240,3 +247,16 @@
 </html>
 
 
+<%!
+    double calculateTotalAmount(List<InvoiceItem> items) {
+        double totalAmount = 0;
+        if (items != null) {
+            for (InvoiceItem item : items) {
+                if (item.getItemPrice() != null && item.getQuantity() != null) {
+                    totalAmount += item.getItemPrice().doubleValue() * item.getQuantity();
+                }
+            }
+        }
+        return totalAmount;
+    }
+%>

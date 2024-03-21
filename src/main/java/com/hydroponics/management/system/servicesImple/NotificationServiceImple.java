@@ -24,6 +24,7 @@ import com.hydroponics.management.system.entities.enums.NotificationType;
 import com.hydroponics.management.system.payloads.PageableResponse;
 import com.hydroponics.management.system.reopository.NotificationRepository;
 import com.hydroponics.management.system.services.NotificationServices;
+import com.hydroponics.management.system.services.SmsServices;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -39,6 +40,9 @@ public class NotificationServiceImple implements NotificationServices  {
 		
 	@Autowired
 	private SimpMessagingTemplate simpMessagingTemplate;
+	
+	@Autowired
+	private SmsServices smsServices;
 	
 	@Override
 	public Notification sendNotification(Notification notification) {
@@ -155,9 +159,11 @@ public class NotificationServiceImple implements NotificationServices  {
             NotificationType notificationType, Environment environment) {
 		
         if (!helperServices.isValidFieldData(actualValue, baseValue, Constants.MINERAL_ALLOWENCE_PERCENT)) {
-            String errorMsg = "Error in " + fieldName + ". Actual value is: " + actualValue +
+            String errorMsg = "Hello Shubrato, Error in " + fieldName + ". Actual value is: " + actualValue +
                     ". It should be within the range of " + helperServices.givenPercentDecrease(baseValue, Constants.MINERAL_ALLOWENCE_PERCENT) +
                     " to " + helperServices.givenPercentIncrease(baseValue, Constants.MINERAL_ALLOWENCE_PERCENT) + ".";
+            
+            String smsMsg = "Hello "+environment.getOwnedBy().getFirstName()+", there's an issue with your "+environment.getPlantName()+" plants environment. "+fieldName.toUpperCase()+" is "+actualValue+", should be "+ helperServices.givenPercentDecrease(baseValue, Constants.MINERAL_ALLOWENCE_PERCENT) +" to " + helperServices.givenPercentIncrease(baseValue, Constants.MINERAL_ALLOWENCE_PERCENT) +". Please address this. Thank you.";
             log.error(errorMsg);
 
             Notification notification = new Notification();
@@ -170,7 +176,9 @@ public class NotificationServiceImple implements NotificationServices  {
             
             Notification sendNotification = this.sendNotificationAfterVerify(notification, Constants.NOTIFICATION_TIME_INTERVAL_HOUR);
             
-            if (sendNotification != null) {
+            if (sendNotification != null) {            	
+            	//sending sms
+            	smsServices.sendSms(environment.getOwnedBy().getPhone(), smsMsg);
                 log.info("Notification: {} saved in the database.", notificationType);
                 simpMessagingTemplate.convertAndSend("/specific/notification/" + sendNotification.getReceiver().getId(), sendNotification);
             } else {
@@ -191,6 +199,8 @@ public class NotificationServiceImple implements NotificationServices  {
                     ". It should be within the range of " + helperServices.givenPercentDecrease(baseValue, Constants.MINERAL_ALLOWENCE_PERCENT) +
                     " to " + helperServices.givenPercentIncrease(baseValue, Constants.MINERAL_ALLOWENCE_PERCENT) + ".";
             log.error(errorMsg);
+            
+            String smsMsg = "Hello "+environment.getOwnedBy().getFirstName()+", there's an issue with your "+environment.getPlantName()+" plants environment. "+fieldName.toUpperCase()+" is "+actualValue+", should be "+ helperServices.givenPercentDecrease(baseValue, Constants.MINERAL_ALLOWENCE_PERCENT) +" to " + helperServices.givenPercentIncrease(baseValue, Constants.MINERAL_ALLOWENCE_PERCENT) +". Please address this. Thank you.";
 
             Notification notification = new Notification();
             notification.setNotificationType(notificationType);
@@ -217,7 +227,9 @@ public class NotificationServiceImple implements NotificationServices  {
     		}
     		
             
-            if (sendNotification != null) {
+            if (sendNotification != null) {            	
+            	smsServices.sendSms(sendNotification.getEnvironment().getOwnedBy().getPhone(), smsMsg);
+            	
                 log.info("Notification: {} saved in the database.", notificationType);
                 simpMessagingTemplate.convertAndSend("/specific/notification/" + sendNotification.getReceiver().getId(), sendNotification);
             } else {
