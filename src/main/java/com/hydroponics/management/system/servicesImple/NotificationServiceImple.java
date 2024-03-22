@@ -279,14 +279,14 @@ public class NotificationServiceImple implements NotificationServices  {
 	        case PAID:
 	            notification.setNotificationType(NotificationType.SUCCESS_FULL_PAYMENT);
 	            notification.setMessage("Thank you! Your payment of " +
-	                                    payment.getAmount() + " taka for Invoice #INV-000" +
+	                                    payment.getAmount() + " taka for Invoice INV-000" +
 	                                    payment.getInvoice().getId()+
 	                                    " has been received successfully.");
 	            break;
 	        case PARTIAL_PAID:
 	            notification.setNotificationType(NotificationType.SUCCESS_PARTIAL_PAYMENT);
 	            notification.setMessage("Thank you! Your partial payment of " +
-	                                    payment.getAmount() + " taka for Invoice #INV-000" +
+	                                    payment.getAmount() + " taka for Invoice INV-000" +
 	                                    payment.getInvoice().getId() +
 	                                    " has been received successfully. Remaining amount: " +
 	                                    getRemainingAmount(payment.getAmount(),payment.getInvoice()) + " taka.");
@@ -294,7 +294,7 @@ public class NotificationServiceImple implements NotificationServices  {
 	        default:
 	            notification.setNotificationType(NotificationType.UNPAID_PAYMENT);
 	            notification.setMessage("Reminder: Your payment of " +
-	                                    payment.getAmount() + " taka for Invoice #INV-00" +
+	                                    payment.getAmount() + " taka for Invoice INV-00" +
 	                                    payment.getInvoice().getId() +
 	                                    " is still pending. Please make the payment at your earliest convenience.");
 	            break;
@@ -303,7 +303,7 @@ public class NotificationServiceImple implements NotificationServices  {
 	    notification.setStatus(NotificationStatus.UNREAD);
 	    
 	    Notification save = notificationRepository.save(notification);
-
+	    smsServices.sendSms(save.getReceiver().getPhone(), "Hello "+save.getReceiver().getFirstName()+", "+save.getMessage()+" Best regards, LeafLab Team");
 	    return save;
 	}
 

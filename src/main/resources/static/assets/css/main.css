@@ -8915,6 +8915,15 @@ thead tr{
 	border-radius: 4px;
 }
 
+.status-paid,
+.status-PAID{
+	color: rgb(0, 128, 0);
+	border: 1px solid rgb(0, 128, 0);
+	padding: 4px 20px;
+	border-radius: 4px;
+}
+
+
 /*.custom-invoice{*/
 /*	padding: 15px;*/
 /*	background-color: darkgoldenrod;*/
@@ -8936,3 +8945,12 @@ thead tr{
 	padding: 10px;
 	padding-top: 20px;
 }
+
+.invoice-items-pdf{
+	font-size: 12px;
+	padding: 5px;
+}
+
+
+
+

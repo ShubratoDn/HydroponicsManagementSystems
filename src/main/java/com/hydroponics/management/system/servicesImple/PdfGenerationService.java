@@ -271,7 +271,7 @@ public class PdfGenerationService {
     			+ "<br>\r\n"
     			+ "\r\n"
     			+ "			<div class=\"table-responsive\">\r\n"
-    			+ "				<table class=\"table table-striped table-hover\">\r\n"
+    			+ "				<table class=\"table invoice-items-pdf table-striped table-hover\">\r\n"
     			+ "					<thead>\r\n"
     			+ "						<tr>\r\n"
     			+ "							<th>#</th>\r\n"

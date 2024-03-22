@@ -1,5 +1,8 @@
 package com.hydroponics.management.system.servicesImple;
 
+import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
@@ -23,7 +26,7 @@ public class SmsServiceImple implements SmsServices {
 	public boolean sendTestSms() {
 		if (Constants.IS_PERMITTED_SENDING_SMS) {
 			sendSMS("01759458961",
-					"./\"\'This is : CHARACTER set () test * . % . ;message from Hydroponics Management System, by shubrato");
+					"./\"\'This is : CHARACTER set () test * . % . ;message from Hydroponics Management # System,\r\n by shubrato");
 		}
 		return false;
 	}
@@ -33,9 +36,10 @@ public class SmsServiceImple implements SmsServices {
 		String senderId = Constants.SMS_SENDER_ID;
 
 		try {
+			String encodedMessage = URLEncoder.encode(message, StandardCharsets.UTF_8);
 			String url = UriComponentsBuilder.fromUriString("http://bulksmsbd.net/api/smsapi")
 					.queryParam("api_key", apiKey).queryParam("senderid", senderId).queryParam("number", receiver)
-					.queryParam("message", message).build().toUriString();
+					.queryParam("message", encodedMessage).build().toUriString();
 
 			RestTemplate restTemplate = new RestTemplate();
 			String responseString = restTemplate.getForObject(url, String.class);

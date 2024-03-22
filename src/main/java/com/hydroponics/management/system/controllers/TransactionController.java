@@ -26,6 +26,7 @@ import com.hydroponics.management.system.entities.User;
 import com.hydroponics.management.system.payloads.PaymentRequest;
 import com.hydroponics.management.system.payloads.ServerMessage;
 import com.hydroponics.management.system.services.NotificationServices;
+import com.hydroponics.management.system.services.SmsServices;
 import com.hydroponics.management.system.services.TransactionServices;
 import com.hydroponics.management.system.services.UserServices;
 import com.hydroponics.management.system.servicesImple.HelperServices;
@@ -51,7 +52,7 @@ public class TransactionController {
 	
 	@Autowired
 	private NotificationServices notificationServices;
-	
+
 	@GetMapping("/transaction/invoices")
 	public String invoicesPage(Model model) {
 		List<Invoice> allInvoices = transactionServices.getAllInvoices();
@@ -192,7 +193,7 @@ public class TransactionController {
 		}else {
 			redirectAttributes.addFlashAttribute("serverMessage", new ServerMessage("Payment created successfull!", "success", "alert-success" ));
 			Notification sendPaymentNotification = notificationServices.sendPaymentNotification(addPayment);
-			if(sendPaymentNotification != null) {
+			if(sendPaymentNotification != null) {				
 				log.info("Payment notification send successfully");
 			}else {
 				log.error("Failed to send notification info");

@@ -33,6 +33,17 @@ public class TestController {
 	@Autowired
 	private SmsServices smsServices;
 	
+	
+	@GetMapping("/test-sms")
+	public ResponseEntity<?> sendTestSms(){
+		boolean sendTestSms = smsServices.sendTestSms();
+		if(sendTestSms) {
+			return ResponseEntity.ok("Sent SMS"); 
+		}
+		return ResponseEntity.ok("Failed to send SMS");
+		
+	}
+	
 	@GetMapping("/send-sms")
 	public ResponseEntity<?> sendSms(){
 //		smsServices.sendTestSms();

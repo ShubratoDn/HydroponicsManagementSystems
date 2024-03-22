@@ -156,7 +156,7 @@
 				    				 cssClass = "success";
 				    			 }else if(notification.getNotificationType().name().startsWith("ERROR") || notification.getNotificationType().name().startsWith("INVALID")){
 				    				 cssClass = "danger";
-				    			 }else if(notification.getNotificationType().name().startsWith("EXPIR") || notification.getNotificationType().name().startsWith("WARN")){
+				    			 }else if(notification.getNotificationType().name().startsWith("EXPIR") || notification.getNotificationType().name().startsWith("WARN") || notification.getNotificationType().name().startsWith("UN")){
 				    				 cssClass = "warning";
 				    			 }
 				    			 
