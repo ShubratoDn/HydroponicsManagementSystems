@@ -1,5 +1,7 @@
 package com.hydroponics.management.system.services;
 
+import java.util.List;
+
 import com.hydroponics.management.system.entities.Environment;
 import com.hydroponics.management.system.entities.Notification;
 import com.hydroponics.management.system.entities.Payment;
@@ -27,5 +29,7 @@ public interface NotificationServices {
 	Notification sendEnvWelcomeNotification(Environment addEnvironment);
 	
 	Notification sendPaymentNotification(Payment payment);
+	
+	List<Notification> getUnreadNotifications(User user);
 	
 }

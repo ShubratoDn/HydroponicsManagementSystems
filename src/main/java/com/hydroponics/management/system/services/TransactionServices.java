@@ -17,5 +17,6 @@ public interface TransactionServices {
 	
 	public Payment addPayment(Payment payment);	
 	public List<Payment> getAllPayments();
+	public List<Payment> getPaymentsByUser(User user);
 }
 

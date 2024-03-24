@@ -11,12 +11,12 @@ import org.springframework.web.bind.annotation.GetMapping;
 import com.hydroponics.management.system.annotation.LoginRequired;
 import com.hydroponics.management.system.annotation.PreAuthorized;
 import com.hydroponics.management.system.entities.Environment;
-import com.hydroponics.management.system.entities.FieldData;
 import com.hydroponics.management.system.entities.User;
 import com.hydroponics.management.system.payloads.AdminHomePageData;
 import com.hydroponics.management.system.payloads.EnvAndFieldData;
 import com.hydroponics.management.system.payloads.UserHomePageData;
 import com.hydroponics.management.system.services.EnvironmentServices;
+import com.hydroponics.management.system.services.NotificationServices;
 import com.hydroponics.management.system.servicesImple.HelperServices;
 import com.hydroponics.management.system.servicesImple.ReportServices;
 
@@ -32,6 +32,9 @@ public class NavigationController {
 	
 	@Autowired
 	private EnvironmentServices environmentServices;
+	
+	@Autowired
+	private NotificationServices notificationServices;
 	
 	@LoginRequired
 	@GetMapping(value = {"/home","/"})
@@ -73,6 +76,8 @@ public class NavigationController {
 			}
 			
 			userHomeData.setFieldDataMultipleList(fieldDataMultipleList);
+			
+			userHomeData.setUnreadNotifications(notificationServices.getUnreadNotifications(loggedUser));
 			
 			model.addAttribute("reportData", userHomeData);
 			return "index";

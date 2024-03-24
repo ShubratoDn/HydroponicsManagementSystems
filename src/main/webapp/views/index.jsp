@@ -1,4 +1,5 @@
 <!DOCTYPE html>
+<%@page import="com.hydroponics.management.system.services.NotificationServices"%>
 <%@page import="java.util.HashMap"%>
 <%@page import="java.util.Map"%>
 <%@page import="java.util.Arrays"%>
@@ -84,6 +85,7 @@
 			
 			UserHomePageData reportData = new UserHomePageData();
 			
+			
 			reportData = (UserHomePageData) request.getAttribute("reportData");
 		%>
 		
@@ -102,7 +104,7 @@
                     <div class="col-lg-3 col-md-6">
                         <div class="card dashboard-product">
                             <span>Environment Owned</span>
-                            <h2 class="dashboard-total-products">1</h2>
+                            <h2 class="dashboard-total-products"><%=reportData.getAllEnvironmentsByUser().size() %></h2>
                             <span class="label label-warning">Environment</span>Environment Owned
                             <div class="side-box">
                                 <i class="ti-signal text-warning-color"></i>
@@ -112,7 +114,7 @@
                     <div class="col-lg-3 col-md-6">
                         <div class="card dashboard-product">
                             <span>Unread notifications</span>
-                            <h2 class="dashboard-total-products">1</h2>
+                            <h2 class="dashboard-total-products"><%=reportData.getUnreadNotifications() != null ? reportData.getUnreadNotifications().size() :"0" %></h2>
                             <span class="label label-primary">Notifications</span>Read them!
                             <div class="side-box ">
                                 <i class="ti-bell text-primary-color"></i>
@@ -147,7 +149,7 @@
                     <div class="col-lg-4">                    	
                         <div class="card">
                             <div class="user-block-2">
-                                <img class="img-fluid" style="height: 140px; width: 140px;" src="<%=loggedUser.getImage() == null? "assets/images/widget/user-1.png" : "assets/images/userimages/"+loggedUser.getImage() %>" alt="user-header">
+                                <img class="img-fluid" style="height: 140px; width: 140px; object-fit:cover;" src="<%=loggedUser.getImage() == null? "assets/images/widget/user-1.png" : "assets/images/userimages/"+loggedUser.getImage() %>" alt="user-header">
                                 <h5><%=loggedUser.getFirstName() + " " + loggedUser.getLastName() %></h5>
                                 <h6><%=loggedUser.getRole() %></h6>
                             </div>
@@ -317,12 +319,6 @@
                 <!-- 2-1 block end -->
             </div>
             <!-- Main content ends -->
-            <!-- Container-fluid ends -->
-            <div class="fixed-button">
-                <a href="#!" class="btn btn-md btn-primary">
-                    <i class="fa fa-shopping-cart" aria-hidden="true"></i> Add Environment
-                </a>
-            </div>
         </div>
     </div>
 

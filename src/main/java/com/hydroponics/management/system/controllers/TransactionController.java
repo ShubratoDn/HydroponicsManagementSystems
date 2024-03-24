@@ -165,6 +165,14 @@ public class TransactionController {
 		return "transactionDirectory/payments";
 	}
 	
+	@LoginRequired
+	@GetMapping("/transaction/payment-history")
+	public String mypaymentsPage(Model model) {
+		User loggedUser = helperServices.getLoggedUser();
+		List<Payment> allPayments = transactionServices.getPaymentsByUser(loggedUser);
+		model.addAttribute("paymentList", allPayments);
+		return "transactionDirectory/my-payments";
+	}
 	
 	@GetMapping("/transaction/create-payment")
 	public String createPaymentPage(Model model) {

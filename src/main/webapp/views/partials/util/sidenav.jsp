@@ -223,8 +223,8 @@
                         </a>
                     </li>
                     <li class="treeview">
-                        <a class="waves-effect waves-dark" href="/transaction/payments">
-                            <i class="icofont-pay"></i><span>My Payments</span>
+                        <a class="waves-effect waves-dark" href="/transaction/payment-history">
+                            <i class="icofont-pay"></i><span>Payment History</span>
                         </a>
                     </li>
                      

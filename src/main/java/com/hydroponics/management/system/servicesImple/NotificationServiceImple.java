@@ -322,5 +322,11 @@ public class NotificationServiceImple implements NotificationServices  {
 	}
 
 	
+	@Override
+	public List<Notification> getUnreadNotifications(User user) {
+		List<Notification> findByReceiverAndStatus = notificationRepository.findByReceiverAndStatus(user, NotificationStatus.UNREAD);
+		return findByReceiverAndStatus;
+	}
+	
 }
 

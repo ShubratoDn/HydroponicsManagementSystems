@@ -107,4 +107,10 @@ public class TransactionServiceImple implements TransactionServices {
 		return findAll;
 	}
 	
+	@Override
+	public List<Payment> getPaymentsByUser(User user) {
+		List<Payment> findByInvoiceUser = paymentRepository.findByInvoiceUser(user);
+		return findByInvoiceUser;
+	}
+	
 }

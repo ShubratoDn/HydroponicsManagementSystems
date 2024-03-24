@@ -10,6 +10,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import com.hydroponics.management.system.entities.Environment;
 import com.hydroponics.management.system.entities.Notification;
 import com.hydroponics.management.system.entities.User;
+import com.hydroponics.management.system.entities.enums.NotificationStatus;
 import com.hydroponics.management.system.entities.enums.NotificationType;
 
 import jakarta.transaction.Transactional;
@@ -22,6 +23,8 @@ public interface NotificationRepository extends JpaRepository<Notification, Long
 
 	
 	Page<Notification> findByReceiver(User user, Pageable page);
+	
+	List<Notification> findByReceiverAndStatus(User user, NotificationStatus status);
 	
 	@Transactional
 	void deleteByEnvironment(Environment env);

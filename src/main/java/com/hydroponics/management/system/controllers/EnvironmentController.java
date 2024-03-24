@@ -1,6 +1,9 @@
 package com.hydroponics.management.system.controllers;
 
-import java.sql.Date;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import org.modelmapper.ModelMapper;
@@ -116,7 +119,7 @@ public class EnvironmentController {
 	}
 	
 	
-	@PreAuthorized(roles = { "Admin", "user"})
+//	@PreAuthorized(roles = { "Admin", "user"})
 	@GetMapping("/find-environments")
 	public String searchEnv(Model model) {	    
 		return "find-environments";
@@ -135,8 +138,10 @@ public class EnvironmentController {
             @RequestParam(required = false) String locationName,
             @RequestParam(required = false) String locationAddress,
             @RequestParam(required = false) Boolean locationAvailable,
-            @RequestParam(required = false) @DateTimeFormat(pattern = "yyyy-MM-dd") Date plantDate,
-            @RequestParam(required = false) @DateTimeFormat(pattern = "yyyy-MM-dd") Date maturityDate,
+//            @RequestParam(required = false) @DateTimeFormat(pattern = "yyyy-MM-dd") Date plantDate,
+//            @RequestParam(required = false) @DateTimeFormat(pattern = "yyyy-MM-dd") Date maturityDate,
+            @RequestParam(required = false) @DateTimeFormat(pattern = "yyyy-MM-dd") String plantDate,
+            @RequestParam(required = false) @DateTimeFormat(pattern = "yyyy-MM-dd") String maturityDate,
             @RequestParam(required = false) Integer lightDuration,
             @RequestParam(required = false) Double waterPH,
             @RequestParam(required = false) Double temperatureC,
@@ -149,8 +154,27 @@ public class EnvironmentController {
             Model model,
             RedirectAttributes redirectAttributes
     ) {
-        
-		List<Environment> searchResult = environmentServices.searchEnvironments(environmentId, plantName, ownedByUserId, ownedByUserFirstName, ownedByUserPhone, ownedByUserEmail, locationId, locationName, locationAddress, locationAvailable, plantDate, maturityDate, lightDuration, waterPH, temperatureC, humidity, addedByUserId, addedByUserFirstName, addedByUserPhone, addedByUserEmail, addedByUserRole);		
+		
+		Date plantDateFormatted = null;
+		Date maturityDateFormatted = null;
+		
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+        try {
+        	if(plantDate != null) {
+        		plantDateFormatted = (Date) dateFormat.parse(plantDate);        		
+        	}
+        	if(maturityDate != null) {
+        		maturityDateFormatted = (Date) dateFormat.parse(maturityDate);        		
+        	}
+        } catch (Exception e) {
+//            e.printStackTrace();
+            
+        }
+		
+		
+        List<Environment> searchResult = environmentServices.searchEnvironments(environmentId, plantName, ownedByUserId, ownedByUserFirstName, ownedByUserPhone, ownedByUserEmail, locationId, locationName, locationAddress, locationAvailable, plantDateFormatted, maturityDateFormatted, lightDuration, waterPH, temperatureC, humidity, addedByUserId, addedByUserFirstName, addedByUserPhone, addedByUserEmail, addedByUserRole);
+		
+//		List<Environment> searchResult =  new ArrayList<>();
 		redirectAttributes.addFlashAttribute("searchResult", searchResult);
 	    return "redirect:/find-environments";
     }
