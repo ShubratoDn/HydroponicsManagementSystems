@@ -163,7 +163,7 @@ public class NotificationServiceImple implements NotificationServices  {
                     ". It should be within the range of " + helperServices.givenPercentDecrease(baseValue, Constants.MINERAL_ALLOWENCE_PERCENT) +
                     " to " + helperServices.givenPercentIncrease(baseValue, Constants.MINERAL_ALLOWENCE_PERCENT) + ".";
             
-            String smsMsg = "Hello "+environment.getOwnedBy().getFirstName()+", there's an issue with your "+environment.getPlantName()+" plants environment. "+fieldName.toUpperCase()+" is "+actualValue+", should be "+ helperServices.givenPercentDecrease(baseValue, Constants.MINERAL_ALLOWENCE_PERCENT) +" to " + helperServices.givenPercentIncrease(baseValue, Constants.MINERAL_ALLOWENCE_PERCENT) +". Please address this. Thank you.";
+            String smsMsg = "Hello "+environment.getOwnedBy().getFirstName()+", there's an issue with your "+environment.getPlantName()+" plants environment. "+fieldName.toUpperCase()+" is "+String.format("%.3f", actualValue)+", should be "+ helperServices.givenPercentDecrease(baseValue, Constants.MINERAL_ALLOWENCE_PERCENT) +" to " + helperServices.givenPercentIncrease(baseValue, Constants.MINERAL_ALLOWENCE_PERCENT) +". Please address this. Thank you.";
             log.error(errorMsg);
 
             Notification notification = new Notification();
@@ -200,7 +200,7 @@ public class NotificationServiceImple implements NotificationServices  {
                     " to " + helperServices.givenPercentIncrease(baseValue, Constants.MINERAL_ALLOWENCE_PERCENT) + ".";
             log.error(errorMsg);
             
-            String smsMsg = "Hello "+environment.getOwnedBy().getFirstName()+", there's an issue with your "+environment.getPlantName()+" plants environment. "+fieldName.toUpperCase()+" is "+actualValue+", should be "+ helperServices.givenPercentDecrease(baseValue, Constants.MINERAL_ALLOWENCE_PERCENT) +" to " + helperServices.givenPercentIncrease(baseValue, Constants.MINERAL_ALLOWENCE_PERCENT) +". Please address this. Thank you.";
+            String smsMsg = "Hello "+environment.getOwnedBy().getFirstName()+", there's an issue with your "+environment.getPlantName()+" plants environment. "+fieldName.toUpperCase()+" is "+String.format("%.3f", actualValue)+", should be "+ helperServices.givenPercentDecrease(baseValue, Constants.MINERAL_ALLOWENCE_PERCENT) +" to " + helperServices.givenPercentIncrease(baseValue, Constants.MINERAL_ALLOWENCE_PERCENT) +". Please address this. Thank you.";
 
             Notification notification = new Notification();
             notification.setNotificationType(notificationType);
