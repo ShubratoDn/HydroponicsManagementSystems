@@ -168,7 +168,7 @@
 				    			 }
 				    		
 				    		%>
-					    	<div class="accordion-panel notification-accordion-panel <%=notification.getStatus().toString().toLowerCase() %> <%=cssClass %> " id="notification_<%=notification.getId()%>" onclick="markAsRead(<%=notification.getId()%>)">
+					    	<div class="accordion-panel notification-accordion-panel <%=notification.getStatus() !=null? notification.getStatus().toString().toLowerCase():"" %> <%=cssClass %> " id="notification_<%=notification.getId()%>" onclick="markAsRead(<%=notification.getId()%>)">
 	                            <div class="accordion-heading" role="tab" id="headingOne">
 	                                <h3 class="card-title accordion-title">
 	                                    <a class="accordion-msg collapsed" data-toggle="collapse" data-parent="#accordion" href="#collapse_<%=notification.getId()%>"
