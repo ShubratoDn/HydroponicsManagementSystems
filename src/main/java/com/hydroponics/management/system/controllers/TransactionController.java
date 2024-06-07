@@ -99,8 +99,7 @@ public class TransactionController {
 		if(invoiceRequest != null && invoiceRequest.getUserId() != null) {
 			UserDTO userById = userServices.getUserById(invoiceRequest.getUserId());
 			model.addAttribute("userInfo", userById);
-		}
-		
+		}		
 		return "transactionDirectory/create-invoice";
 	}
 	
