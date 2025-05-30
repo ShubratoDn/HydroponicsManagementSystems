@@ -150,6 +150,3 @@ On first run, an admin user is created automatically:
 Developed by **Shubrato Debnath**
 
 ---
-
-## License
-(Add your license here, if any) 
